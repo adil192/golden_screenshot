@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 extension ScreenshotTester on WidgetTester {
   Future<void> precacheImages(
@@ -28,4 +29,6 @@ extension ScreenshotTester on WidgetTester {
         ],
         widgetType: widgetType,
       );
+
+  Future<void> loadFonts() async => await runAsync(loadAppFonts);
 }
