@@ -52,6 +52,23 @@ The main portion might look something like this:
     );
 ```
 
+If you're familiar with golden tests,
+you'll notice the golden file is not compared in the usual way in the example.
+Instead of using `expectLater`, we use `tester.expectScreenshot` from this package:
+
+```dart
+// OLD
+await expectLater(find.byType(HomePage), matchesGoldenFile('1_home'));
+// NEW
+await tester.expectScreenshot(matchesGoldenFile('1_home'));
+```
+
+`tester.expectScreenshot` allows for a 0.1% difference (configurable) between the expected and actual image,
+useful for screenshots since we don't require every pixel to be exactly the same.
+With this feature, we can allow shadows in golden files with `debugDisableShadows` (see the example)
+without the test becoming
+[flaky](https://api.flutter.dev/flutter/painting/debugDisableShadows.html).
+
 ## Usage
 
 Once you have created your test file, run the following command to generate the screenshots:
