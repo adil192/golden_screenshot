@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/src/screenshot_frame.dart';
 
+/// A device whose resolution and pixel ratio will be simulated,
+/// and whose frame will be drawn in screenshots.
 enum ScreenshotDevice {
+  /// A desktop/laptop running Linux.
+  ///
+  /// The size is based on Flathub's guidelines for screenshots:
+  /// https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size
   flathub(
     platform: TargetPlatform.linux,
     resolution: Size(2000, 1400),
@@ -10,6 +16,7 @@ enum ScreenshotDevice {
     frameBuilder: ScreenshotFrame.noFrame,
   ),
 
+  /// An Android phone based on the Pixel 6 Pro.
   android(
     platform: TargetPlatform.android,
     resolution: Size(1440, 3120),
@@ -18,6 +25,8 @@ enum ScreenshotDevice {
     frameBuilder: ScreenshotFrame.android,
   ),
 
+  /// A MacBook Pro (15-inch, 2019)
+  /// with a "scaled resolution" of 1440x900.
   macbook(
     platform: TargetPlatform.macOS,
     resolution: Size(2880, 1800),
@@ -70,9 +79,19 @@ enum ScreenshotDevice {
     required this.frameBuilder,
   }) : assert(pixelRatio > 0);
 
+  /// The platform/operating system of the device.
   final TargetPlatform platform;
+
+  /// The resolution of the device in physical pixels.
+  /// This is not the logical resolution.
   final Size resolution;
+
+  /// The ratio of physical pixels to logical pixels.
   final double pixelRatio;
+
+  /// The folder where golden files are stored.
   final String goldenFolder;
+
+  /// The builder that creates the frame around the [child].
   final ScreenshotFrameBuilder frameBuilder;
 }

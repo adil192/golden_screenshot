@@ -12,9 +12,17 @@ class ScreenshotApp extends StatelessWidget {
     required this.child,
   });
 
+  /// The theme that will be passed to [MaterialApp].
   final ThemeData? theme;
+
+  /// The device whose resolution and pixel ratio will be simulated,
+  /// and whose frame will be drawn around the [child].
   final ScreenshotDevice device;
+
+  /// The colors of the device frame.
   final ScreenshotFrameColors? frameColors;
+
+  /// The page that will be rendered inside the device frame.
   final Widget child;
 
   @override
