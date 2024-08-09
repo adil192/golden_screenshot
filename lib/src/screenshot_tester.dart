@@ -96,14 +96,23 @@ extension ScreenshotTester on WidgetTester {
 
   /// Use this method instead of the usual [expectLater] to allow
   /// small pixel differences between the golden and the test image.
+  ///
+  /// By default, this will use the child of the [ScreenshotApp] widget.
+  /// If you want to use a different widget, provide a [finder].
   Future<void> expectScreenshot(
     AsyncMatcher matchesGoldenFile, {
     double allowedDiffPercent = 0.1,
     bool enableShadows = true,
+    Finder? finder,
   }) async {
-    final screenshotApp =
-        widget<ScreenshotApp>(find.bySubtype<ScreenshotApp>());
-    final child = screenshotApp.child;
+    final Widget child;
+    if (finder != null) {
+      child = widget(finder);
+    } else {
+      final screenshotApp =
+          widget<ScreenshotApp>(find.bySubtype<ScreenshotApp>());
+      child = screenshotApp.child;
+    }
 
     _useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
