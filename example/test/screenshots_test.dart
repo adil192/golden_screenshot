@@ -64,14 +64,9 @@ void _screenshotWidget({
         tester.state<MyHomePageState>(find.byType(MyHomePage)).counter =
             counter;
 
-        // You may want to precache images before taking a screenshot
-        // but we don't need to in this example.
-        // await tester.precacheImages(const [
-        //   AssetImage('assets/images/coin.png'),
-        // ]);
-
-        // Precache the top bars for each device and the fonts
+        // Precache the images and fonts
         // so they're ready for the screenshot.
+        await tester.precacheImagesInWidgetTree();
         await tester.precacheTopbarImages();
         await tester.loadFonts();
 

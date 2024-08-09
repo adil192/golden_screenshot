@@ -33,6 +33,20 @@ extension ScreenshotTester on WidgetTester {
     );
   }
 
+  /// Prefetches all [Image]s found in the widget tree.
+  ///
+  /// This method should only be called after [pumpWidget].
+  /// See [precacheImages] for more details.
+  Future<void> precacheImagesInWidgetTree({
+    bool skipOffstage = true,
+  }) {
+    final imageWidgets = widgetList<Image>(find.bySubtype<Image>(
+      skipOffstage: skipOffstage,
+    ));
+    final imageProviders = imageWidgets.map((widget) => widget.image).toList();
+    return precacheImages(imageProviders);
+  }
+
   /// Prefetches the top bar images used by [ScreenshotFrame].
   ///
   /// This method should only be called after [pumpWidget].
