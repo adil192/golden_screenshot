@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:golden_screenshot/src/screenshot_device.dart';
+import 'package:golden_screenshot/golden_screenshot.dart';
 
 /// A [MaterialApp] that produces golden images
 /// with [device]'s resolution, pixel ratio, and frame.
@@ -8,14 +8,13 @@ class ScreenshotApp extends StatelessWidget {
     super.key,
     this.theme,
     required this.device,
-    required this.frameColor,
-    required this.onFrameColor,
+    this.frameColors,
     required this.child,
   });
 
   final ThemeData? theme;
   final ScreenshotDevice device;
-  final Color? frameColor, onFrameColor;
+  final ScreenshotFrameColors? frameColors;
   final Widget child;
 
   @override
@@ -23,6 +22,7 @@ class ScreenshotApp extends StatelessWidget {
     return MaterialApp(
       theme: theme,
       themeAnimationDuration: Duration.zero,
+      debugShowCheckedModeBanner: false,
       home: FittedBox(
         child: RepaintBoundary(
           child: SizedBox(
@@ -34,8 +34,7 @@ class ScreenshotApp extends StatelessWidget {
                 height: device.resolution.height / device.pixelRatio,
                 child: device.frameBuilder(
                   device: device,
-                  frameColor: frameColor,
-                  onFrameColor: onFrameColor,
+                  frameColors: frameColors,
                   child: child,
                 ),
               ),
