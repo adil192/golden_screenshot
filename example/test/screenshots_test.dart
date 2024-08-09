@@ -53,6 +53,10 @@ void _screenshotWidget({
   group(goldenFileName, () {
     for (final device in ScreenshotDevice.values) {
       testWidgets('for ${device.name}', (tester) async {
+        // Enable shadows which are normally disabled in golden tests.
+        // Make sure to disable them again at the end of the test.
+        debugDisableShadows = false;
+
         final widget = ScreenshotApp(
           theme: theme,
           device: device,
@@ -78,6 +82,8 @@ void _screenshotWidget({
           find.byWidget(child),
           matchesGoldenFile('${device.goldenFolder}$goldenFileName.png'),
         );
+
+        debugDisableShadows = true;
       });
     }
   });
