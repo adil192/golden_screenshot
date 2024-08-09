@@ -9,13 +9,7 @@ enum ScreenshotDevice {
     goldenFolder: '../metadata/en-US/images/tenInchScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
   ),
-  macbook(
-    platform: TargetPlatform.macOS,
-    resolution: Size(2880, 1800),
-    pixelRatio: 2,
-    goldenFolder: '../metadata/en-US/images/macbookScreenshots/',
-    frameBuilder: ScreenshotFrame.noFrame,
-  ),
+
   android(
     platform: TargetPlatform.android,
     resolution: Size(1440, 3120),
@@ -23,6 +17,16 @@ enum ScreenshotDevice {
     goldenFolder: '../metadata/en-US/images/phoneScreenshots/',
     frameBuilder: ScreenshotFrame.android,
   ),
+
+  macbook(
+    platform: TargetPlatform.macOS,
+    resolution: Size(2880, 1800),
+    pixelRatio: 2,
+    goldenFolder: '../metadata/en-US/images/macbookScreenshots/',
+    frameBuilder: ScreenshotFrame.noFrame,
+  ),
+
+  /// iPhone 5.5" Display (the one with a home button)
   olderIphone(
     platform: TargetPlatform.iOS,
     resolution: Size(1242, 2208),
@@ -30,6 +34,8 @@ enum ScreenshotDevice {
     goldenFolder: '../metadata/en-US/images/olderIphoneScreenshots/',
     frameBuilder: ScreenshotFrame.olderIphone,
   ),
+
+  /// iPhone 6.5" Display (the one without a home button)
   newerIphone(
     platform: TargetPlatform.iOS,
     resolution: Size(1284, 2778),
@@ -37,6 +43,8 @@ enum ScreenshotDevice {
     goldenFolder: '../metadata/en-US/images/newerIphoneScreenshots/',
     frameBuilder: ScreenshotFrame.newerIphone,
   ),
+
+  /// iPad 12.9" Display (the one with a home button)
   olderIpad(
     platform: TargetPlatform.iOS,
     resolution: Size(2048, 2732),
@@ -44,6 +52,8 @@ enum ScreenshotDevice {
     goldenFolder: '../metadata/en-US/images/olderIpadScreenshots/',
     frameBuilder: ScreenshotFrame.olderIpad,
   ),
+
+  /// iPad 13" Display (the one without a home button)
   newerIpad(
     platform: TargetPlatform.iOS,
     resolution: Size(2064, 2752),
