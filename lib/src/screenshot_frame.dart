@@ -18,49 +18,64 @@ class ScreenshotFrame extends StatelessWidget {
   })  : topBarImage = null,
         bottomBar = null;
 
+  static const androidTopBarImage = AssetImage(
+      'assets/topbars/android_topbar.png',
+      package: 'golden_screenshot');
   const ScreenshotFrame.android({
     super.key,
     required this.device,
     required this.frameColor,
     required this.onFrameColor,
     required this.child,
-  })  : topBarImage = const AssetImage('assets/tests/android_topbar.png'),
+  })  : topBarImage = androidTopBarImage,
         bottomBar = const SizedBox(width: 125, height: 4);
 
+  static const olderIphoneTopBarImage = AssetImage(
+      'assets/topbars/older_iphone_topbar.png',
+      package: 'golden_screenshot');
   const ScreenshotFrame.olderIphone({
     super.key,
     required this.device,
     required this.frameColor,
     required this.onFrameColor,
     required this.child,
-  })  : topBarImage = const AssetImage('assets/tests/older_iphone_topbar.png'),
+  })  : topBarImage = olderIphoneTopBarImage,
         bottomBar = null;
 
+  static const newerIphoneTopBarImage = AssetImage(
+      'assets/topbars/newer_iphone_topbar.png',
+      package: 'golden_screenshot');
   const ScreenshotFrame.newerIphone({
     super.key,
     required this.device,
     required this.frameColor,
     required this.onFrameColor,
     required this.child,
-  })  : topBarImage = const AssetImage('assets/tests/newer_iphone_topbar.png'),
+  })  : topBarImage = newerIphoneTopBarImage,
         bottomBar = const SizedBox(width: 150, height: 5);
 
+  static const olderIpadTopBarImage = AssetImage(
+      'assets/topbars/older_ipad_topbar.png',
+      package: 'golden_screenshot');
   const ScreenshotFrame.olderIpad({
     super.key,
     required this.device,
     required this.frameColor,
     required this.onFrameColor,
     required this.child,
-  })  : topBarImage = const AssetImage('assets/tests/older_ipad_topbar.png'),
+  })  : topBarImage = olderIpadTopBarImage,
         bottomBar = null;
 
+  static const newerIpadTopBarImage = AssetImage(
+      'assets/topbars/newer_ipad_topbar.png',
+      package: 'golden_screenshot');
   const ScreenshotFrame.newerIpad({
     super.key,
     required this.device,
     required this.frameColor,
     required this.onFrameColor,
     required this.child,
-  })  : topBarImage = const AssetImage('assets/tests/newer_ipad_topbar.png'),
+  })  : topBarImage = newerIpadTopBarImage,
         bottomBar = const SizedBox(width: 320, height: 6);
 
   final ScreenshotDevice device;
