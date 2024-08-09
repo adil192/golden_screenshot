@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_screenshot/src/screenshot_comparator.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
+// ignore: implementation_imports
+import 'package:matcher/src/expect/async_matcher.dart' show AsyncMatcher;
 
 /// An extension on [WidgetTester] that provides some
 /// convenience methods for screenshot tests
@@ -71,4 +74,41 @@ extension ScreenshotTester on WidgetTester {
   ///
   /// This method loads proper fonts for the app to use in golden tests.
   Future<void> loadFonts() async => await runAsync(loadAppFonts);
+
+  /// Uses a [ScreenshotComparator] instead of the default golden
+  /// file comparator to allow a small amount of difference between
+  /// the golden and the test image.
+  void _useScreenshotComparator({
+    required double allowedDiffPercent,
+  }) {
+    final previousGoldenFileComparator = goldenFileComparator;
+
+    final basedir =
+        (previousGoldenFileComparator as LocalFileComparator).basedir.path;
+    goldenFileComparator = ScreenshotComparator(
+      // The actual file doesn't matter, just the directory.
+      Uri.parse('$basedir/some_test.dart'),
+      allowedDiffPercent: allowedDiffPercent,
+    );
+
+    addTearDown(() => goldenFileComparator = previousGoldenFileComparator);
+  }
+
+  /// Use this method instead of the usual [expectLater] to allow
+  /// small pixel differences between the golden and the test image.
+  Future<void> expectScreenshot(
+    AsyncMatcher matchesGoldenFile, {
+    double allowedDiffPercent = 0.1,
+    bool enableShadows = true,
+  }) async {
+    final screenshotApp =
+        widget<ScreenshotApp>(find.bySubtype<ScreenshotApp>());
+    final child = screenshotApp.child;
+
+    _useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
+    await expectLater(
+      find.byWidget(child),
+      matchesGoldenFile,
+    );
+  }
 }
