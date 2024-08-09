@@ -40,10 +40,16 @@ class ScreenshotApp extends StatelessWidget {
               child: SizedBox(
                 width: device.resolution.width / device.pixelRatio,
                 height: device.resolution.height / device.pixelRatio,
-                child: device.frameBuilder(
-                  device: device,
-                  frameColors: frameColors,
-                  child: child,
+                child: MediaQuery(
+                  data: MediaQueryData(
+                    size: device.resolution / device.pixelRatio,
+                    devicePixelRatio: device.pixelRatio,
+                  ),
+                  child: device.frameBuilder(
+                    device: device,
+                    frameColors: frameColors,
+                    child: child,
+                  ),
                 ),
               ),
             ),
