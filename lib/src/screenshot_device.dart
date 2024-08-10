@@ -12,8 +12,8 @@ enum ScreenshotDevice {
   flathub(
     platform: TargetPlatform.linux,
     resolution: Size(1920, 1080),
-    pixelRatio: 2,
-    goldenFolder: '../metadata/en-US/images/sevenInchScreenshots/',
+    pixelRatio: 1.5,
+    goldenFolder: '../metadata/en-US/images/tenInchScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
   ),
 
