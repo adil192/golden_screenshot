@@ -51,8 +51,10 @@ void _screenshotWidget({
   required Widget child,
 }) {
   group(goldenFileName, () {
-    for (final device in ScreenshotDevice.values) {
-      testWidgets('for ${device.name}', (tester) async {
+    for (final goldenDevice in GoldenScreenshotDevices.values) {
+      testWidgets('for ${goldenDevice.name}', (tester) async {
+        final device = goldenDevice.device;
+
         // Enable shadows which are normally disabled in golden tests.
         // Make sure to disable them again at the end of the test.
         debugDisableShadows = false;
@@ -78,9 +80,7 @@ void _screenshotWidget({
         await tester.pumpFrames(widget, const Duration(seconds: 1));
 
         // Take the screenshot and compare it to the golden file.
-        await tester.expectScreenshot(matchesGoldenFile(
-          '${device.goldenFolder}$goldenFileName.png',
-        ));
+        await tester.expectScreenshot(device, goldenFileName);
 
         debugDisableShadows = true;
       });

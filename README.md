@@ -2,12 +2,11 @@
 
 Utilities to automate screenshot generation using Flutter's golden tests.
 
-Currently, there isn't much customization available, but I'll probably add more in the future.
-
 The generated screenshots are suitable for the App Store, Play Store, F-Droid, Flathub (Linux), etc,
-and are saved in a Fastlane-compatible directory structure (e.g. `metadata/en-US/images/phoneScreenshots/1_home.png`).
+and are saved in a Fastlane-compatible directory structure (e.g. `metadata/en-US/images/phoneScreenshots/1_home.png`) by default.
 See [lib/src/screenshot_device.dart](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_device.dart)
-for the list of devices and the paths where the screenshots are saved.
+for the default list of devices,
+or have a look at [Customization](#customization) to customize the devices, frames, and location of the screenshots.
 
 ## Getting started
 
@@ -58,9 +57,9 @@ Instead of using `expectLater`, we use `tester.expectScreenshot` from this packa
 
 ```dart
 // OLD
-await expectLater(find.byType(HomePage), matchesGoldenFile('1_home'));
+await expectLater(find.byType(HomePage), matchesGoldenFile('path/to/1_home'));
 // NEW
-await tester.expectScreenshot(matchesGoldenFile('1_home'));
+await tester.expectScreenshot(device, '1_home');
 ```
 
 `tester.expectScreenshot` allows for a 0.1% difference (configurable) between the expected and actual image,
@@ -75,4 +74,73 @@ Once you have created your test file, run the following command to generate the 
 
 ```bash
 flutter test test/screenshot_test.dart --update-goldens
+```
+
+## Customization
+
+### Custom devices
+
+If you don't want to use the default set of devices (`GoldenScreenshotDevices`),
+you can create your own set of devices by creating an enum containing
+`ScreenshotDevice` instances.
+See [GoldenScreenshotDevices](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_device.dart) for what your enum should look like.
+
+```dart
+enum MyScreenshotDevices {
+  phone(ScreenshotDevice(
+    platform: TargetPlatform.android,
+    resolution: Size(1440, 3120),
+    pixelRatio: 10 / 3,
+    goldenSubFolder: 'phoneScreenshots/',
+    frameBuilder: ScreenshotFrame.android,
+  )),
+  tablet(ScreenshotDevice(
+    platform: TargetPlatform.android,
+    resolution: Size(2732, 2048),
+    pixelRatio: 2,
+    goldenSubFolder: 'tenInchScreenshots/',
+    frameBuilder: MyTabletFrame.new,
+  )),
+}
+```
+
+### Custom frames
+
+You can create your own frames by creating a widget whose contructor
+has the same signature as `ScreenshotFrame`'s constructor,
+i.e. has the type `ScreenshotFrameBuilder`.
+
+You can then pass your frame's constructor to the `ScreenshotDevice`'s `frameBuilder` parameter as above.
+
+```dart
+class MyTabletFrame extends StatelessWidget {
+  const MyTabletFrame({
+    super.key,
+    required this.device,
+    this.frameColors,
+    required this.child,
+  });
+
+  final ScreenshotDevice device;
+  final ScreenshotFrameColors? frameColors;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    // Your frame implementation
+  }
+}
+```
+
+### Custom screenshot directory
+
+By default, the screenshots are saved in `../metadata/\$localeCode/images/`.
+The `../` is because this path is relative to the `test` directory.
+
+You can change this by setting `ScreenshotDevice.screenshotsFolder` to something else. This path should end with a slash too.
+
+```dart
+void main() {
+  ScreenshotDevice.screenshotsFolder = 'path/to/screenshots/';
+  test('...', () {
 ```

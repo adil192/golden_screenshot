@@ -3,8 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 import 'package:golden_screenshot/src/screenshot_comparator.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-// ignore: implementation_imports
-import 'package:matcher/src/expect/async_matcher.dart' show AsyncMatcher;
 
 /// An extension on [WidgetTester] that provides some
 /// convenience methods for screenshot tests
@@ -100,9 +98,10 @@ extension ScreenshotTester on WidgetTester {
   /// By default, this will use the child of the [ScreenshotApp] widget.
   /// If you want to use a different widget, provide a [finder].
   Future<void> expectScreenshot(
-    AsyncMatcher matchesGoldenFile, {
+    ScreenshotDevice device,
+    String goldenFileName, {
+    String? langCode,
     double allowedDiffPercent = 0.1,
-    bool enableShadows = true,
     Finder? finder,
   }) async {
     final Widget child;
@@ -117,7 +116,7 @@ extension ScreenshotTester on WidgetTester {
     _useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       find.byWidget(child),
-      matchesGoldenFile,
+      device.matchesGoldenFile(goldenFileName, langCode: langCode),
     );
   }
 }
