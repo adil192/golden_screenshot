@@ -1,3 +1,27 @@
+## 2.0.0
+
+- Added the ability to use your own set of devices by creating an enum that stores `ScreenshotDevice` objects. See the README for more.
+- Added the ability to customize where the goldens are stored by setting `ScreenshotDevice.screenshotsFolder`. See the README for more.
+- Added the ability to use multiple locales by passing a locale code to `tester.expectScreenshot`.
+- Because of the above, you'll need to make the following changes (see the example for more):
+  ```dart
+  # OLD
+  for (final device in ScreenshotDevice.values) {
+    testWidgets('for ${device.name}', (tester) async {
+  # NEW
+  for (final goldenDevice in GoldenScreenshotDevices.values) {
+    testWidgets('for ${goldenDevice.name}', (tester) async {
+      final device = goldenDevice.device;
+  ```
+  ```dart
+  # OLD
+  await tester.expectScreenshot(matchesGoldenFile(
+    '${device.goldenFolder}$goldenFileName.png',
+  ));
+  # NEW
+  await tester.expectScreenshot(device, goldenFileName);
+  ```
+
 ## 1.5.0
 
 - Made the Linux screenshots 16:9 so they can also be used for the Play Store.
