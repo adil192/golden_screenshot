@@ -13,7 +13,7 @@ enum ScreenshotDevice {
     platform: TargetPlatform.linux,
     resolution: Size(1920, 1080),
     pixelRatio: 2,
-    goldenFolder: '../metadata/en-US/images/tenInchScreenshots/',
+    goldenFolder: '../metadata/en-US/images/sevenInchScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
   ),
 
