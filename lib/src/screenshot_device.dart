@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:golden_screenshot/src/screenshot_frame.dart';
 // ignore: implementation_imports
 import 'package:matcher/src/expect/async_matcher.dart' show AsyncMatcher;
@@ -131,6 +132,6 @@ class ScreenshotDevice {
         'goldenSubFolder must end with a slash: $goldenSubFolder');
 
     final goldenFile = '$screenshotsFolder$goldenSubFolder$goldenFileName.png';
-    return matchesGoldenFile(goldenFile);
+    return flutter_test.matchesGoldenFile(goldenFile);
   }
 }
