@@ -1,8 +1,4 @@
-## 1.4.0
-
-- The Linux screenshots are now saved to `metadatametadata/en-US/images/sevenInchScreenshots` instead of `tenInchScreenshots` to match their scaling.
-
-## 1.3.0
+## 1.5.0
 
 - Made the Linux screenshots 16:9 so they can also be used for the Play Store.
 
