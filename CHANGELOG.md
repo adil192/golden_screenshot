@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Made the Linux screenshots 16:9 so they can also be used for the Play Store.
+
 ## 1.2.0
 
 - Added a fuzzy comparator to allow for 0.1% difference between a widget's expected and actual image. You should replace the usual `expectLater` with `tester.expectScreenshot(matchesGoldenFile(...))` to use this feature.
