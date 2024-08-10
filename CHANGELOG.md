@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Fixed an infinite recursion error in `device.matchesGoldenFile`
+
 ## 2.0.0
 
 - Added the ability to use your own set of devices by creating an enum that stores `ScreenshotDevice` objects. See the README for more.
