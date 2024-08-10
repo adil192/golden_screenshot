@@ -6,11 +6,12 @@ import 'package:golden_screenshot/src/screenshot_frame.dart';
 enum ScreenshotDevice {
   /// A desktop/laptop running Linux.
   ///
-  /// The size is based on Flathub's guidelines for screenshots:
-  /// https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size
+  /// The size fits Flathub's guidelines for screenshots
+  /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size)
+  /// while also being a 16:9 aspect ratio for Google Play.
   flathub(
     platform: TargetPlatform.linux,
-    resolution: Size(2000, 1400),
+    resolution: Size(1920, 1080),
     pixelRatio: 2,
     goldenFolder: '../metadata/en-US/images/tenInchScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
