@@ -27,25 +27,25 @@ class ScreenshotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: theme,
-      themeAnimationDuration: Duration.zero,
-      debugShowCheckedModeBanner: false,
-      home: FittedBox(
-        child: RepaintBoundary(
-          child: SizedBox(
-            width: device.resolution.width,
-            height: device.resolution.height,
-            child: FittedBox(
-              child: SizedBox(
-                width: device.resolution.width / device.pixelRatio,
-                height: device.resolution.height / device.pixelRatio,
-                child: MediaQuery(
-                  data: MediaQueryData(
-                    size: device.resolution / device.pixelRatio,
-                    devicePixelRatio: device.pixelRatio,
-                  ),
-                  child: device.frameBuilder(
+    return FittedBox(
+      child: RepaintBoundary(
+        child: SizedBox(
+          width: device.resolution.width,
+          height: device.resolution.height,
+          child: FittedBox(
+            child: SizedBox(
+              width: device.resolution.width / device.pixelRatio,
+              height: device.resolution.height / device.pixelRatio,
+              child: MediaQuery(
+                data: MediaQueryData(
+                  size: device.resolution / device.pixelRatio,
+                  devicePixelRatio: device.pixelRatio,
+                ),
+                child: MaterialApp(
+                  theme: theme,
+                  themeAnimationDuration: Duration.zero,
+                  debugShowCheckedModeBanner: false,
+                  home: device.frameBuilder(
                     device: device,
                     frameColors: frameColors,
                     child: child,
