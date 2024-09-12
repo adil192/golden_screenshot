@@ -100,7 +100,10 @@ enum MyScreenshotDevices {
     pixelRatio: 2,
     goldenSubFolder: 'tenInchScreenshots/',
     frameBuilder: MyTabletFrame.new,
-  )),
+  ));
+
+  const GoldenScreenshotDevices(this.device);
+  final ScreenshotDevice device;
 }
 ```
 
