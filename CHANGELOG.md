@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Screenshots now include dialogs with the default finder
+
 ## 2.0.1
 
 - Fixed an infinite recursion error in `device.matchesGoldenFile`
