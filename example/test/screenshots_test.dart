@@ -40,6 +40,17 @@ void main() {
         title: 'Golden screenshot demo',
       ),
     );
+
+    _screenshotWidget(
+      counter: 998,
+      frameColors: homePageFrameColors,
+      theme: homePageTheme,
+      goldenFileName: '3_dialog',
+      child: const MyHomePage(
+        title: 'Golden screenshot dialog demo',
+        showDialog: true,
+      ),
+    );
   });
 }
 
