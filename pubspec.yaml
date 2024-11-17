@@ -17,6 +17,8 @@ dependencies:
 
   matcher: ^0.12.16+1
 
+  web: ^1.1.0
+
 dev_dependencies:
   flutter_lints: ^4.0.0
 

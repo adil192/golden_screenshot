@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
@@ -26,6 +27,10 @@ extension ScreenshotTester on WidgetTester {
     List<ImageProvider> images, {
     Type widgetType = ScreenshotApp,
   }) {
+    if (kIsWeb) {
+      // This times out with `flutter test --platform chrome`
+      return Future.value();
+    }
     final context = element(find.byType(widgetType));
     return runAsync(
       () => Future.wait(
@@ -72,7 +77,23 @@ extension ScreenshotTester on WidgetTester {
   /// which of course isn't suitable for app stores.
   ///
   /// This method loads proper fonts for the app to use in golden tests.
-  Future<void> loadFonts() async => await runAsync(loadAppFonts);
+  Future<void> loadFonts() async {
+    if (kIsWeb) {
+      // This times out with `flutter test --platform chrome`
+      return;
+    }
+    await runAsync(loadAppFonts);
+  }
+
+  dynamic get goldenComparator =>
+      kIsWeb ? webGoldenComparator : webGoldenComparator;
+  set goldenComparator(dynamic value) {
+    if (kIsWeb) {
+      webGoldenComparator = value;
+    } else {
+      goldenFileComparator = value;
+    }
+  }
 
   /// Uses a [ScreenshotComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
@@ -83,17 +104,13 @@ extension ScreenshotTester on WidgetTester {
   void useScreenshotComparator({
     required double allowedDiffPercent,
   }) {
-    final previousGoldenFileComparator = goldenFileComparator;
+    final previousComparator = goldenComparator;
+    addTearDown(() => goldenComparator = previousComparator);
 
-    final basedir =
-        (previousGoldenFileComparator as LocalFileComparator).basedir.path;
-    goldenFileComparator = ScreenshotComparator(
-      // The actual file doesn't matter, just the directory.
-      Uri.parse('$basedir/some_test.dart'),
+    goldenComparator = ScreenshotComparator(
+      previousComparator: previousComparator,
       allowedDiffPercent: allowedDiffPercent,
     );
-
-    addTearDown(() => goldenFileComparator = previousGoldenFileComparator);
   }
 
   /// Use this method instead of the usual [expectLater] to allow
