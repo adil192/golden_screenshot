@@ -77,7 +77,10 @@ extension ScreenshotTester on WidgetTester {
   /// Uses a [ScreenshotComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
   /// the golden and the test image.
-  void _useScreenshotComparator({
+  ///
+  /// You may wish to use `tester.expectScreenshot` instead, which already
+  /// uses this method.
+  void useScreenshotComparator({
     required double allowedDiffPercent,
   }) {
     final previousGoldenFileComparator = goldenFileComparator;
@@ -107,7 +110,7 @@ extension ScreenshotTester on WidgetTester {
     Finder? finder,
   }) async {
     finder ??= find.bySubtype<MaterialApp>();
-    _useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
+    useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       finder,
       device.matchesGoldenFile(goldenFileName, langCode: langCode),
