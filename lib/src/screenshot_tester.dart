@@ -40,12 +40,13 @@ extension ScreenshotTester on WidgetTester {
   /// See [precacheImages] for more details.
   Future<void> precacheImagesInWidgetTree({
     bool skipOffstage = true,
+    Type widgetType = ScreenshotApp,
   }) {
     final imageWidgets = widgetList<Image>(find.bySubtype<Image>(
       skipOffstage: skipOffstage,
     ));
     final imageProviders = imageWidgets.map((widget) => widget.image).toList();
-    return precacheImages(imageProviders);
+    return precacheImages(imageProviders, widgetType: widgetType);
   }
 
   /// Prefetches the top bar images used by [ScreenshotFrame].
