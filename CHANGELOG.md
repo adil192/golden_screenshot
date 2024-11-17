@@ -1,3 +1,7 @@
+## 2.2.1
+
+- Fixed compilation issues with `flutter test --platform chrome`. However, image/font precaching and fuzzy comparison aren't implemented (yet).
+
 ## 2.2.0
 
 - You can now use `tester.useScreenshotComparator` without having to use `tester.expectScreenshot`.
