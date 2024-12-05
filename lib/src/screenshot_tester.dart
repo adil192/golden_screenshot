@@ -86,7 +86,7 @@ extension ScreenshotTester on WidgetTester {
   }
 
   dynamic get goldenComparator =>
-      kIsWeb ? webGoldenComparator : webGoldenComparator;
+      kIsWeb ? webGoldenComparator : goldenFileComparator;
   set goldenComparator(dynamic value) {
     if (kIsWeb) {
       webGoldenComparator = value;
