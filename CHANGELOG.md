@@ -1,3 +1,7 @@
+## 2.2.2
+
+- Fixed regression from 2.2.1 where the wrong comparator would be used on io (non-web).
+
 ## 2.2.1
 
 - Fixed compilation issues with `flutter test --platform chrome`. However, image/font precaching and fuzzy comparison aren't implemented (yet).
