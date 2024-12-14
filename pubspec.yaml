@@ -3,6 +3,11 @@ description: Utilities to automate screenshot generation using Flutter's golden 
 version: 2.2.2
 repository: https://github.com/adil192/golden_screenshot
 
+topics:
+  - ui
+  - testing
+  - screenshot
+
 environment:
   sdk: ^3.0.0
   flutter: ">=3.10.0"
