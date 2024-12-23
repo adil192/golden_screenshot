@@ -1,3 +1,8 @@
+## 2.3.0
+
+- Added localization arguments to `ScreenshotApp`, thanks to @albemala
+- Renamed `tester.useScreenshotComparator` to `tester.useFuzzyComparator`
+
 ## 2.2.2
 
 - Fixed regression from 2.2.1 where the wrong comparator would be used on io (non-web).
