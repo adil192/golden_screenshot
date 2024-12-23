@@ -58,7 +58,8 @@ class ScreenshotApp extends StatelessWidget {
                   themeAnimationDuration: Duration.zero,
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: localizationsDelegates,
-                  supportedLocales: supportedLocales ?? const [Locale('en', 'US')],
+                  supportedLocales:
+                      supportedLocales ?? const [Locale('en', 'US')],
                   locale: locale,
                   home: device.frameBuilder(
                     device: device,
