@@ -16,6 +16,8 @@ class ScreenshotApp extends StatelessWidget {
   });
 
   /// The theme that will be passed to [MaterialApp].
+  ///
+  /// Note that [device.platform] will take precedence over [theme.platform].
   final ThemeData? theme;
 
   /// The device whose resolution and pixel ratio will be simulated,
@@ -54,7 +56,10 @@ class ScreenshotApp extends StatelessWidget {
                   devicePixelRatio: device.pixelRatio,
                 ),
                 child: MaterialApp(
-                  theme: theme,
+                  theme: theme?.copyWith(
+                        platform: device.platform,
+                      ) ??
+                      ThemeData(platform: device.platform),
                   themeAnimationDuration: Duration.zero,
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: localizationsDelegates,

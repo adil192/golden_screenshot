@@ -16,14 +16,9 @@ void main() {
     final homePageTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     );
-    final homePageFrameColors = ScreenshotFrameColors(
-      topBar: homePageTheme.colorScheme.inversePrimary,
-      bottomBar: homePageTheme.colorScheme.surface,
-    );
 
     _screenshotWidget(
       counter: 100,
-      frameColors: homePageFrameColors,
       theme: homePageTheme,
       goldenFileName: '1_counter_100',
       child: const MyHomePage(
@@ -33,7 +28,6 @@ void main() {
 
     _screenshotWidget(
       counter: 998,
-      frameColors: homePageFrameColors,
       theme: homePageTheme,
       goldenFileName: '2_counter_998',
       child: const MyHomePage(
@@ -43,7 +37,6 @@ void main() {
 
     _screenshotWidget(
       counter: 998,
-      frameColors: homePageFrameColors,
       theme: homePageTheme,
       goldenFileName: '3_dialog',
       child: const MyHomePage(
@@ -56,7 +49,6 @@ void main() {
 
 void _screenshotWidget({
   int counter = 0,
-  ScreenshotFrameColors? frameColors,
   ThemeData? theme,
   required String goldenFileName,
   required Widget child,
@@ -73,7 +65,6 @@ void _screenshotWidget({
         final widget = ScreenshotApp(
           theme: theme,
           device: device,
-          frameColors: frameColors,
           child: child,
         );
         await tester.pumpWidget(widget);
