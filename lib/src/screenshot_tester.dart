@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
-import 'package:golden_screenshot/src/screenshot_comparator.dart';
+import 'package:golden_screenshot/src/fuzzy_comparator.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
 /// An extension on [WidgetTester] that provides some
@@ -95,23 +95,29 @@ extension ScreenshotTester on WidgetTester {
     }
   }
 
-  /// Uses a [ScreenshotComparator] instead of the default golden
+  /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
   /// the golden and the test image.
   ///
   /// You may wish to use `tester.expectScreenshot` instead, which already
   /// uses this method.
-  void useScreenshotComparator({
+  void useFuzzyComparator({
     required double allowedDiffPercent,
   }) {
     final previousComparator = goldenComparator;
     addTearDown(() => goldenComparator = previousComparator);
 
-    goldenComparator = ScreenshotComparator(
+    goldenComparator = FuzzyComparator(
       previousComparator: previousComparator,
       allowedDiffPercent: allowedDiffPercent,
     );
   }
+
+  @Deprecated('Use useFuzzyComparator instead')
+  void useScreenshotComparator({
+    required double allowedDiffPercent,
+  }) =>
+      useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
 
   /// Use this method instead of the usual [expectLater] to allow
   /// small pixel differences between the golden and the test image.
@@ -127,7 +133,7 @@ extension ScreenshotTester on WidgetTester {
     Finder? finder,
   }) async {
     finder ??= find.bySubtype<MaterialApp>();
-    useScreenshotComparator(allowedDiffPercent: allowedDiffPercent);
+    useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       finder,
       device.matchesGoldenFile(goldenFileName, langCode: langCode),

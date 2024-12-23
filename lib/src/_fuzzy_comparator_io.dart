@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// A golden file comparator that differs from the default one by allowing
 /// a small amount of difference between the golden and the test image.
-class ScreenshotComparator extends LocalFileComparator {
-  ScreenshotComparator({
+class FuzzyComparator extends LocalFileComparator {
+  FuzzyComparator({
     required dynamic previousComparator,
     required this.allowedDiffPercent,
   })  : assert(previousComparator is LocalFileComparator,

@@ -8,7 +8,7 @@
 
 ## 2.2.0
 
-- You can now use `tester.useScreenshotComparator` without having to use `tester.expectScreenshot`.
+- You can now use `tester.useScreenshotComparator` (Update: renamed to `tester.useFuzzyComparator`) without having to use `tester.expectScreenshot`.
 - Added a missing `widgetType` option in `precacheImagesInWidgetTree` to allow use without `ScreenshotApp`.
 
 ## 2.1.0

@@ -9,8 +9,8 @@ import 'package:web/web.dart' as web;
 
 /// A golden file comparator that differs from the default one by allowing
 /// a small amount of difference between the golden and the test image.
-class ScreenshotComparator extends DefaultWebGoldenComparator {
-  ScreenshotComparator({
+class FuzzyComparator extends DefaultWebGoldenComparator {
+  FuzzyComparator({
     required dynamic previousComparator,
     required this.allowedDiffPercent,
   })  : assert(previousComparator is DefaultWebGoldenComparator,
