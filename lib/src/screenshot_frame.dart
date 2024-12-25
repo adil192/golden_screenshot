@@ -26,6 +26,18 @@ class ScreenshotFrameColors {
 
   /// The foreground (gesture hint) brightness of the bottom bar.
   final Brightness? gestureHintBrightness;
+
+  /// Sets the foregrounds (text, icons, and gesture hint) to [Brightness.light]
+  static const light = ScreenshotFrameColors(
+    topBarIconBrightness: Brightness.light,
+    gestureHintBrightness: Brightness.light,
+  );
+
+  /// Sets the foregrounds (text, icons, and gesture hint) to [Brightness.dark]
+  static const dark = ScreenshotFrameColors(
+    topBarIconBrightness: Brightness.dark,
+    gestureHintBrightness: Brightness.dark,
+  );
 }
 
 /// A widget that draws a frame around its [child].
