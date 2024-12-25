@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Added `ScreenshotFrameColors.dark` and `ScreenshotFrameColors.light` named constants for convenience.
+
 ## 3.0.0
 
 - The top and bottom bar colors are now decided by Flutter. In most cases, this is sufficient, but you can still override the foreground brightness with by passing a `ScreenshotFrameColors` object to `ScreenshotApp`.
