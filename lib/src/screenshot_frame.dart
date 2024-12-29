@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:golden_screenshot/src/screenshot_device.dart';
 
 /// A builder that can add a top and bottom bar to its [child].
@@ -14,7 +13,8 @@ typedef ScreenshotFrameBuilder = Widget Function({
 /// The frame's colors can be customized with this
 /// to match the content of the app.
 ///
-/// These colors, if provided, will override the built-in [SystemChrome].
+/// If these brightnesses aren't provided, they will be guessed from
+/// the current theme's surface color.
 class ScreenshotFrameColors {
   const ScreenshotFrameColors({
     this.topBarIconBrightness,
@@ -130,22 +130,8 @@ class ScreenshotFrame extends StatelessWidget {
       return frameColors!.topBarIconBrightness!;
     }
 
-    // ignore: invalid_use_of_visible_for_testing_member
-    final systemStyle = SystemChrome.latestStyle;
-    if (systemStyle != null) {
-      if (systemStyle.statusBarIconBrightness != null) {
-        return systemStyle.statusBarIconBrightness!;
-      }
-      if (systemStyle.statusBarBrightness != null) {
-        return systemStyle.statusBarBrightness == Brightness.dark
-            ? Brightness.light
-            : Brightness.dark;
-      }
-    }
-
     return _iconBrightnessForBackgroundColor(
-      systemStyle?.statusBarColor ?? Theme.of(context).colorScheme.surface,
-    );
+        Theme.of(context).colorScheme.surface);
   }
 
   Brightness _getGestureHintBrightness(BuildContext context) {
@@ -153,18 +139,8 @@ class ScreenshotFrame extends StatelessWidget {
       return frameColors!.gestureHintBrightness!;
     }
 
-    // ignore: invalid_use_of_visible_for_testing_member
-    final systemStyle = SystemChrome.latestStyle;
-    if (systemStyle != null) {
-      if (systemStyle.systemNavigationBarIconBrightness != null) {
-        return systemStyle.systemNavigationBarIconBrightness!;
-      }
-    }
-
     return _iconBrightnessForBackgroundColor(
-      systemStyle?.systemNavigationBarColor ??
-          Theme.of(context).colorScheme.surface,
-    );
+        Theme.of(context).colorScheme.surface);
   }
 
   Brightness _iconBrightnessForBackgroundColor(Color backgroundColor) {
