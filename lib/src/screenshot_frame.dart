@@ -59,7 +59,7 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(1440, 148),
+  })  : topBarSize = const Size(1440, 145),
         topBarImage = androidTopBarImage,
         gestureHintSize = const Size(125, 4);
 
@@ -150,16 +150,11 @@ class ScreenshotFrame extends StatelessWidget {
   }
 
   Color _getIconColor(BuildContext context, Brightness iconBrightness) {
-    if (Theme.of(context).brightness == iconBrightness) {
-      // We can't use the theme's colors since the brightness is different.
-      return iconBrightness == Brightness.dark ? Colors.black : Colors.white;
-    }
-
-    final colorScheme = Theme.of(context).colorScheme;
-    if (Theme.of(context).platform == TargetPlatform.android) {
-      return Color.lerp(colorScheme.onSurface, colorScheme.surface, 0.3)!;
+    final theme = Theme.of(context);
+    if (theme.brightness == iconBrightness) {
+      return theme.colorScheme.surface;
     } else {
-      return colorScheme.onSurface;
+      return theme.colorScheme.onSurface;
     }
   }
 
