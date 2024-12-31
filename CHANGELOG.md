@@ -1,3 +1,7 @@
+## 3.1.2
+
+- Removed the camera cutout from the iphone top bar
+
 ## 3.1.1
 
 - Fixed the color of the new top bars not being set
@@ -5,6 +9,7 @@
 ## 3.1.0
 
 - iOS top bar sizes now match exactly with the real devices.
+- Switched newerIphone to the iPhone 16 Pro Max.
 
 ## 3.0.2
 
