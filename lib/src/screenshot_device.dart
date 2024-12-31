@@ -58,7 +58,10 @@ enum GoldenScreenshotDevices {
     frameBuilder: ScreenshotFrame.newerIphone,
   )),
 
-  /// iPad 12.9" Display (the one with a home button)
+  /// iPad Pro 12.9" (2nd generation),
+  /// labelled on App Store Connect as iPad 12.9" Display.
+  ///
+  /// This is the older type of iPad with thicker bezels and a home button.
   olderIpad(ScreenshotDevice(
     platform: TargetPlatform.iOS,
     resolution: Size(2048, 2732),
@@ -67,7 +70,10 @@ enum GoldenScreenshotDevices {
     frameBuilder: ScreenshotFrame.olderIpad,
   )),
 
-  /// iPad 13" Display (the one without a home button)
+  /// iPad Pro 13" (M4),
+  /// labelled on App Store Connect as iPad 13" Display.
+  ///
+  /// This is the newer type of iPad with thinner bezels and no home button.
   newerIpad(ScreenshotDevice(
     platform: TargetPlatform.iOS,
     resolution: Size(2064, 2752),

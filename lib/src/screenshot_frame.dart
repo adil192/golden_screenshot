@@ -70,7 +70,7 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(1242, 54),
+  })  : topBarSize = const Size(1242, 60),
         topBarImage = olderIphoneTopBarImage,
         gestureHintSize = null;
 
@@ -91,7 +91,7 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(2048, 39),
+  })  : topBarSize = const Size(2048, 40),
         topBarImage = olderIpadTopBarImage,
         gestureHintSize = null;
 
@@ -101,7 +101,7 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(2064, 50),
+  })  : topBarSize = const Size(2064, 48),
         topBarImage = newerIpadTopBarImage,
         gestureHintSize = const Size(320, 6);
 
