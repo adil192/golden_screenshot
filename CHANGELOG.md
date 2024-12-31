@@ -1,3 +1,7 @@
+## 3.1.1
+
+- Fixed the color of the new top bars not being set
+
 ## 3.1.0
 
 - iOS top bar sizes now match exactly with the real devices.
