@@ -1,3 +1,7 @@
+## 3.1.0
+
+- iOS top bar sizes now match exactly with the real devices.
+
 ## 3.0.2
 
 - Frame colors are now guessed based on the current theme's surface color. This will hopefully be more reliable than the previous `SystemChrome` based implementation.
