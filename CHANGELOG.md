@@ -1,3 +1,7 @@
+## 3.1.3
+
+- Updated the Android topbar to Android 15
+
 ## 3.1.2
 
 - Removed the camera cutout from the iphone top bar
