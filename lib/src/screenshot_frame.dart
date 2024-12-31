@@ -197,7 +197,7 @@ class ScreenshotFrame extends StatelessWidget {
                     context,
                     _getStatusBarIconBrightness(context),
                   ),
-                  BlendMode.modulate,
+                  BlendMode.srcIn,
                 ),
                 child: Image(image: topBarImage!),
               ),
