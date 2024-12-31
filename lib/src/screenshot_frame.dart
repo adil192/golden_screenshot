@@ -80,7 +80,7 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(1284, 106),
+  })  : topBarSize = const Size(1320, 186),
         topBarImage = newerIphoneTopBarImage,
         gestureHintSize = const Size(150, 5);
 

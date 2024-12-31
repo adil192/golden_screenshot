@@ -39,6 +39,7 @@ enum GoldenScreenshotDevices {
   )),
 
   /// iPhone 5.5" Display (the one with a home button)
+  /// based on the iPhone 8 Plus.
   olderIphone(ScreenshotDevice(
     platform: TargetPlatform.iOS,
     resolution: Size(1242, 2208),
@@ -47,10 +48,11 @@ enum GoldenScreenshotDevices {
     frameBuilder: ScreenshotFrame.olderIphone,
   )),
 
-  /// iPhone 6.5" Display (the one without a home button)
+  /// iPhone 6.9" Display (the one without a home button)
+  /// based on the iPhone 16 Pro Max.
   newerIphone(ScreenshotDevice(
     platform: TargetPlatform.iOS,
-    resolution: Size(1284, 2778),
+    resolution: Size(1320, 2868),
     pixelRatio: 3,
     goldenSubFolder: 'newerIphoneScreenshots/',
     frameBuilder: ScreenshotFrame.newerIphone,
