@@ -125,10 +125,12 @@ extension ScreenshotTester on WidgetTester {
   /// By default, this will use the [MaterialApp] widget
   /// (which is a child of the [ScreenshotApp] widget).
   /// If you want to use a different widget, provide a [finder].
+  /// Use [goldenFilePath] to override the path to the golden file.
   Future<void> expectScreenshot(
     ScreenshotDevice device,
     String goldenFileName, {
     String? langCode,
+    String? goldenFilePath,
     double allowedDiffPercent = 0.1,
     Finder? finder,
   }) async {
@@ -136,7 +138,7 @@ extension ScreenshotTester on WidgetTester {
     useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       finder,
-      device.matchesGoldenFile(goldenFileName, langCode: langCode),
+      device.matchesGoldenFile(goldenFileName, langCode: langCode, goldenFilePath: goldenFilePath),
     );
   }
 }

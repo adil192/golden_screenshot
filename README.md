@@ -140,7 +140,7 @@ class MyTabletFrame extends StatelessWidget {
 By default, the screenshots are saved in `../metadata/\$localeCode/images/`.
 The `../` is because this path is relative to the `test` directory.
 
-You can change this by setting `ScreenshotDevice.screenshotsFolder` to something else. This path should end with a slash too.
+You can change this by setting `ScreenshotDevice.screenshotsFolder` to something else.
 
 ```dart
 void main() {

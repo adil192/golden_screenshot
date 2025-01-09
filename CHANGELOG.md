@@ -1,3 +1,6 @@
+## 3.1.4
+- Added goldenFilePath optional parameter to `expectScreenshot` and `matchesGoldenFile` to override path for golden file.
+
 ## 3.1.3
 
 - Updated the Android topbar to Android 15
