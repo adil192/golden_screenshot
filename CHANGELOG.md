@@ -1,3 +1,6 @@
+## 3.2.1
+- Added goldenFilePath optional parameter to `expectScreenshot` and `matchesGoldenFile` to override path for golden file.
+
 ## 3.2.0
 
 - You can now use `testGoldens(...)` instead of `testWidgets(...)` to automatically enable shadows, instead of manually setting and unsetting `debugDisableShadows`.

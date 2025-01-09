@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart' as flutter_test;
 import 'package:golden_screenshot/src/screenshot_frame.dart';
+import 'package:path/path.dart' as p;
 // ignore: implementation_imports
 import 'package:matcher/src/expect/async_matcher.dart' show AsyncMatcher;
 
@@ -115,31 +116,32 @@ class ScreenshotDevice {
 
   /// The folder inside [screenshotsFolder] where the
   /// screenshots for this device are stored.
-  ///
-  /// This should end with a slash.
   final String goldenSubFolder;
 
   /// The builder that creates the frame around the [child].
   final ScreenshotFrameBuilder frameBuilder;
 
   /// This folder will contain subfolders for each device's screenshots.
-  /// Use `\$langCode` as a placeholder for the language code,
+  /// Use `\${langCode}` as a placeholder for the language code,
   /// if needed.
   ///
-  /// This path is relative to the `test` folder, and should end with a slash.
-  static String screenshotsFolder = '../metadata/\$langCode/images/';
+  /// This path is relative to the `test` folder.
+  static String screenshotsFolder = '../metadata/\${langCode}/images';
 
   /// Returns a `matchesGoldenFile` matcher for the relevant golden file.
-  AsyncMatcher matchesGoldenFile(String goldenFileName, {String? langCode}) {
-    final screenshotsFolder = ScreenshotDevice.screenshotsFolder
-        .replaceFirst('\$langCode', langCode ?? 'en-US');
+  /// Use [goldenFilePath] to override the path to the golden file.
+  AsyncMatcher matchesGoldenFile(String goldenFileName, {String? langCode, String? goldenFilePath}) {
+    final fileName = '$goldenFileName.png';
 
-    assert(screenshotsFolder.endsWith('/'),
-        'screenshotsFolder must end with a slash: $screenshotsFolder');
-    assert(goldenSubFolder.endsWith('/'),
-        'goldenSubFolder must end with a slash: $goldenSubFolder');
+    if (goldenFilePath != null) {
+      final goldenFile = p.join(goldenFilePath, fileName);
+      return flutter_test.matchesGoldenFile(goldenFile);
+    }
 
-    final goldenFile = '$screenshotsFolder$goldenSubFolder$goldenFileName.png';
+    final goldenFile = p
+        .join(ScreenshotDevice.screenshotsFolder, goldenSubFolder, fileName)
+        .replaceFirst('\${langCode}', langCode ?? 'en-US');
+
     return flutter_test.matchesGoldenFile(goldenFile);
   }
 }
