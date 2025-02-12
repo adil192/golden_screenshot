@@ -1,3 +1,7 @@
+## 3.1.4
+
+- Fixed a compilation error when running `flutter test --platform chrome` on Flutter 3.29
+
 ## 3.1.3
 
 - Updated the Android topbar to Android 15
