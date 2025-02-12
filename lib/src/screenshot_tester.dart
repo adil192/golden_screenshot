@@ -85,16 +85,6 @@ extension ScreenshotTester on WidgetTester {
     await runAsync(loadAppFonts);
   }
 
-  dynamic get goldenComparator =>
-      kIsWeb ? webGoldenComparator : goldenFileComparator;
-  set goldenComparator(dynamic value) {
-    if (kIsWeb) {
-      webGoldenComparator = value;
-    } else {
-      goldenFileComparator = value;
-    }
-  }
-
   /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
   /// the golden and the test image.
@@ -104,10 +94,15 @@ extension ScreenshotTester on WidgetTester {
   void useFuzzyComparator({
     required double allowedDiffPercent,
   }) {
-    final previousComparator = goldenComparator;
-    addTearDown(() => goldenComparator = previousComparator);
+    if (kIsWeb) {
+      // We can't yet use FuzzyComparator on the web
+      return;
+    }
 
-    goldenComparator = FuzzyComparator(
+    final previousComparator = goldenFileComparator;
+    addTearDown(() => goldenFileComparator = previousComparator);
+
+    goldenFileComparator = FuzzyComparator(
       previousComparator: previousComparator,
       allowedDiffPercent: allowedDiffPercent,
     );
