@@ -51,9 +51,14 @@ The main portion might look something like this:
     );
 ```
 
-If you're familiar with golden tests,
-you'll notice the golden file is not compared in the usual way in the example.
-Instead of using `expectLater`, we use `tester.expectScreenshot` from this package:
+If you're familiar with golden tests in Flutter, you'll notice some differences...
+
+We use `testGoldens` instead of `testWidgets` to create the tests, which enables
+shadows inside golden files. By default, Flutter disables them since
+[shadows are rendered ever-so-slightly differently every time](https://api.flutter.dev/flutter/painting/debugDisableShadows.html),
+but we handle this by using a fuzzy comparator.
+
+Additionally, instead of using `expectLater`, we use `tester.expectScreenshot`:
 
 ```dart
 // OLD
@@ -62,11 +67,9 @@ await expectLater(find.byType(HomePage), matchesGoldenFile('path/to/1_home'));
 await tester.expectScreenshot(device, '1_home');
 ```
 
-`tester.expectScreenshot` allows for a 0.1% difference (configurable) between the expected and actual image,
-useful for screenshots since we don't require every pixel to be exactly the same.
-With this feature, we can allow shadows in golden files with `debugDisableShadows` (see the example)
-without the test becoming
-[flaky](https://api.flutter.dev/flutter/painting/debugDisableShadows.html).
+`tester.expectScreenshot` internally enables a fuzzy comparator which allows for
+small (0.1% configurable) differences between the expected and actual image,
+whereas Flutter typically expects every pixel to be exactly the same.
 
 ## Usage
 
@@ -145,5 +148,5 @@ You can change this by setting `ScreenshotDevice.screenshotsFolder` to something
 ```dart
 void main() {
   ScreenshotDevice.screenshotsFolder = 'path/to/screenshots/';
-  test('...', () {
+  testGoldens('...', (tester) async {
 ```
