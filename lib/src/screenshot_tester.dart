@@ -79,9 +79,11 @@ extension ScreenshotTester on WidgetTester {
   /// This method loads proper fonts for the app to use in golden tests.
   Future<void> loadFonts() async {
     if (kIsWeb) {
-      // This times out with `flutter test --platform chrome`
+      // rootBundle not available on web
+      // https://github.com/flutter/flutter/issues/159879
       return;
     }
+
     await runAsync(loadAppFonts);
   }
 
