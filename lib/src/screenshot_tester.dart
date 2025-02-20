@@ -102,7 +102,9 @@ extension ScreenshotTester on WidgetTester {
     }
 
     final previousComparator = goldenFileComparator;
-    addTearDown(() => goldenFileComparator = previousComparator);
+    if (previousComparator is! FuzzyComparator) {
+      addTearDown(() => goldenFileComparator = previousComparator);
+    }
 
     goldenFileComparator = FuzzyComparator(
       previousComparator: previousComparator,
