@@ -1,3 +1,7 @@
+## 3.2.0
+
+- You can now use `testGoldens(...)` instead of `testWidgets(...)` to automatically enable shadows, instead of manually setting and unsetting `debugDisableShadows`.
+
 ## 3.1.4
 
 - Fixed a compilation error when running `flutter test --platform chrome` on Flutter 3.29
