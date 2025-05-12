@@ -1,3 +1,7 @@
+## 3.2.1
+
+- Golden screenshots now support all standard font weights, instead of just normal and bold (see [#8](https://github.com/adil192/golden_screenshot/issues/8)).
+
 ## 3.2.0
 
 - You can now use `testGoldens(...)` instead of `testWidgets(...)` to automatically enable shadows, instead of manually setting and unsetting `debugDisableShadows`.
