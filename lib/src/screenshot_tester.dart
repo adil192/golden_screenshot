@@ -80,7 +80,7 @@ extension ScreenshotTester on WidgetTester {
   Future<void> loadFonts({
     List<String> overriddenFonts = kOverriddenFonts,
   }) =>
-      runAsync(loadAppFonts);
+      runAsync(() => loadAppFonts(overriddenFonts: overriddenFonts));
 
   /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
