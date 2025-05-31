@@ -72,20 +72,15 @@ extension ScreenshotTester on WidgetTester {
         widgetType: widgetType,
       );
 
-  /// Flutter uses the `Ahem` font by default in golden tests
-  /// which displays a filled rectangle for each character,
-  /// which of course isn't suitable for app stores.
+  /// {@macro loadAppFonts}
   ///
-  /// This method loads proper fonts for the app to use in golden tests.
-  Future<void> loadFonts() async {
-    if (kIsWeb) {
-      // rootBundle not available on web
-      // https://github.com/flutter/flutter/issues/159879
-      return;
-    }
-
-    await runAsync(loadAppFonts);
-  }
+  /// ```dart
+  /// await tester.loadFonts(overriddenFonts: ['Inter', ...kOverriddenFonts]);
+  /// ```
+  Future<void> loadFonts({
+    List<String> overriddenFonts = kOverriddenFonts,
+  }) =>
+      runAsync(loadAppFonts);
 
   /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between

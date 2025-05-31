@@ -6,13 +6,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 typedef JsonMap = Map<String, dynamic>;
 
-/// By default, flutter golden tests show the Ahem font consisting of black
-/// rectangles for each character.
+/// {@template loadAppFonts}
+/// Flutter uses the `Ahem` font by default in golden tests
+/// which displays a filled rectangle for each character,
+/// which of course isn't suitable for app stores.
 ///
-/// Call this method in your tests to change that behavior.
-/// It will load the fonts provided by your app and its dependencies,
-/// including the Roboto font provided by this package.
-Future<void> loadAppFonts() async {
+/// This method loads proper fonts for the app to use in golden tests.
+///
+/// Note that if your app specifies a custom font (e.g. Inter)
+/// with font fallbacks, but does not include said custom font,
+/// the font fallbacks will not be applied. Ahem will be used instead.
+/// In this case, please provide the [overriddenFonts] parameter like this
+/// with the fonts that should be forced to use Roboto instead of Ahem:
+/// {@endtemplate}
+///
+/// ```dart
+/// await loadAppFonts(overriddenFonts: ['Inter', ...kOverriddenFonts]);
+/// ```
+Future<void> loadAppFonts({
+  List<String> overriddenFonts = kOverriddenFonts,
+}) async {
   if (kIsWeb) {
     // rootBundle not available on web
     // https://github.com/flutter/flutter/issues/159879
