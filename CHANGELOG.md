@@ -1,3 +1,9 @@
+## 3.3.0
+
+- If you encounter a font falling back to Ahem, please use
+  `await tester.loadFonts(overriddenFonts: ['MYFONT', ...kOverriddenFonts]);`
+- Removed dependency on the deprecated `golden_toolkit` package
+
 ## 3.2.1
 
 - Golden screenshots now support all standard font weights, instead of just normal and bold (see [#8](https://github.com/adil192/golden_screenshot/issues/8)).
