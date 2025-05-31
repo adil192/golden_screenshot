@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
-import 'package:golden_screenshot/src/font_loader.dart';
-import 'package:golden_screenshot/src/fuzzy_comparator.dart';
 
 /// An extension on [WidgetTester] that provides some
 /// convenience methods for screenshot tests
