@@ -81,8 +81,8 @@ Future<void> loadFont(String family, JsonMap fontObject) {
 
 const kOverriddenFonts = [
   'Roboto',
+  '.SF Pro Display',
+  '.SF Pro Text',
   '.SF UI Display',
   '.SF UI Text',
-  '.SF Pro Text',
-  '.SF Pro Display',
 ];
