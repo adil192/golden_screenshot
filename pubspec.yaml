@@ -18,8 +18,6 @@ dependencies:
   flutter_test:
     sdk: flutter
 
-  golden_toolkit: ^0.15.0
-
   matcher: ^0.12.16+1
 
   web: ^1.1.0

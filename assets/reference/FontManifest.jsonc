@@ -1,0 +1,274 @@
+// This file was generated in a Flutter build for Linux, serving as a reference for the file structure
+// of the FontManifest.json file used in lib/src/font_loader.dart.
+[
+    {
+        "family": "MaterialIcons",
+        "fonts": [
+            {
+                "asset": "fonts/MaterialIcons-Regular.otf"
+            }
+        ]
+    },
+    {
+        "family": "AtkinsonHyperlegible",
+        "fonts": [
+            {
+                "asset": "assets/google_fonts/Atkinson_Hyperlegible/AtkinsonHyperlegible-Regular.ttf"
+            },
+            {
+                "style": "italic",
+                "asset": "assets/google_fonts/Atkinson_Hyperlegible/AtkinsonHyperlegible-Italic.ttf"
+            },
+            {
+                "weight": 700,
+                "asset": "assets/google_fonts/Atkinson_Hyperlegible/AtkinsonHyperlegible-Bold.ttf"
+            },
+            {
+                "weight": 700,
+                "asset": "assets/google_fonts/Atkinson_Hyperlegible/AtkinsonHyperlegible-BoldItalic.ttf"
+            }
+        ]
+    },
+    {
+        "family": "Dekko",
+        "fonts": [
+            {
+                "asset": "assets/google_fonts/Dekko/Dekko-Regular.ttf"
+            }
+        ]
+    },
+    {
+        "family": "FiraMono",
+        "fonts": [
+            {
+                "asset": "assets/google_fonts/Fira_Mono/FiraMono-Regular.ttf"
+            },
+            {
+                "weight": 500,
+                "asset": "assets/google_fonts/Fira_Mono/FiraMono-Medium.ttf"
+            },
+            {
+                "weight": 700,
+                "asset": "assets/google_fonts/Fira_Mono/FiraMono-Bold.ttf"
+            }
+        ]
+    },
+    {
+        "family": "Neucha",
+        "fonts": [
+            {
+                "asset": "assets/google_fonts/Neucha/Neucha-Regular.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/yaru/Ubuntu",
+        "fonts": [
+            {
+                "weight": 300,
+                "asset": "packages/yaru/assets/fonts/Ubuntu-L.ttf"
+            },
+            {
+                "weight": 300,
+                "style": "italic",
+                "asset": "packages/yaru/assets/fonts/Ubuntu-LI.ttf"
+            },
+            {
+                "weight": 400,
+                "asset": "packages/yaru/assets/fonts/Ubuntu-R.ttf"
+            },
+            {
+                "weight": 400,
+                "style": "italic",
+                "asset": "packages/yaru/assets/fonts/Ubuntu-RI.ttf"
+            },
+            {
+                "weight": 500,
+                "asset": "packages/yaru/assets/fonts/Ubuntu-M.ttf"
+            },
+            {
+                "weight": 500,
+                "style": "italic",
+                "asset": "packages/yaru/assets/fonts/Ubuntu-MI.ttf"
+            },
+            {
+                "weight": 700,
+                "asset": "packages/yaru/assets/fonts/Ubuntu-B.ttf"
+            },
+            {
+                "weight": 700,
+                "style": "italic",
+                "asset": "packages/yaru/assets/fonts/Ubuntu-BI.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/yaru/YaruIcons",
+        "fonts": [
+            {
+                "asset": "packages/yaru/assets/yaru_icons.otf"
+            }
+        ]
+    },
+    {
+        "family": "packages/yaru/UbuntuMono",
+        "fonts": [
+            {
+                "asset": "packages/yaru/assets/fonts/UbuntuMono-Regular.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/cupertino_icons/CupertinoIcons",
+        "fonts": [
+            {
+                "asset": "packages/cupertino_icons/assets/CupertinoIcons.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/font_awesome_flutter/FontAwesomeBrands",
+        "fonts": [
+            {
+                "weight": 400,
+                "asset": "packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/font_awesome_flutter/FontAwesomeRegular",
+        "fonts": [
+            {
+                "weight": 400,
+                "asset": "packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/font_awesome_flutter/FontAwesomeSolid",
+        "fonts": [
+            {
+                "weight": 900,
+                "asset": "packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/golden_screenshot/Roboto",
+        "fonts": [
+            {
+                "weight": 100,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Thin.ttf"
+            },
+            {
+                "weight": 100,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-ThinItalic.ttf"
+            },
+            {
+                "weight": 200,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-ExtraLight.ttf"
+            },
+            {
+                "weight": 200,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-ExtraLightItalic.ttf"
+            },
+            {
+                "weight": 300,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Light.ttf"
+            },
+            {
+                "weight": 300,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-LightItalic.ttf"
+            },
+            {
+                "weight": 400,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Regular.ttf"
+            },
+            {
+                "weight": 400,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Italic.ttf"
+            },
+            {
+                "weight": 500,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Medium.ttf"
+            },
+            {
+                "weight": 500,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-MediumItalic.ttf"
+            },
+            {
+                "weight": 600,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-SemiBold.ttf"
+            },
+            {
+                "weight": 600,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-SemiBoldItalic.ttf"
+            },
+            {
+                "weight": 700,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Bold.ttf"
+            },
+            {
+                "weight": 700,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-BoldItalic.ttf"
+            },
+            {
+                "weight": 800,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-ExtraBold.ttf"
+            },
+            {
+                "weight": 800,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-ExtraBoldItalic.ttf"
+            },
+            {
+                "weight": 900,
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-Black.ttf"
+            },
+            {
+                "weight": 900,
+                "style": "italic",
+                "asset": "packages/golden_screenshot/assets/roboto/Roboto-BlackItalic.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/golden_toolkit/Roboto",
+        "fonts": [
+            {
+                "asset": "packages/golden_toolkit/fonts/Roboto-Regular.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/material_symbols_icons/MaterialSymbolsOutlined",
+        "fonts": [
+            {
+                "asset": "packages/material_symbols_icons/lib/fonts/MaterialSymbolsOutlined.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/material_symbols_icons/MaterialSymbolsRounded",
+        "fonts": [
+            {
+                "asset": "packages/material_symbols_icons/lib/fonts/MaterialSymbolsRounded.ttf"
+            }
+        ]
+    },
+    {
+        "family": "packages/material_symbols_icons/MaterialSymbolsSharp",
+        "fonts": [
+            {
+                "asset": "packages/material_symbols_icons/lib/fonts/MaterialSymbolsSharp.ttf"
+            }
+        ]
+    }
+]
