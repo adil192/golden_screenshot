@@ -1,3 +1,9 @@
+## 4.0.0
+
+- FEAT: `ScreenshotApp` now takes any parameter that `MaterialApp` takes.
+- BREAKING TWEAK: `ScreenshotApp` now takes a `home` parameter instead of a `child` parameter. This is to be consistent with `MaterialApp`.
+- BREAKING TWEAK: `ScreenshotApp` now extends `MaterialApp` so if you were using `find.bySubtype<MaterialApp>()` before, you should now use `find.byType(MaterialApp)`.
+
 ## 3.3.0
 
 - If you encounter a font falling back to Ahem, please use
