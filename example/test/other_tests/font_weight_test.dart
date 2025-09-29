@@ -6,31 +6,8 @@ void main() {
   testGoldens('Font weights in goldens', (tester) async {
     await tester.pumpWidget(ScreenshotApp(
       device: GoldenScreenshotDevices.newerIphone.device,
-      child: FontWeightTestApp(),
-    ));
-
-    await tester.precacheImagesInWidgetTree();
-    await tester.precacheTopbarImages();
-    await tester.loadFonts();
-    await tester.pumpAndSettle();
-
-    await expectLater(
-      find.byType(FontWeightTestApp),
-      matchesGoldenFile('font_weight_test.png'),
-    );
-  });
-}
-
-class FontWeightTestApp extends StatelessWidget {
-  const FontWeightTestApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-      ),
+      theme: ThemeData(colorSchemeSeed: Colors.blue),
+      frameColors: ScreenshotFrameColors.dark,
       home: Scaffold(
         appBar: AppBar(title: const Text('Font Weight Test')),
         body: Center(
@@ -49,6 +26,16 @@ class FontWeightTestApp extends StatelessWidget {
           ),
         ),
       ),
+    ));
+
+    await tester.precacheImagesInWidgetTree();
+    await tester.precacheTopbarImages();
+    await tester.loadFonts();
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('font_weight_test.png'),
     );
-  }
+  });
 }

@@ -124,7 +124,7 @@ extension ScreenshotTester on WidgetTester {
     double allowedDiffPercent = 0.1,
     Finder? finder,
   }) async {
-    finder ??= find.bySubtype<MaterialApp>();
+    finder ??= find.byType(MaterialApp);
     useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       finder,

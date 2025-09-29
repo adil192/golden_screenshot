@@ -61,7 +61,7 @@ void _screenshotWidget({
         final widget = ScreenshotApp(
           theme: theme,
           device: device,
-          child: child,
+          home: child,
         );
         await tester.pumpWidget(widget);
 
