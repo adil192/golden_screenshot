@@ -26,9 +26,9 @@ jobs:
             example/.flutter-plugins
             example/.flutter-plugins-dependencies
             example/pubspec.lock
-          key: ${{ runner.OS }}-${{ hashFiles('**/pubspec.lock') }}-${{ hashFiles('**/*.dart') }}
+          key: ${{ runner.OS }}-${{ hashFiles('**/pubspec.yaml') }}-${{ hashFiles('**/*.dart') }}
           restore-keys: |
-            ${{ runner.OS }}-${{ hashFiles('**/pubspec.lock') }}-
+            ${{ runner.OS }}-
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
