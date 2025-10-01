@@ -1,3 +1,7 @@
+## 4.0.1
+
+- You can now run `dart fix --apply` to automatically rename `ScreenshotApp.child` to `ScreenshotApp.home`.
+
 ## 4.0.0
 
 - FEAT: `ScreenshotApp` now takes any parameter that `MaterialApp` takes.
