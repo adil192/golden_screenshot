@@ -1,0 +1,30 @@
+version: 1
+transforms:
+  - title: Rename child field to home in ScreenshotApp
+    date: 2024-10-01
+    element:
+      uris:
+        - 'src/screenshot_app.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_app.dart'
+        - 'package:golden_screenshot/screenshot_app.dart'
+      field: child
+      inClass: ScreenshotApp
+    changes:
+      - kind: rename
+        newName: home
+
+  - title: Rename child to home in ScreenshotApp constructor
+    date: 2024-10-01
+    element:
+      uris:
+        - 'src/screenshot_app.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_app.dart'
+        - 'package:golden_screenshot/screenshot_app.dart'
+      constructor: ''
+      inClass: ScreenshotApp
+    changes:
+      - kind: renameParameter
+        oldName: child
+        newName: home

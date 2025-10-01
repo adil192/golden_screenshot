@@ -55,6 +55,10 @@ class ScreenshotApp extends MaterialApp {
   /// The colors of the device frame.
   final ScreenshotFrameColors? frameColors;
 
+  /// This property has been replaced with [home].
+  @Deprecated('Use home instead.')
+  Widget? get child => home;
+
   @override
   State<ScreenshotApp> createState() => _ScreenshotAppState();
 }
