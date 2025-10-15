@@ -1,3 +1,11 @@
+## 5.0.0
+
+- Apple no longer requires screenshots from `olderIphone` and `olderIpad`, so in `GoldenScreenshotDevices`:
+    - `olderIphone` and `olderIpad` have been removed.
+    - `newerIphone` and `newerIphone` have been renamed to `iphone` and `ipad`.
+    - **Migration needed**: Delete the `metadata/en-US/images/*Screenshots` folders and rerun `flutter test --update-goldens`.
+- For non-user-facing goldens, you can now use `GoldenSmallDevices` instead of `GoldenScreenshotDevices`. It's the same but with a lower resolution, resulting in faster tests.
+
 ## 4.0.1
 
 - You can now run `dart fix --apply` to automatically rename `ScreenshotApp.child` to `ScreenshotApp.home`.
