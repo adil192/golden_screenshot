@@ -4,7 +4,7 @@ import 'package:golden_screenshot/golden_screenshot.dart';
 void main() {
   testGoldens('some test', (tester) async {
     final app = ScreenshotApp(
-      device: GoldenScreenshotDevices.newerIphone.device,
+      device: GoldenScreenshotDevices.iphone.device,
       home: Text('child renamed to home'),
     );
     print(app.home);

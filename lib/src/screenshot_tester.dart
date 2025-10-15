@@ -62,10 +62,8 @@ extension ScreenshotTester on WidgetTester {
       precacheImages(
         const [
           ScreenshotFrame.androidTopBarImage,
-          ScreenshotFrame.newerIphoneTopBarImage,
-          ScreenshotFrame.newerIpadTopBarImage,
-          ScreenshotFrame.olderIphoneTopBarImage,
-          ScreenshotFrame.olderIpadTopBarImage,
+          ScreenshotFrame.iphoneTopBarImage,
+          ScreenshotFrame.ipadTopBarImage,
         ],
         widgetType: widgetType,
       );

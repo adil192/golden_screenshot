@@ -5,7 +5,7 @@ import 'package:golden_screenshot/golden_screenshot.dart';
 void main() {
   testGoldens('Font weights in goldens', (tester) async {
     await tester.pumpWidget(ScreenshotApp(
-      device: GoldenScreenshotDevices.newerIphone.device,
+      device: GoldenScreenshotDevices.iphone.device,
       theme: ThemeData(colorSchemeSeed: Colors.blue),
       frameColors: ScreenshotFrameColors.dark,
       home: Scaffold(

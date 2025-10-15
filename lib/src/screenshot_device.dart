@@ -38,52 +38,37 @@ enum GoldenScreenshotDevices {
     frameBuilder: ScreenshotFrame.noFrame,
   )),
 
-  /// iPhone 5.5" Display (the one with a home button)
-  /// based on the iPhone 8 Plus.
-  olderIphone(ScreenshotDevice(
-    platform: TargetPlatform.iOS,
-    resolution: Size(1242, 2208),
-    pixelRatio: 3,
-    goldenSubFolder: 'olderIphoneScreenshots/',
-    frameBuilder: ScreenshotFrame.olderIphone,
-  )),
-
-  /// iPhone 6.9" Display (the one without a home button)
-  /// based on the iPhone 16 Pro Max.
-  newerIphone(ScreenshotDevice(
+  /// iPhone 16 Pro Max,
+  /// labelled on App Store Connect as iPhone 6.9" Display.
+  iphone(ScreenshotDevice(
     platform: TargetPlatform.iOS,
     resolution: Size(1320, 2868),
     pixelRatio: 3,
-    goldenSubFolder: 'newerIphoneScreenshots/',
-    frameBuilder: ScreenshotFrame.newerIphone,
-  )),
-
-  /// iPad Pro 12.9" (2nd generation),
-  /// labelled on App Store Connect as iPad 12.9" Display.
-  ///
-  /// This is the older type of iPad with thicker bezels and a home button.
-  olderIpad(ScreenshotDevice(
-    platform: TargetPlatform.iOS,
-    resolution: Size(2048, 2732),
-    pixelRatio: 2,
-    goldenSubFolder: 'olderIpadScreenshots/',
-    frameBuilder: ScreenshotFrame.olderIpad,
+    goldenSubFolder: 'iphoneScreenshots/',
+    frameBuilder: ScreenshotFrame.iphone,
   )),
 
   /// iPad Pro 13" (M4),
   /// labelled on App Store Connect as iPad 13" Display.
-  ///
-  /// This is the newer type of iPad with thinner bezels and no home button.
-  newerIpad(ScreenshotDevice(
+  ipad(ScreenshotDevice(
     platform: TargetPlatform.iOS,
     resolution: Size(2064, 2752),
     pixelRatio: 2,
-    goldenSubFolder: 'newerIpadScreenshots/',
-    frameBuilder: ScreenshotFrame.newerIpad,
+    goldenSubFolder: 'ipadScreenshots/',
+    frameBuilder: ScreenshotFrame.ipad,
   ));
 
   const GoldenScreenshotDevices(this.device);
   final ScreenshotDevice device;
+
+  @Deprecated('Use `iphone` instead')
+  static GoldenScreenshotDevices get newerIphone => iphone;
+  @Deprecated('Use `iphone` instead')
+  static GoldenScreenshotDevices get olderIphone => iphone;
+  @Deprecated('Use `ipad` instead')
+  static GoldenScreenshotDevices get newerIpad => ipad;
+  @Deprecated('Use `ipad` instead')
+  static GoldenScreenshotDevices get olderIpad => ipad;
 }
 
 @Deprecated('Use GoldenScreenshotDevices instead.')

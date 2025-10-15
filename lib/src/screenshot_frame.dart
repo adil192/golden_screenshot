@@ -63,46 +63,24 @@ class ScreenshotFrame extends StatelessWidget {
         topBarImage = androidTopBarImage,
         gestureHintSize = const Size(125, 4);
 
-  /// Creates a frame with an iPhone 5.5" top bar.
-  /// There is no bottom bar because the iPhone 5.5" has a home button.
-  const ScreenshotFrame.olderIphone({
-    super.key,
-    required this.device,
-    this.frameColors,
-    required this.child,
-  })  : topBarSize = const Size(1242, 60),
-        topBarImage = olderIphoneTopBarImage,
-        gestureHintSize = null;
-
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
-  const ScreenshotFrame.newerIphone({
+  const ScreenshotFrame.iphone({
     super.key,
     required this.device,
     this.frameColors,
     required this.child,
   })  : topBarSize = const Size(1320, 186),
-        topBarImage = newerIphoneTopBarImage,
+        topBarImage = iphoneTopBarImage,
         gestureHintSize = const Size(150, 5);
 
-  /// Creates a frame with an iPad 12.9" top bar.
-  /// There is no bottom bar because the iPad 12.9" has a home button.
-  const ScreenshotFrame.olderIpad({
-    super.key,
-    required this.device,
-    this.frameColors,
-    required this.child,
-  })  : topBarSize = const Size(2048, 40),
-        topBarImage = olderIpadTopBarImage,
-        gestureHintSize = null;
-
   /// Creates a frame with an iPad 13" top bar and a bottom bar.
-  const ScreenshotFrame.newerIpad({
+  const ScreenshotFrame.ipad({
     super.key,
     required this.device,
     this.frameColors,
     required this.child,
   })  : topBarSize = const Size(2064, 48),
-        topBarImage = newerIpadTopBarImage,
+        topBarImage = ipadTopBarImage,
         gestureHintSize = const Size(320, 6);
 
   /// The device that this frame will simulate.
@@ -229,23 +207,12 @@ class ScreenshotFrame extends StatelessWidget {
       'assets/topbars/android_topbar.png',
       package: 'golden_screenshot');
 
-  /// An image of the top bar of an older iPhone.
-  static const olderIphoneTopBarImage = AssetImage(
-      'assets/topbars/older_iphone_topbar.png',
+  /// An image of the top bar of an iPhone.
+  static const iphoneTopBarImage = AssetImage(
+      'assets/topbars/iphone_topbar.png',
       package: 'golden_screenshot');
 
-  /// An image of the top bar of a newer iPhone.
-  static const newerIphoneTopBarImage = AssetImage(
-      'assets/topbars/newer_iphone_topbar.png',
-      package: 'golden_screenshot');
-
-  /// An image of the top bar of an older iPad.
-  static const olderIpadTopBarImage = AssetImage(
-      'assets/topbars/older_ipad_topbar.png',
-      package: 'golden_screenshot');
-
-  /// An image of the top bar of a newer iPad.
-  static const newerIpadTopBarImage = AssetImage(
-      'assets/topbars/newer_ipad_topbar.png',
+  /// An image of the top bar of an iPad.
+  static const ipadTopBarImage = AssetImage('assets/topbars/ipad_topbar.png',
       package: 'golden_screenshot');
 }
