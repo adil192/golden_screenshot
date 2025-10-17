@@ -1,3 +1,7 @@
+## 5.0.0+1
+
+- Fixed a link in the README
+
 ## 5.0.0
 
 - Apple no longer requires screenshots from `olderIphone` and `olderIpad`, so in `GoldenScreenshotDevices`:
