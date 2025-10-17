@@ -4,7 +4,7 @@ Utilities to automate screenshot generation using Flutter's golden tests.
 
 The generated screenshots are suitable for the App Store, Play Store, F-Droid, Flathub (Linux), etc,
 and are saved in a Fastlane-compatible directory structure (e.g. `metadata/en-US/images/phoneScreenshots/1_home.png`) by default.
-See [lib/src/screenshot_device.dart](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_device.dart)
+See [lib/src/screenshot_devices.dart](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_devices.dart)
 for the default list of devices,
 or have a look at [Customization](#customization) to customize the devices, frames, and location of the screenshots.
 
@@ -86,7 +86,7 @@ flutter test test/screenshot_test.dart --update-goldens
 If you don't want to use the default set of devices (`GoldenScreenshotDevices`),
 you can create your own set of devices by creating an enum containing
 `ScreenshotDevice` instances.
-See [GoldenScreenshotDevices](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_device.dart) for what your enum should look like.
+See [GoldenScreenshotDevices](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_devices.dart) for what your enum should look like.
 
 ```dart
 enum MyScreenshotDevices {
