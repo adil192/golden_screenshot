@@ -1,5 +1,9 @@
 # golden_screenshot
 
+[![pub.dev](https://img.shields.io/pub/v/golden_screenshot)](https://pub.dev/packages/golden_screenshot)
+[![codecov](https://codecov.io/github/adil192/golden_screenshot/graph/badge.svg?token=TIBGLCUE11)](https://codecov.io/github/adil192/golden_screenshot)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/adil192/golden_screenshot/blob/main/LICENSE)
+
 Utilities to automate screenshot generation using Flutter's golden tests.
 
 The generated screenshots are suitable for the App Store, Play Store, F-Droid, Flathub (Linux), etc,
