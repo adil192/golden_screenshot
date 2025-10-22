@@ -71,7 +71,7 @@ extension ScreenshotTester on WidgetTester {
   /// {@macro loadAppFonts}
   ///
   /// ```dart
-  /// await tester.loadFonts(overriddenFonts: ['Inter', ...kOverriddenFonts]);
+  /// await tester.loadFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
   /// ```
   Future<void> loadFonts({
     List<String> overriddenFonts = kOverriddenFonts,

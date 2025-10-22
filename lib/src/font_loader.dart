@@ -13,7 +13,7 @@ typedef JsonMap = Map<String, dynamic>;
 ///
 /// This method loads proper fonts for the app to use in golden tests.
 ///
-/// Note that if your app specifies a custom font (e.g. Inter)
+/// Note that if your app specifies a custom font (e.g. Comic Sans)
 /// with font fallbacks, but does not include said custom font,
 /// the font fallbacks will not be applied. Ahem will be used instead.
 /// In this case, please provide the [overriddenFonts] parameter like this
@@ -21,7 +21,7 @@ typedef JsonMap = Map<String, dynamic>;
 /// {@endtemplate}
 ///
 /// ```dart
-/// await loadAppFonts(overriddenFonts: ['Inter', ...kOverriddenFonts]);
+/// await loadAppFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
 /// ```
 Future<void> loadAppFonts({
   List<String> overriddenFonts = kOverriddenFonts,
@@ -79,10 +79,34 @@ Future<void> loadFont(String family, JsonMap fontObject) {
   return fontLoader.load();
 }
 
+/// The fonts overridden by Roboto in [loadAppFonts].
+///
+/// This list represents the default fonts used by Flutter on various platforms.
 const kOverriddenFonts = [
+  // Android
+  'Inter',
   'Roboto',
+
+  // Linux
+  'Adwaita Sans',
+  'Cantarell',
+  'Noto Sans',
+  'Ubuntu',
+  'packages/yaru/Ubuntu',
+
+  // Windows
+  'Segoe UI',
+
+  // Apple
+  'CupertinoSystemDisplay',
+  'CupertinoSystemText',
+  '.AppleSystemUIFont',
   '.SF Pro Display',
   '.SF Pro Text',
   '.SF UI Display',
   '.SF UI Text',
+
+  // Other
+  'system-ui',
+  'sans-serif',
 ];
