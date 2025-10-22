@@ -1,6 +1,6 @@
 name: golden_screenshot
 description: Utilities to automate screenshot generation using Flutter's golden tests.
-version: 5.0.0+1
+version: 5.1.0
 repository: https://github.com/adil192/golden_screenshot
 
 topics:

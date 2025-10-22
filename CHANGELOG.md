@@ -1,3 +1,8 @@
+## 5.1.0
+
+- Fixed iOS fonts not being overridden in `tester.loadFonts`.
+- Overridden a bunch more common system fonts. See the [`kOverriddenFonts`](https://github.com/adil192/golden_screenshot/blob/608a437edfc9682397ae0a140a1fa1b4bc64dd73/lib/src/font_loader.dart#L82) 
+
 ## 5.0.0+1
 
 - Fixed a link in the README
