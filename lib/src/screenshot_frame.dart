@@ -59,12 +59,12 @@ class ScreenshotFrame extends StatelessWidget {
     this.frameColors,
     required this.child,
   })  : topBar = const FrameTopBar(
-          topBarPhysicalHeight: 156,
-          topBarImage: androidTopBarImage,
+          height: 156 / 3,
+          image: androidTopBarImage,
         ),
         bottomBar = const FrameBottomBar(
-          bottomBarPhysicalHeight: 72,
-          handlePhysicalSize: Size(324, 12),
+          height: 72 / 3,
+          handleSize: Size(324 / 3, 12 / 3),
         );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
@@ -74,12 +74,12 @@ class ScreenshotFrame extends StatelessWidget {
     this.frameColors,
     required this.child,
   })  : topBar = const FrameTopBar(
-          topBarPhysicalHeight: 186,
-          topBarImage: iphoneTopBarImage,
+          height: 186 / 3,
+          image: iphoneTopBarImage,
         ),
         bottomBar = const FrameBottomBar(
-          bottomBarPhysicalHeight: 102,
-          handlePhysicalSize: Size.zero,
+          height: 102 / 3,
+          handleSize: Size.zero,
         );
 
   /// Creates a frame with an iPad 13" top bar and a bottom bar.
@@ -89,12 +89,12 @@ class ScreenshotFrame extends StatelessWidget {
     this.frameColors,
     required this.child,
   })  : topBar = const FrameTopBar(
-          topBarPhysicalHeight: 64,
-          topBarImage: ipadTopBarImage,
+          height: 64 / 2,
+          image: ipadTopBarImage,
         ),
         bottomBar = const FrameBottomBar(
-          bottomBarPhysicalHeight: 40,
-          handlePhysicalSize: Size.zero,
+          height: 40 / 2,
+          handleSize: Size.zero,
         );
 
   /// The device that this frame will simulate.
@@ -148,31 +148,25 @@ class ScreenshotFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final topBarLogicalHeight =
-        (topBar?.topBarPhysicalHeight ?? 0) / mediaQuery.devicePixelRatio;
-    final bottomBarLogicalHeight =
-        (bottomBar?.bottomBarPhysicalHeight ?? 0) / mediaQuery.devicePixelRatio;
+    final viewPadding = EdgeInsets.only(
+      top: topBar?.height ?? 0,
+      bottom: bottomBar?.height ?? 0,
+    );
 
     return MediaQuery(
       data: mediaQuery.copyWith(
-        padding: EdgeInsets.only(
-          top: topBarLogicalHeight,
-          bottom: bottomBarLogicalHeight,
-        ),
-        viewPadding: EdgeInsets.only(
-          top: topBarLogicalHeight,
-          bottom: bottomBarLogicalHeight,
-        ),
+        padding: viewPadding,
+        viewPadding: viewPadding,
       ),
       child: Stack(
         children: [
           child,
-          if (topBarLogicalHeight > 0)
+          if (topBar != null)
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              height: topBarLogicalHeight,
+              height: topBar!.height,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   _getIconColor(
@@ -181,15 +175,15 @@ class ScreenshotFrame extends StatelessWidget {
                   ),
                   BlendMode.srcIn,
                 ),
-                child: Image(image: topBar!.topBarImage),
+                child: Image(image: topBar!.image),
               ),
             ),
-          if (bottomBarLogicalHeight > 0)
+          if (bottomBar != null)
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              height: bottomBarLogicalHeight,
+              height: bottomBar!.height,
               child: Center(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -199,12 +193,7 @@ class ScreenshotFrame extends StatelessWidget {
                       _getGestureHintBrightness(context),
                     ),
                   ),
-                  child: SizedBox(
-                    width: bottomBar!.handlePhysicalSize.width /
-                        mediaQuery.devicePixelRatio,
-                    height: bottomBar!.handlePhysicalSize.height /
-                        mediaQuery.devicePixelRatio,
-                  ),
+                  child: SizedBox.fromSize(size: bottomBar!.handleSize),
                 ),
               ),
             ),
@@ -230,32 +219,26 @@ class ScreenshotFrame extends StatelessWidget {
 
 class FrameTopBar {
   const FrameTopBar({
-    required this.topBarPhysicalHeight,
-    required this.topBarImage,
-  });
+    required this.height,
+    required this.image,
+  }) : assert(height > 0);
 
-  /// The size of the top bar in physical pixels.
-  ///
-  /// This will be divided by the device pixel ratio to get the logical size.
-  final double topBarPhysicalHeight;
+  /// The size of the top bar in logical pixels.
+  final double height;
 
   /// The image of the top bar.
-  final ImageProvider topBarImage;
+  final ImageProvider image;
 }
 
 class FrameBottomBar {
   const FrameBottomBar({
-    required this.bottomBarPhysicalHeight,
-    required this.handlePhysicalSize,
-  });
+    required this.height,
+    required this.handleSize,
+  }) : assert(height > 0);
 
-  /// The size of the bottom bar in physical pixels.
-  ///
-  /// This will be divided by the device pixel ratio to get the logical size.
-  final double bottomBarPhysicalHeight;
+  /// The size of the bottom bar in logical pixels.
+  final double height;
 
-  /// The size of the gesture handle in physical pixels.
-  ///
-  /// This will be divided by the device pixel ratio to get the logical size.
-  final Size handlePhysicalSize;
+  /// The size of the gesture handle in logical pixels.
+  final Size handleSize;
 }
