@@ -94,11 +94,11 @@ enum GoldenSmallDevices {
     frameBuilder: ScreenshotFrame.noFrame,
   )),
 
-  /// An Android phone based on the Pixel 6 Pro.
+  /// An Android phone based on the Pixel 9 Pro.
   android(ScreenshotDevice(
     platform: TargetPlatform.android,
-    resolution: Size(1440 * sf, 3120 * sf),
-    pixelRatio: 10 / 3 * sf,
+    resolution: Size(1280 * sf, 2856 * sf),
+    pixelRatio: 3 * sf,
     goldenSubFolder: 'phoneScreenshots/',
     frameBuilder: ScreenshotFrame.android,
   )),
