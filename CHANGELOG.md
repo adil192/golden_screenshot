@@ -1,18 +1,22 @@
+## 6.0.0
+
+**Migration needed**: Update your goldens by running `flutter test --update-goldens`.
+
+- Updated the top bars to Android 16 QPR1 (Material 3 Expressive) and iOS 26 (Liquid Glass).
+- Switched the android device from the Pixel 6 Pro to the Pixel 9 Pro.
+
 ## 5.1.0
 
 - Fixed iOS fonts not being overridden in `tester.loadFonts`.
-- Overridden a bunch more common system fonts. See the [`kOverriddenFonts`](https://github.com/adil192/golden_screenshot/blob/608a437edfc9682397ae0a140a1fa1b4bc64dd73/lib/src/font_loader.dart#L82) 
-
-## 5.0.0+1
-
-- Fixed a link in the README
+- Overridden a bunch more common system fonts: see [`kOverriddenFonts`](https://github.com/adil192/golden_screenshot/blob/608a437edfc9682397ae0a140a1fa1b4bc64dd73/lib/src/font_loader.dart#L82-L112) for the full list.
 
 ## 5.0.0
+
+**Migration needed**: Delete the `metadata/en-US/images/*Screenshots` folders and rerun `flutter test --update-goldens`.
 
 - Apple no longer requires screenshots from `olderIphone` and `olderIpad`, so in `GoldenScreenshotDevices`:
     - `olderIphone` and `olderIpad` have been removed.
     - `newerIphone` and `newerIphone` have been renamed to `iphone` and `ipad`.
-    - **Migration needed**: Delete the `metadata/en-US/images/*Screenshots` folders and rerun `flutter test --update-goldens`.
 - For non-user-facing goldens, you can now use `GoldenSmallDevices` instead of `GoldenScreenshotDevices`. It's the same but with a lower resolution, resulting in faster tests.
 
 ## 4.0.1
