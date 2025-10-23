@@ -49,9 +49,8 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = null,
-        topBarImage = null,
-        gestureHintSize = null;
+  })  : topBar = null,
+        bottomBar = null;
 
   /// Creates a frame with a status bar and a navigation bar.
   const ScreenshotFrame.android({
@@ -59,9 +58,14 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(1440, 145),
-        topBarImage = androidTopBarImage,
-        gestureHintSize = const Size(125, 4);
+  })  : topBar = const FrameTopBar(
+          topBarPhysicalHeight: 156,
+          topBarImage: androidTopBarImage,
+        ),
+        bottomBar = const FrameBottomBar(
+          bottomBarPhysicalHeight: 72,
+          handlePhysicalSize: Size(324, 12),
+        );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
   const ScreenshotFrame.iphone({
@@ -69,9 +73,14 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(1320, 186),
-        topBarImage = iphoneTopBarImage,
-        gestureHintSize = const Size(150, 5);
+  })  : topBar = const FrameTopBar(
+          topBarPhysicalHeight: 186,
+          topBarImage: iphoneTopBarImage,
+        ),
+        bottomBar = const FrameBottomBar(
+          bottomBarPhysicalHeight: 102,
+          handlePhysicalSize: Size.zero,
+        );
 
   /// Creates a frame with an iPad 13" top bar and a bottom bar.
   const ScreenshotFrame.ipad({
@@ -79,9 +88,14 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBarSize = const Size(2064, 64),
-        topBarImage = ipadTopBarImage,
-        gestureHintSize = const Size(320, 6);
+  })  : topBar = const FrameTopBar(
+          topBarPhysicalHeight: 64,
+          topBarImage: ipadTopBarImage,
+        ),
+        bottomBar = const FrameBottomBar(
+          bottomBarPhysicalHeight: 40,
+          handlePhysicalSize: Size.zero,
+        );
 
   /// The device that this frame will simulate.
   final ScreenshotDevice device;
@@ -89,16 +103,11 @@ class ScreenshotFrame extends StatelessWidget {
   /// The colors of the top and bottom bars.
   final ScreenshotFrameColors? frameColors;
 
-  // The size of the top bar, if any.
-  final Size? topBarSize;
+  /// Information about the top bar, if present.
+  final FrameTopBar? topBar;
 
-  /// The image of the top bar, if any.
-  /// This will have the same size as [topBarSize].
-  final ImageProvider? topBarImage;
-
-  /// The size of the gesture hint in the bottom bar, if any.
-  /// This is the size of the hint, not the bar itself.
-  final Size? gestureHintSize;
+  /// Information about the bottom bar, if present.
+  final FrameBottomBar? bottomBar;
 
   /// The child that will be rendered inside the frame.
   final Widget child;
@@ -139,31 +148,31 @@ class ScreenshotFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final logicalTopBarHeight = topBarSize == null
-        ? 0.0
-        : topBarSize!.height / topBarSize!.width * mediaQuery.size.width;
-    final logicalBottomBarHeight = gestureHintSize == null ? 0.0 : 24.0;
+    final topBarLogicalHeight =
+        (topBar?.topBarPhysicalHeight ?? 0) / mediaQuery.devicePixelRatio;
+    final bottomBarLogicalHeight =
+        (bottomBar?.bottomBarPhysicalHeight ?? 0) / mediaQuery.devicePixelRatio;
 
     return MediaQuery(
       data: mediaQuery.copyWith(
         padding: EdgeInsets.only(
-          top: logicalTopBarHeight,
-          bottom: logicalBottomBarHeight,
+          top: topBarLogicalHeight,
+          bottom: bottomBarLogicalHeight,
         ),
         viewPadding: EdgeInsets.only(
-          top: logicalTopBarHeight,
-          bottom: logicalBottomBarHeight,
+          top: topBarLogicalHeight,
+          bottom: bottomBarLogicalHeight,
         ),
       ),
       child: Stack(
         children: [
           child,
-          if (logicalTopBarHeight > 0)
+          if (topBarLogicalHeight > 0)
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              height: logicalTopBarHeight,
+              height: topBarLogicalHeight,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   _getIconColor(
@@ -172,15 +181,15 @@ class ScreenshotFrame extends StatelessWidget {
                   ),
                   BlendMode.srcIn,
                 ),
-                child: Image(image: topBarImage!),
+                child: Image(image: topBar!.topBarImage),
               ),
             ),
-          if (logicalBottomBarHeight > 0)
+          if (bottomBarLogicalHeight > 0)
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              height: logicalBottomBarHeight,
+              height: bottomBarLogicalHeight,
               child: Center(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -191,8 +200,10 @@ class ScreenshotFrame extends StatelessWidget {
                     ),
                   ),
                   child: SizedBox(
-                    width: gestureHintSize!.width,
-                    height: gestureHintSize!.height,
+                    width: bottomBar!.handlePhysicalSize.width /
+                        mediaQuery.devicePixelRatio,
+                    height: bottomBar!.handlePhysicalSize.height /
+                        mediaQuery.devicePixelRatio,
                   ),
                 ),
               ),
@@ -215,4 +226,36 @@ class ScreenshotFrame extends StatelessWidget {
   /// An image of the top bar of an iPad.
   static const ipadTopBarImage = AssetImage('assets/topbars/ipad_topbar.png',
       package: 'golden_screenshot');
+}
+
+class FrameTopBar {
+  const FrameTopBar({
+    required this.topBarPhysicalHeight,
+    required this.topBarImage,
+  });
+
+  /// The size of the top bar in physical pixels.
+  ///
+  /// This will be divided by the device pixel ratio to get the logical size.
+  final double topBarPhysicalHeight;
+
+  /// The image of the top bar.
+  final ImageProvider topBarImage;
+}
+
+class FrameBottomBar {
+  const FrameBottomBar({
+    required this.bottomBarPhysicalHeight,
+    required this.handlePhysicalSize,
+  });
+
+  /// The size of the bottom bar in physical pixels.
+  ///
+  /// This will be divided by the device pixel ratio to get the logical size.
+  final double bottomBarPhysicalHeight;
+
+  /// The size of the gesture handle in physical pixels.
+  ///
+  /// This will be divided by the device pixel ratio to get the logical size.
+  final Size handlePhysicalSize;
 }
