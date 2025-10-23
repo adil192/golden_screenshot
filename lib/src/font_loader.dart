@@ -24,7 +24,7 @@ typedef JsonMap = Map<String, dynamic>;
 /// await loadAppFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
 /// ```
 Future<void> loadAppFonts({
-  List<String> overriddenFonts = kOverriddenFonts,
+  Iterable<String> overriddenFonts = kOverriddenFonts,
 }) async {
   if (kIsWeb) {
     // rootBundle not available on web
@@ -82,7 +82,7 @@ Future<void> loadFont(String family, JsonMap fontObject) {
 /// The fonts overridden by Roboto in [loadAppFonts].
 ///
 /// This list represents the default fonts used by Flutter on various platforms.
-const kOverriddenFonts = [
+const kOverriddenFonts = {
   // Android
   'Inter',
   'Roboto',
@@ -109,4 +109,4 @@ const kOverriddenFonts = [
   // Other
   'system-ui',
   'sans-serif',
-];
+};

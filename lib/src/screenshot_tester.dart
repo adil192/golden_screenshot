@@ -74,7 +74,7 @@ extension ScreenshotTester on WidgetTester {
   /// await tester.loadFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
   /// ```
   Future<void> loadFonts({
-    List<String> overriddenFonts = kOverriddenFonts,
+    Iterable<String> overriddenFonts = kOverriddenFonts,
   }) =>
       runAsync(() => loadAppFonts(overriddenFonts: overriddenFonts));
 
