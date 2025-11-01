@@ -12,10 +12,10 @@ enum GoldenScreenshotDevices {
   /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size).
   flathub(ScreenshotDevice(
     platform: TargetPlatform.linux,
-    resolution: Size(1920, 1080),
-    pixelRatio: 1.5,
+    resolution: Size(1000 + flathubMargin * 2, 700 + flathubMargin * 2),
+    pixelRatio: 1,
     goldenSubFolder: 'flathubScreenshots/',
-    frameBuilder: ScreenshotFrame.noFrame,
+    frameBuilder: ScreenshotFrame.flathub,
   )),
 
   /// An Android phone based on the Pixel 9 Pro.
@@ -98,10 +98,11 @@ enum GoldenSmallDevices {
   /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size).
   flathub(ScreenshotDevice(
     platform: TargetPlatform.linux,
-    resolution: Size(1920 * sf, 1080 * sf),
-    pixelRatio: 1.5 * sf,
+    resolution:
+        Size((1000 + flathubMargin * 2) * sf, (700 + flathubMargin * 2) * sf),
+    pixelRatio: 1 * sf,
     goldenSubFolder: 'flathubScreenshots/',
-    frameBuilder: ScreenshotFrame.noFrame,
+    frameBuilder: ScreenshotFrame.flathub,
   )),
 
   /// An Android phone based on the Pixel 9 Pro.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/src/screenshot_device.dart';
+import 'package:yaru/yaru.dart';
 
 /// A builder that can add a top and bottom bar to its [child].
 ///
@@ -9,6 +10,10 @@ typedef ScreenshotFrameBuilder = Widget Function({
   required ScreenshotFrameColors? frameColors,
   required Widget child,
 });
+
+/// The margin around the window for the Flathub frame.
+/// This is intended to match the Gnome screenshot tool's style.
+const flathubMargin = 25.0;
 
 /// The frame's colors can be customized with this
 /// to match the content of the app.
@@ -94,6 +99,20 @@ class ScreenshotFrame extends StatelessWidget {
           height: 48 / 1.5,
           handleSize: Size(330 / 1.5, 6 / 1.5),
         );
+
+  /// Creates a shadowed window frame with no top or bottom bar.
+  factory ScreenshotFrame.flathub({
+    Key? key,
+    required ScreenshotDevice device,
+    ScreenshotFrameColors? frameColors,
+    required Widget child,
+  }) =>
+      _FlathubScreenshotFrame(
+        key: key,
+        device: device,
+        frameColors: frameColors,
+        child: child,
+      );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
   const ScreenshotFrame.iphone({
@@ -251,6 +270,47 @@ class ScreenshotFrame extends StatelessWidget {
 
   @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
   static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
+}
+
+class _FlathubScreenshotFrame extends ScreenshotFrame {
+  const _FlathubScreenshotFrame({
+    super.key,
+    required super.device,
+    super.frameColors,
+    required super.child,
+  }) : super.noFrame();
+
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(12);
+    final colorScheme = ColorScheme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(flathubMargin),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.shadow.withValues(alpha: 0.3),
+              offset: const Offset(0, 3),
+              blurRadius: 12,
+              spreadRadius: -1,
+            ),
+            BoxShadow(
+              color: colorScheme.shadow.withValues(alpha: 0.2),
+              offset: const Offset(0, 0),
+              blurRadius: 1,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: child,
+        ),
+      ),
+    );
+  }
 }
 
 class FrameTopBar {
