@@ -69,6 +69,8 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
     return _ResizedBox(
       resolution: widget.device.resolution,
       pixelRatio: widget.device.pixelRatio,
+      disableAnimations:
+          widget.themeAnimationStyle == AnimationStyle.noAnimation,
       child: MaterialApp(
         navigatorKey: widget.navigatorKey,
         scaffoldMessengerKey: widget.scaffoldMessengerKey,
@@ -129,11 +131,13 @@ class _ResizedBox extends StatelessWidget {
   const _ResizedBox({
     required this.resolution,
     required this.pixelRatio,
+    this.disableAnimations = true,
     required this.child,
   });
 
   final Size resolution;
   final double pixelRatio;
+  final bool disableAnimations;
   final Widget child;
 
   @override
@@ -151,6 +155,7 @@ class _ResizedBox extends StatelessWidget {
                 data: MediaQueryData(
                   size: resolution / pixelRatio,
                   devicePixelRatio: pixelRatio,
+                  disableAnimations: disableAnimations,
                 ),
                 child: child,
               ),
