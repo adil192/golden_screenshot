@@ -1,3 +1,19 @@
+## 7.0.0
+
+- The `flathub` device was previously a combination of Flathub (Linux) and Play Store (Android) requirements. It has now been split into two separate devices:
+  1. The new `flathub` device:
+      - Has rounded corners and a shadow to match real Gnome screenshots.
+      - Screenshots are saved in `metadata/en-US/images/flathubScreenshots/`.
+      - I recommend you use a `ScreenshotConditionalTitlebar` (see below) for a more native look.
+  2. The new `androidTablet` device:
+      - Has a top and bottom bar matching Android 16 QPR1 (Material 3 Expressive) tablets.
+      - Screenshots are saved in `metadata/en-US/images/tenInchScreenshots/`.
+  3. The renamed `androidPhone` device:
+      - Exactly the same as `android` from before.
+      - Migration can be done automatically with the `dart fix` tool.
+
+- Added the `ScreenshotConditionalTitlebar` widget, which adds a Yaru (Ubuntu) themed titlebar to Linux screenshots.
+
 ## 6.0.0
 
 **Migration needed**: Update your goldens by running `flutter test --update-goldens`.
