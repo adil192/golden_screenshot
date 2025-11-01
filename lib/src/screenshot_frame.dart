@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/src/screenshot_device.dart';
-import 'package:yaru/yaru.dart';
 
 /// A builder that can add a top and bottom bar to its [child].
 ///

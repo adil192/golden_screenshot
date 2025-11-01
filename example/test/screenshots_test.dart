@@ -61,7 +61,11 @@ void _screenshotWidget({
         final widget = ScreenshotApp(
           theme: theme,
           device: device,
-          home: child,
+          home: ScreenshotConditionalTitlebar(
+            title: Text('golden_screenshot'),
+            device: device,
+            child: child,
+          ),
         );
         await tester.pumpWidget(widget);
 

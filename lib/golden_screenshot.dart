@@ -8,4 +8,5 @@ export 'src/screenshot_device.dart';
 export 'src/screenshot_devices.dart';
 export 'src/screenshot_frame.dart';
 export 'src/screenshot_tester.dart';
+export 'src/screenshot_titlebar.dart';
 export 'src/test_goldens.dart';
