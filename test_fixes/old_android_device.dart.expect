@@ -1,0 +1,8 @@
+import 'package:golden_screenshot/golden_screenshot.dart';
+
+void main() {
+  final device = GoldenScreenshotDevices.androidPhone;
+  final smallDevice = GoldenSmallDevices.androidPhone;
+  final frameBuilder = ScreenshotFrame.androidPhone;
+  final frameImage = ScreenshotFrame.androidPhoneTopBarImage;
+}

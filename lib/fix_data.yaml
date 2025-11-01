@@ -1,13 +1,13 @@
 version: 1
 transforms:
   - title: Rename child field to home in ScreenshotApp
-    date: 2024-10-01
+    date: 2025-09-29
     element:
       uris:
         - 'src/screenshot_app.dart'
         - 'golden_screenshot.dart'
         - 'package:golden_screenshot/src/screenshot_app.dart'
-        - 'package:golden_screenshot/screenshot_app.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
       field: child
       inClass: ScreenshotApp
     changes:
@@ -15,16 +15,72 @@ transforms:
         newName: home
 
   - title: Rename child to home in ScreenshotApp constructor
-    date: 2024-10-01
+    date: 2025-09-29
     element:
       uris:
         - 'src/screenshot_app.dart'
         - 'golden_screenshot.dart'
         - 'package:golden_screenshot/src/screenshot_app.dart'
-        - 'package:golden_screenshot/screenshot_app.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
       constructor: ''
       inClass: ScreenshotApp
     changes:
       - kind: renameParameter
         oldName: child
         newName: home
+
+  - title: Rename android to androidPhone in GoldenScreenshotDevices
+    date: 2025-11-01
+    element:
+      uris:
+        - 'src/screenshot_devices.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_devices.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      field: android
+      inClass: GoldenScreenshotDevices
+    changes:
+      - kind: rename
+        newName: androidPhone
+
+  - title: Rename android to androidPhone in GoldenSmallDevices
+    date: 2025-11-01
+    element:
+      uris:
+        - 'src/screenshot_devices.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_devices.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      field: android
+      inClass: GoldenSmallDevices
+    changes:
+      - kind: rename
+        newName: androidPhone
+
+  - title: Rename android to androidPhone in ScreenshotFrame
+    date: 2025-11-01
+    element:
+      uris:
+        - 'src/screenshot_frame.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_frame.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      constructor: android
+      inClass: ScreenshotFrame
+    changes:
+      - kind: rename
+        newName: androidPhone
+
+  - title: Rename androidTopBarImage to androidPhoneTopBarImage in ScreenshotFrame
+    date: 2025-11-01
+    element:
+      uris:
+        - 'src/screenshot_frame.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_frame.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      field: androidTopBarImage
+      inClass: ScreenshotFrame
+    changes:
+      - kind: rename
+        newName: androidPhoneTopBarImage

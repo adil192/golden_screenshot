@@ -20,12 +20,12 @@ enum GoldenScreenshotDevices {
   )),
 
   /// An Android phone based on the Pixel 9 Pro.
-  android(ScreenshotDevice(
+  androidPhone(ScreenshotDevice(
     platform: TargetPlatform.android,
     resolution: Size(1280, 2856),
     pixelRatio: 3,
     goldenSubFolder: 'phoneScreenshots/',
-    frameBuilder: ScreenshotFrame.android,
+    frameBuilder: ScreenshotFrame.androidPhone,
   )),
 
   /// A MacBook Pro (15-inch, 2019)
@@ -69,6 +69,8 @@ enum GoldenScreenshotDevices {
   static GoldenScreenshotDevices get newerIpad => ipad;
   @Deprecated('Use `ipad` instead')
   static GoldenScreenshotDevices get olderIpad => ipad;
+  @Deprecated('Use `androidPhone` instead')
+  static GoldenScreenshotDevices get android => androidPhone;
 }
 
 @Deprecated('Use GoldenScreenshotDevices instead.')
@@ -95,12 +97,12 @@ enum GoldenSmallDevices {
   )),
 
   /// An Android phone based on the Pixel 9 Pro.
-  android(ScreenshotDevice(
+  androidPhone(ScreenshotDevice(
     platform: TargetPlatform.android,
     resolution: Size(1280 * sf, 2856 * sf),
     pixelRatio: 3 * sf,
     goldenSubFolder: 'phoneScreenshots/',
-    frameBuilder: ScreenshotFrame.android,
+    frameBuilder: ScreenshotFrame.androidPhone,
   )),
 
   /// A MacBook Pro (15-inch, 2019)
@@ -139,4 +141,7 @@ enum GoldenSmallDevices {
   /// The scale factor applied to each device's resolution.
   @visibleForTesting
   static const sf = 0.2;
+
+  @Deprecated('Use `androidPhone` instead')
+  static GoldenSmallDevices get android => androidPhone;
 }

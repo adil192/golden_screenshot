@@ -53,18 +53,31 @@ class ScreenshotFrame extends StatelessWidget {
         bottomBar = null;
 
   /// Creates a frame with a status bar and a navigation bar.
-  const ScreenshotFrame.android({
+  const ScreenshotFrame.androidPhone({
     super.key,
     required this.device,
     this.frameColors,
     required this.child,
   })  : topBar = const FrameTopBar(
           height: 156 / 3,
-          image: androidTopBarImage,
+          image: androidPhoneTopBarImage,
         ),
         bottomBar = const FrameBottomBar(
           height: 72 / 3,
           handleSize: Size(324 / 3, 12 / 3),
+        );
+
+  @Deprecated('This has been renamed to `ScreenshotFrame.androidPhone`')
+  const ScreenshotFrame.android({
+    Key? key,
+    required ScreenshotDevice device,
+    ScreenshotFrameColors? frameColors,
+    required Widget child,
+  }) : this.androidPhone(
+          key: key,
+          device: device,
+          frameColors: frameColors,
+          child: child,
         );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
@@ -202,9 +215,9 @@ class ScreenshotFrame extends StatelessWidget {
     );
   }
 
-  /// An image of the Android status bar.
-  static const androidTopBarImage = AssetImage(
-      'assets/topbars/android_topbar.png',
+  /// An image of the top bar of an Android phone.
+  static const androidPhoneTopBarImage = AssetImage(
+      'assets/topbars/android_phone_topbar.png',
       package: 'golden_screenshot');
 
   /// An image of the top bar of an iPhone.
@@ -215,6 +228,9 @@ class ScreenshotFrame extends StatelessWidget {
   /// An image of the top bar of an iPad.
   static const ipadTopBarImage = AssetImage('assets/topbars/ipad_topbar.png',
       package: 'golden_screenshot');
+
+  @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
+  static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
 }
 
 class FrameTopBar {

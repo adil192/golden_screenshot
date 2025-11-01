@@ -61,7 +61,7 @@ extension ScreenshotTester on WidgetTester {
   }) =>
       precacheImages(
         const [
-          ScreenshotFrame.androidTopBarImage,
+          ScreenshotFrame.androidPhoneTopBarImage,
           ScreenshotFrame.iphoneTopBarImage,
           ScreenshotFrame.ipadTopBarImage,
         ],
