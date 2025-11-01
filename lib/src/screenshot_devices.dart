@@ -9,13 +9,12 @@ enum GoldenScreenshotDevices {
   /// A desktop/laptop running Linux.
   ///
   /// The size fits Flathub's guidelines for screenshots
-  /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size)
-  /// while also being a 16:9 aspect ratio for Google Play.
+  /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size).
   flathub(ScreenshotDevice(
     platform: TargetPlatform.linux,
     resolution: Size(1920, 1080),
     pixelRatio: 1.5,
-    goldenSubFolder: 'tenInchScreenshots/',
+    goldenSubFolder: 'flathubScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
   )),
 
@@ -26,6 +25,16 @@ enum GoldenScreenshotDevices {
     pixelRatio: 3,
     goldenSubFolder: 'phoneScreenshots/',
     frameBuilder: ScreenshotFrame.androidPhone,
+  )),
+
+  /// An Android tablet based on the Samsung Galaxy Tab S11,
+  /// but with a 16:9 aspect ratio to meet Play Store requirements.
+  androidTablet(ScreenshotDevice(
+    platform: TargetPlatform.android,
+    resolution: Size(2560, 1440),
+    pixelRatio: 1.5,
+    goldenSubFolder: 'tenInchScreenshots/',
+    frameBuilder: ScreenshotFrame.androidTablet,
   )),
 
   /// A MacBook Pro (15-inch, 2019)
@@ -86,13 +95,12 @@ enum GoldenSmallDevices {
   /// A desktop/laptop running Linux.
   ///
   /// The size fits Flathub's guidelines for screenshots
-  /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size)
-  /// while also being a 16:9 aspect ratio for Google Play.
+  /// (https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines/#reasonable-window-size).
   flathub(ScreenshotDevice(
     platform: TargetPlatform.linux,
     resolution: Size(1920 * sf, 1080 * sf),
     pixelRatio: 1.5 * sf,
-    goldenSubFolder: 'tenInchScreenshots/',
+    goldenSubFolder: 'flathubScreenshots/',
     frameBuilder: ScreenshotFrame.noFrame,
   )),
 
@@ -103,6 +111,16 @@ enum GoldenSmallDevices {
     pixelRatio: 3 * sf,
     goldenSubFolder: 'phoneScreenshots/',
     frameBuilder: ScreenshotFrame.androidPhone,
+  )),
+
+  /// An Android tablet based on the Samsung Galaxy Tab S11,
+  /// but with a 16:9 aspect ratio to meet Play Store requirements.
+  androidTablet(ScreenshotDevice(
+    platform: TargetPlatform.android,
+    resolution: Size(2560 * sf, 1440 * sf),
+    pixelRatio: 1.5 * sf,
+    goldenSubFolder: 'tenInchScreenshots/',
+    frameBuilder: ScreenshotFrame.androidTablet,
   )),
 
   /// A MacBook Pro (15-inch, 2019)

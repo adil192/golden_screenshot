@@ -52,7 +52,7 @@ class ScreenshotFrame extends StatelessWidget {
   })  : topBar = null,
         bottomBar = null;
 
-  /// Creates a frame with a status bar and a navigation bar.
+  /// Creates a frame resembling an Android phone.
   const ScreenshotFrame.androidPhone({
     super.key,
     required this.device,
@@ -78,6 +78,21 @@ class ScreenshotFrame extends StatelessWidget {
           device: device,
           frameColors: frameColors,
           child: child,
+        );
+
+  /// Creates a frame resembling an Android tablet.
+  const ScreenshotFrame.androidTablet({
+    super.key,
+    required this.device,
+    this.frameColors,
+    required this.child,
+  })  : topBar = const FrameTopBar(
+          height: 36 / 1.5,
+          image: androidTabletTopBarImage,
+        ),
+        bottomBar = const FrameBottomBar(
+          height: 48 / 1.5,
+          handleSize: Size(330 / 1.5, 6 / 1.5),
         );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
@@ -218,6 +233,11 @@ class ScreenshotFrame extends StatelessWidget {
   /// An image of the top bar of an Android phone.
   static const androidPhoneTopBarImage = AssetImage(
       'assets/topbars/android_phone_topbar.png',
+      package: 'golden_screenshot');
+
+  /// An image of the top bar of an Android tablet.
+  static const androidTabletTopBarImage = AssetImage(
+      'assets/topbars/android_tablet_topbar.png',
       package: 'golden_screenshot');
 
   /// An image of the top bar of an iPhone.
