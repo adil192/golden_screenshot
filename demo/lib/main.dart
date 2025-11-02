@@ -64,7 +64,7 @@ class _RecentChatsList extends StatelessWidget {
       children: [
         _ChatListTile(
           'Jane',
-          'This is message number 20.',
+          'This is message number 30.',
           unread: selectedUserName != 'Jane',
           selected: selectedUserName == 'Jane',
         ),
