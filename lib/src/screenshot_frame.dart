@@ -174,7 +174,7 @@ class ScreenshotFrame extends StatelessWidget {
   }
 
   Brightness _getGestureHintBrightness(BuildContext context) {
-    return frameColors!.gestureHintBrightness ??
+    return frameColors?.gestureHintBrightness ??
         _iconBrightnessForBackgroundColor(ColorScheme.of(context).surface);
   }
 
