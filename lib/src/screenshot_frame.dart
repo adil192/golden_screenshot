@@ -53,8 +53,8 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-    this.topBar,
-    this.bottomBar,
+    required this.topBar,
+    required this.bottomBar,
   });
 
   /// Creates a frame with no top or bottom bar.
