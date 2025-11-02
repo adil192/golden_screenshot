@@ -1,3 +1,8 @@
+## 7.1.0
+
+- No need to use `ScreenshotConditionalTitlebar` widget directly anymore. Instead, use the `ScreenshotApp.withConditionalTitlebar` constructor to do the same thing with less code.
+- If you're subclassing `ScreenshotFrame`, you must now provide the `topBar` and `bottomBar` parameters in the constructor (they no longer default to null).
+
 ## 7.0.1
 
 - Polished the README a little and added example screenshots to it.
@@ -19,6 +24,7 @@
       - Migration can be done automatically with the `dart fix` tool.
 
 - Added the `ScreenshotConditionalTitlebar` widget, which adds a Yaru (Ubuntu) themed titlebar to Linux screenshots.
+  <br/>(As of v7.1.0, prefer using `ScreenshotApp.withConditionalTitlebar` instead of using this widget directly.)
 
 ## 6.0.0
 
