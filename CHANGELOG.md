@@ -1,3 +1,9 @@
+## 7.0.1
+
+- Polished the README a little and added example screenshots to it.
+- Updated the example/demo app to be prettier and have more flexible testing.
+- Added an unnamed `ScreenshotFrame()` constructor for easier subclassing.
+
 ## 7.0.0
 
 - The `flathub` device was previously a combination of Flathub (Linux) and Play Store (Android) requirements. It has now been split into two separate devices:

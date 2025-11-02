@@ -1,5 +1,5 @@
 name: golden_screenshot_demo
-description: "A new Flutter project."
+description: A demo project for the golden_screenshot package.
 publish_to: 'none'
 version: 0.1.0
 
