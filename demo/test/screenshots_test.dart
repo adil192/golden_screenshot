@@ -25,7 +25,6 @@ void main() {
           ),
         );
         await tester.pumpWidget(app);
-        return app;
       },
     );
 
@@ -41,7 +40,6 @@ void main() {
           ),
         );
         await tester.pumpWidget(app);
-        return app;
       },
     );
 
@@ -62,8 +60,6 @@ void main() {
         await tester.pump();
         await tester.longPress(find.byIcon(Icons.send));
         await tester.pump();
-
-        return app;
       },
     );
   });
@@ -71,26 +67,24 @@ void main() {
 
 void _screenshot(
   String description, {
-  required Future<ScreenshotApp> Function(
-    WidgetTester tester,
-    ScreenshotDevice device,
-  )
-  pumpApp,
+  required Future<void> Function(WidgetTester, ScreenshotDevice) pumpApp,
 }) {
   group(description, () {
     for (final goldenDevice in GoldenScreenshotDevices.values) {
       testGoldens('for ${goldenDevice.name}', (tester) async {
         final device = goldenDevice.device;
 
-        final widget = await pumpApp(tester, device);
+        await pumpApp(tester, device);
 
-        // Precache the images and fonts
-        // so they're ready for the screenshot.
+        // Precache the images and fonts so they're ready for the screenshot.
         await tester.precacheImagesInWidgetTree();
         await tester.loadFonts();
 
         // Pump the widget for a second to ensure animations are complete.
-        await tester.pumpFrames(widget, const Duration(seconds: 1));
+        await tester.pumpFrames(
+          tester.widget(find.byType(ScreenshotApp)),
+          const Duration(seconds: 1),
+        );
 
         // Take the screenshot and compare it to the golden file.
         await tester.expectScreenshot(device, description);

@@ -1,87 +1,86 @@
 # golden_screenshot
 
+Utilities to automate screenshot generation using Flutter's golden tests.
+
 [![pub.dev](https://img.shields.io/pub/v/golden_screenshot)](https://pub.dev/packages/golden_screenshot)
 [![codecov](https://codecov.io/github/adil192/golden_screenshot/graph/badge.svg?token=TIBGLCUE11)](https://codecov.io/github/adil192/golden_screenshot)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/adil192/golden_screenshot/blob/main/LICENSE)
 
-Utilities to automate screenshot generation using Flutter's golden tests.
+This package makes it easy to generate screenshots of your Flutter app for 
+the App Store, Play Store, F-Droid, Flathub (Linux), etc.<br>
+You can use the provided set of common devices (phones, tablets, desktops)
+or create your own custom devices and frames.
 
-The generated screenshots are suitable for the App Store, Play Store, F-Droid, Flathub (Linux), etc,
-and are saved in a Fastlane-compatible directory structure (e.g. `metadata/en-US/images/phoneScreenshots/1_home.png`) by default.
-See [lib/src/screenshot_devices.dart](https://github.com/adil192/golden_screenshot/blob/main/lib/src/screenshot_devices.dart)
-for the default list of devices,
-or have a look at [Customization](#customization) to customize the devices, frames, and location of the screenshots.
+This package is also great for regular golden tests, not just for app store screenshots. It provides lots of flexibility and functionality beyond what Flutter has built-in.
 
 ## Getting started
 
-In your `pubspec.yaml` file, add `golden_screenshot` as a `dev_dependency` before running `flutter pub get`:
+Add `golden_screenshot` to your app as a dev dependency:
 
-```yaml
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  
-  golden_screenshot: ^x.y.z # Replace x.y.z with the latest version
+```bash
+flutter pub add dev:golden_screenshot
 ```
 
-Then create a file in your `test` directory (e.g. `test/screenshot_test.dart`) and use
-[demo/test/screenshots_test.dart](https://github.com/adil192/golden_screenshot/blob/main/demo/test/screenshots_test.dart)
-as a template to create your own tests.
+Then create a file in your `test` directory (e.g. `test/screenshot_test.dart`).
+In that file, you will create tests that load widgets and take screenshots of them.
+Please use [the example test file](https://github.com/adil192/golden_screenshot/blob/main/demo/test/screenshots_test.dart) as a starting point. <br/>
+If you're new to golden testing, watching a tutorial on Flutter golden testing will help you understand the basics.
 
-The main portion might look something like this:
+Once you have your test file, you can run the tests to generate the screenshots:
 
-```dart
-    _testGame(
-      goldenFileName: '1_home',
-      child: const HomePage(),
-    );
-    _testGame(
-      gameSave: inProgressGameSave,
-      frameColors: playPageFrameColors,
-      goldenFileName: '2_play',
-      child: const PlayPage(),
-    );
-    _testGame(
-      goldenFileName: '4_shop',
-      child: const ShopPage(),
-    );
-    _testGame(
-      goldenFileName: '5_tutorial',
-      child: const TutorialPage(),
-    );
-    _testGame(
-      goldenFileName: '6_settings',
-      child: const SettingsPage(),
-    );
+```bash
+flutter test --update-goldens
 ```
 
-If you're familiar with golden tests in Flutter, you'll notice some differences...
+That's it! Your screenshots will be generated in the appropriate directories.
 
-We use `testGoldens` instead of `testWidgets` to create the tests, which enables
-shadows inside golden files. By default, Flutter disables them since
-[shadows are rendered ever-so-slightly differently every time](https://api.flutter.dev/flutter/painting/debugDisableShadows.html),
-but we handle this by using a fuzzy comparator.
+## Differences from regular golden tests
+
+If you're familiar with golden tests in Flutter, you'll notice 2 small differences...
+
+We use `testGoldens` instead of `testWidgets` to create the tests, which is a convenience function to enable shadows inside golden tests. By default, Flutter renders them as solid black borders to
+[avoid flakiness](https://api.flutter.dev/flutter/rendering/debugDisableShadows.html), but we handle this by using a fuzzy comparator.
 
 Additionally, instead of using `expectLater`, we use `tester.expectScreenshot`:
 
 ```dart
 // OLD
-await expectLater(find.byType(HomePage), matchesGoldenFile('path/to/1_home'));
+await expectLater(find.byType(MaterialApp), matchesGoldenFile('metadata/en-US/images/phoneScreenshots/1_home.png'));
 // NEW
 await tester.expectScreenshot(device, '1_home');
 ```
 
-`tester.expectScreenshot` internally enables a fuzzy comparator which allows for
-small (0.1% configurable) differences between the expected and actual image,
-whereas Flutter typically expects every pixel to be exactly the same.
+`tester.expectScreenshot` gives us two benefits:
+- It automatically determines the golden file path.
+- It enables a fuzzy comparator. Flutter's default behavior is to expect pixel-perfect matches in golden tests, but for our purposes, we can allow a small (0.1% configurable) mismatch without issue.
 
-## Usage
+## Usage with regular golden tests
 
-Once you have created your test file, run the following command to generate the screenshots:
+You can also use this package for regular golden tests, not just for app store screenshots. Just make a few adjustments to your existing golden tests:
+- Use `testGoldens` instead of `testWidgets`.
+- Use a `ScreenshotApp` to get a realistic device frame:
+  ```dart
+  final app = ScreenshotApp(
+    device: GoldenScreenshotDevices.iphone.device,
+    child: MyApp(),
+  );
+  await tester.pumpWidget(app);
+  ```
+- Before the `matchesGoldenFile` line, call these methods:
+  ```dart
+  await tester.precacheImagesInWidgetTree();
+  await tester.loadFonts();
+  await tester.pump();
 
-```bash
-flutter test test/screenshot_test.dart --update-goldens
-```
+  tester.useFuzzyComparator();
+  await expectLater(find.byType(MaterialApp), matchesGoldenFile(...));
+  ```
+
+## Other notes
+
+- Always use `find.byType(MaterialApp)` not `find.byType(MyWidget)` when taking screenshots, so that the device frame is included in the golden image.
+- `tester.loadFonts()` will replace any missing fonts with Roboto. If you wish to avoid this, ensure all font files you need are bundled with your app.
+- If your golden images don't need to be high-resolution, you can swap `GoldenScreenshotDevices` with `GoldenSmallDevices` which have smaller resolutions to speed up tests.
 
 ## Customization
 
@@ -137,7 +136,7 @@ class MyTabletFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Your frame implementation
+    // Your frame implementation, e.g. add system UIs, borders, etc.
   }
 }
 ```
@@ -145,7 +144,7 @@ class MyTabletFrame extends StatelessWidget {
 ### Custom screenshot directory
 
 By default, the screenshots are saved in `../metadata/\$localeCode/images/`.
-The `../` is because this path is relative to the `test` directory.
+The `../` is because this path is relative to your current test file.
 
 You can change this by setting `ScreenshotDevice.screenshotsFolder` to something else. This path should end with a slash too.
 
