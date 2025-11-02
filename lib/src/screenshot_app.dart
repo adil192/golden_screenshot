@@ -48,6 +48,64 @@ class ScreenshotApp extends MaterialApp {
     super.themeAnimationStyle = AnimationStyle.noAnimation,
   });
 
+  /// A [ScreenshotApp] that includes a title bar if the device is running
+  /// Linux or Windows.
+  /// For other platforms, it behaves the same as [ScreenshotApp].
+  ScreenshotApp.withConditionalTitlebar({
+    super.key,
+    required this.device,
+    this.frameColors,
+    @Deprecated('Use home instead') Widget? child,
+    super.navigatorKey,
+    super.scaffoldMessengerKey,
+    required super.home,
+    super.routes,
+    super.initialRoute,
+    super.onGenerateRoute,
+    super.onGenerateInitialRoutes,
+    super.onUnknownRoute,
+    super.onNavigationNotification,
+    super.navigatorObservers,
+    TransitionBuilder? builder,
+    // Title is required for the title bar.
+    required String super.title,
+    super.onGenerateTitle,
+    super.color,
+    super.theme,
+    super.darkTheme,
+    super.highContrastTheme,
+    super.highContrastDarkTheme,
+    super.themeMode,
+    super.themeAnimationDuration = Duration.zero,
+    super.themeAnimationCurve,
+    super.locale,
+    super.localizationsDelegates,
+    super.localeListResolutionCallback,
+    super.localeResolutionCallback,
+    super.supportedLocales,
+    super.debugShowMaterialGrid,
+    super.showPerformanceOverlay,
+    super.checkerboardRasterCacheImages,
+    super.checkerboardOffscreenLayers,
+    super.showSemanticsDebugger,
+    super.debugShowCheckedModeBanner = false,
+    super.shortcuts,
+    super.actions,
+    super.restorationScopeId,
+    super.scrollBehavior,
+    super.themeAnimationStyle = AnimationStyle.noAnimation,
+  }) : super(
+          builder: (context, child) {
+            return ScreenshotConditionalTitlebar(
+              title: Text(title),
+              device: device,
+              child: builder?.call(context, child) ??
+                  child ??
+                  const SizedBox.expand(),
+            );
+          },
+        );
+
   /// The device whose resolution and pixel ratio will be simulated,
   /// and whose frame will be drawn around the [home] widget.
   final ScreenshotDevice device;

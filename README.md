@@ -70,6 +70,7 @@ You can also use this package for regular golden tests, not just for app store s
   );
   await tester.pumpWidget(app);
   ```
+  Use the `ScreenshotApp.withConditionalTitlebar` constructor instead to add a title bar on desktop platforms (like in the image above).
 - Before the `matchesGoldenFile` line, call these methods:
   ```dart
   await tester.precacheImagesInWidgetTree();

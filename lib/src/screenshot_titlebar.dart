@@ -25,6 +25,16 @@ import 'package:yaru/yaru.dart';
 ///   home: MyApp(),
 /// ));
 /// ```
+///
+/// Preferably, use the [ScreenshotApp.withConditionalTitlebar] constructor
+/// instead of using this widget directly.
+/// ```dart
+/// tester.pumpWidget(ScreenshotApp.withConditionalTitlebar(
+///   device: device,
+///   title: 'My App',
+///   home: MyApp(),
+/// ));
+/// ```
 class ScreenshotConditionalTitlebar extends StatelessWidget {
   const ScreenshotConditionalTitlebar({
     super.key,
