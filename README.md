@@ -25,7 +25,7 @@ dev_dependencies:
 ```
 
 Then create a file in your `test` directory (e.g. `test/screenshot_test.dart`) and use
-[example/test/screenshots_test.dart](https://github.com/adil192/golden_screenshot/blob/main/example/test/screenshots_test.dart)
+[demo/test/screenshots_test.dart](https://github.com/adil192/golden_screenshot/blob/main/demo/test/screenshots_test.dart)
 as a template to create your own tests.
 
 The main portion might look something like this:

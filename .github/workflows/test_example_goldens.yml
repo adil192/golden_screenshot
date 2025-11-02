@@ -18,14 +18,13 @@ jobs:
           path: |
             .dart_tool/
             build/
-            .flutter-plugins
             .flutter-plugins-dependencies
             pubspec.lock
-            example/.dart_tool/
-            example/build/
-            example/.flutter-plugins
-            example/.flutter-plugins-dependencies
-            example/pubspec.lock
+
+            demo/.dart_tool/
+            demo/build/
+            demo/.flutter-plugins-dependencies
+            demo/pubspec.lock
           key: ${{ runner.OS }}-${{ hashFiles('**/pubspec.yaml') }}-${{ hashFiles('**/*.dart') }}
           restore-keys: |
             ${{ runner.OS }}-
@@ -40,7 +39,7 @@ jobs:
       - run: flutter pub get
 
       - name: Run tests
-        working-directory: example
+        working-directory: demo
         run: flutter test --coverage --coverage-path=../coverage/lcov.info --coverage-package=golden_screenshot
 
       - name: Upload coverage reports to Codecov
