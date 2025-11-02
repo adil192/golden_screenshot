@@ -47,6 +47,16 @@ class ScreenshotFrameColors {
 /// A widget that draws a frame around its [child].
 /// Each constructor creates a different frame.
 class ScreenshotFrame extends StatelessWidget {
+  @protected
+  const ScreenshotFrame({
+    super.key,
+    required this.device,
+    this.frameColors,
+    required this.child,
+    this.topBar,
+    this.bottomBar,
+  });
+
   /// Creates a frame with no top or bottom bar.
   const ScreenshotFrame.noFrame({
     super.key,
