@@ -18,11 +18,14 @@ void main() {
       pumpApp: (tester, device) async {
         final app = ScreenshotApp(
           device: device,
-          home: ScreenshotConditionalTitlebar(
-            title: Text('Talk'),
-            device: device,
-            child: DemoHomePage(),
-          ),
+          builder: (context, child) {
+            return ScreenshotConditionalTitlebar(
+              title: Text('Talk'),
+              device: device,
+              child: child!,
+            );
+          },
+          home: DemoHomePage(),
         );
         await tester.pumpWidget(app);
       },
@@ -33,11 +36,14 @@ void main() {
       pumpApp: (tester, device) async {
         final app = ScreenshotApp(
           device: device,
-          home: ScreenshotConditionalTitlebar(
-            title: Text('Talk'),
-            device: device,
-            child: DemoChatPage(userName: 'Jane'),
-          ),
+          builder: (context, child) {
+            return ScreenshotConditionalTitlebar(
+              title: Text('Talk'),
+              device: device,
+              child: child!,
+            );
+          },
+          home: DemoChatPage(userName: 'Jane'),
         );
         await tester.pumpWidget(app);
       },
@@ -48,11 +54,14 @@ void main() {
       pumpApp: (tester, device) async {
         final app = ScreenshotApp(
           device: device,
-          home: ScreenshotConditionalTitlebar(
-            title: Text('Talk'),
-            device: device,
-            child: DemoChatPage(userName: 'Jane'),
-          ),
+          builder: (context, child) {
+            return ScreenshotConditionalTitlebar(
+              title: Text('Talk'),
+              device: device,
+              child: child!,
+            );
+          },
+          home: DemoChatPage(userName: 'Jane'),
         );
         await tester.pumpWidget(app);
 

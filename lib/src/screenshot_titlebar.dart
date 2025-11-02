@@ -7,15 +7,22 @@ import 'package:yaru/yaru.dart';
 /// For Linux and Windows devices, it shows a titlebar from the Yaru package.
 /// For other platforms, it simply returns [child] without modification.
 ///
+/// It is recommended to use this widget inside the [builder] of [ScreenshotApp]
+/// to ensure that the titlebar isn't affected by dialog backdrops or other
+/// effects.
+///
 /// Example usage:
 /// ```dart
 /// tester.pumpWidget(ScreenshotApp(
-///   device: myDevice,
-///   home: ScreenshotConditionalTitlebar(
-///     title: Text('My App'),
-///     device: myDevice,
-///     child: MyApp(),
-///   ),
+///   device: device,
+///   builder: (context, child) {
+///     return ScreenshotConditionalTitlebar(
+///       title: Text('My App'),
+///       device: myDevice,
+///       child: child!,
+///     );
+///   },
+///   home: MyApp(),
 /// ));
 /// ```
 class ScreenshotConditionalTitlebar extends StatelessWidget {
