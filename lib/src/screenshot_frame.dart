@@ -169,21 +169,13 @@ class ScreenshotFrame extends StatelessWidget {
   final Widget child;
 
   Brightness _getStatusBarIconBrightness(BuildContext context) {
-    if (frameColors?.topBarIconBrightness != null) {
-      return frameColors!.topBarIconBrightness!;
-    }
-
-    return _iconBrightnessForBackgroundColor(
-        Theme.of(context).colorScheme.surface);
+    return frameColors?.topBarIconBrightness ??
+        _iconBrightnessForBackgroundColor(ColorScheme.of(context).surface);
   }
 
   Brightness _getGestureHintBrightness(BuildContext context) {
-    if (frameColors?.gestureHintBrightness != null) {
-      return frameColors!.gestureHintBrightness!;
-    }
-
-    return _iconBrightnessForBackgroundColor(
-        Theme.of(context).colorScheme.surface);
+    return frameColors!.gestureHintBrightness ??
+        _iconBrightnessForBackgroundColor(ColorScheme.of(context).surface);
   }
 
   Brightness _iconBrightnessForBackgroundColor(Color backgroundColor) {
@@ -193,11 +185,11 @@ class ScreenshotFrame extends StatelessWidget {
   }
 
   Color _getIconColor(BuildContext context, Brightness iconBrightness) {
-    final theme = Theme.of(context);
-    if (theme.brightness == iconBrightness) {
-      return theme.colorScheme.surface;
+    final colorScheme = ColorScheme.of(context);
+    if (colorScheme.brightness == iconBrightness) {
+      return colorScheme.surface;
     } else {
-      return theme.colorScheme.onSurface;
+      return colorScheme.onSurface;
     }
   }
 
