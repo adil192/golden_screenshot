@@ -52,7 +52,8 @@ class CustomFrame extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
+        child: Stack(
+          fit: StackFit.expand,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 64, horizontal: 8),
@@ -66,28 +67,24 @@ class CustomFrame extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(64),
-                    topRight: Radius.circular(64),
+            Positioned(
+              top: 210,
+              left: 8,
+              right: 8,
+              child: FittedBox(
+                child: Container(
+                  width: device.resolution.width / device.pixelRatio,
+                  height: device.resolution.height / device.pixelRatio,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(64),
                   ),
+                  foregroundDecoration: BoxDecoration(
+                    border: Border.all(width: 8),
+                    borderRadius: BorderRadius.circular(64),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: ScreenshotFrame.iphone(device: device, child: child),
                 ),
-                foregroundDecoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.black, width: 8),
-                    left: BorderSide(color: Colors.black, width: 8),
-                    right: BorderSide(color: Colors.black, width: 8),
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(64),
-                    topRight: Radius.circular(64),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: ScreenshotFrame.iphone(device: device, child: child),
               ),
             ),
           ],
