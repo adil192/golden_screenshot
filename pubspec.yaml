@@ -20,6 +20,20 @@ platforms:
   web:
   windows:
 
+screenshots:
+  - description: A generated screenshot for Linux
+    path: demo/metadata/en-US/images/flathubScreenshots/2_chat_jane.png
+  - description: A generated screenshot for an iPhone
+    path: demo/metadata/en-US/images/iphoneScreenshots/2_chat_jane.png
+  - description: A generated screenshot for an Android phone
+    path: demo/metadata/en-US/images/phoneScreenshots/2_chat_jane.png
+  - description: A generated screenshot for an iPad
+    path: demo/metadata/en-US/images/ipadScreenshots/2_chat_jane.png
+  - description: A generated screenshot for an Android tablet
+    path: demo/metadata/en-US/images/tenInchScreenshots/2_chat_jane.png
+  - description: A generated screenshot for a Macbook
+    path: demo/metadata/en-US/images/macbookScreenshots/2_chat_jane.png
+
 dependencies:
   flutter:
     sdk: flutter
