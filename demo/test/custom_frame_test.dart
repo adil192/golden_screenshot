@@ -21,7 +21,7 @@ void main() {
     await tester.loadFonts();
     await tester.pump();
 
-    tester.useFuzzyComparator(allowedDiffPercent: 0.1);
+    tester.useFuzzyComparator();
     await expectLater(
       find.byType(MaterialApp),
       matchesGoldenFile('custom_frame_test.png'),
