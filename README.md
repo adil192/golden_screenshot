@@ -146,6 +146,12 @@ class MyTabletFrame extends StatelessWidget {
 }
 ```
 
+Also, your frames can do more than just add system UIs. You can style your screenshot however
+you like, e.g. by adding text, backgrounds, etc.
+As a proof of concept, see [custom_frame_test.dart](https://github.com/adil192/golden_screenshot/blob/main/demo/test/custom_frame_test.dart) for how to make this styled frame:
+
+<img height="400" src="https://raw.githubusercontent.com/adil192/golden_screenshot/main/demo/test/custom_frame_test.png" alt="Custom frame example, showing a text heading above an iphone with a gradient background">
+
 ### Custom screenshot directory
 
 By default, the screenshots are saved in `../metadata/\$localeCode/images/`.
