@@ -13,40 +13,14 @@ void main() {
   group('Screenshot:', () {
     TestWidgetsFlutterBinding.ensureInitialized();
 
-    _screenshot(
-      '1_home',
-      pumpApp: (tester, device) async {
-        final app = ScreenshotApp.withConditionalTitlebar(
-          device: device,
-          title: 'Talk',
-          home: DemoHomePage(),
-        );
-        await tester.pumpWidget(app);
-      },
-    );
+    _screenshot('1_home', home: DemoHomePage());
 
-    _screenshot(
-      '2_chat_jane',
-      pumpApp: (tester, device) async {
-        final app = ScreenshotApp.withConditionalTitlebar(
-          device: device,
-          title: 'Talk',
-          home: DemoChatPage(userName: 'Jane'),
-        );
-        await tester.pumpWidget(app);
-      },
-    );
+    _screenshot('2_chat_jane', home: DemoChatPage(userName: 'Jane'));
 
     _screenshot(
       '3_dialog',
-      pumpApp: (tester, device) async {
-        final app = ScreenshotApp.withConditionalTitlebar(
-          device: device,
-          title: 'Talk',
-          home: DemoChatPage(userName: 'Jane'),
-        );
-        await tester.pumpWidget(app);
-
+      home: DemoChatPage(userName: 'Jane'),
+      beforeScreenshot: (tester) async {
         await tester.enterText(find.byType(TextField), 'Hello Jane!');
         await tester.pump();
         await tester.longPress(find.byIcon(Icons.send));
@@ -58,14 +32,24 @@ void main() {
 
 void _screenshot(
   String description, {
-  required Future<void> Function(WidgetTester, ScreenshotDevice) pumpApp,
+  required Widget home,
+  Future<void> Function(WidgetTester tester)? beforeScreenshot,
 }) {
   group(description, () {
     for (final goldenDevice in GoldenScreenshotDevices.values) {
       testGoldens('for ${goldenDevice.name}', (tester) async {
         final device = goldenDevice.device;
 
-        await pumpApp(tester, device);
+        await tester.pumpWidget(
+          ScreenshotApp.withConditionalTitlebar(
+            device: device,
+            title: 'Talk',
+            home: home,
+          ),
+        );
+
+        // One of our tests needs to interact with the UI before taking the screenshot.
+        await beforeScreenshot?.call(tester);
 
         // Precache the images and fonts so they're ready for the screenshot.
         await tester.loadAssets();
