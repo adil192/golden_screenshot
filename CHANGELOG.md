@@ -1,4 +1,12 @@
+## 8.0.0
+
+**Migration needed**: Remove any calls to `tester.useFuzzyComparator()`, and make sure you're using `testGoldens` instead of `testWidgets`.
+
+- `testGoldens` now automatically enables the fuzzy comparator and shadow rendering, so you no longer need to call `tester.useFuzzyComparator()`. It is also no longer called inside `tester.expectScreenshot()`, so make sure you're using `testGoldens` to get the benefits.
+
 ## 7.2.0
+
+**Migration recommended**: Replace the deprecated precaching methods with `tester.loadAssets()`.
 
 - Added `tester.loadAssets()`, replacing the previous methods for loading images and fonts. This method loads images and fonts at once, simplifying the API.
 - Deprecated `tester.loadFonts()`, `tester.precacheImagesInWidgetTree()`, and `tester.precacheTopbarImages()`. Use `tester.loadAssets()` instead.
