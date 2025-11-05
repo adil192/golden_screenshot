@@ -4,5 +4,9 @@
     "**/.idea/": true,
     "**/.flutter-plugins-dependencies": true,
     "**/*.iml": true
-  }
+  },
+  "dart.analysisExcludedFolders": [
+    "test_fixes",
+    "example"
+  ]
 }
