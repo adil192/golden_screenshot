@@ -42,21 +42,31 @@ That's it! Your screenshots will be generated in the appropriate directories.
 
 If you're familiar with golden tests in Flutter, you'll notice 2 small differences...
 
-We use `testGoldens` instead of `testWidgets` to create the tests, which is a convenience function to enable shadows inside golden tests. By default, Flutter renders them as solid black borders to
-[avoid flakiness](https://api.flutter.dev/flutter/rendering/debugDisableShadows.html), but we handle this by using a fuzzy comparator.
+We can replace `expectLater` with `tester.expectScreenshot` to automatically determine the golden file path from the device and language.
 
-Additionally, instead of using `expectLater`, we use `tester.expectScreenshot`:
+Additionally, we use `testGoldens` instead of `testWidgets` which gives us two benefits:
+- It enables shadows inside golden tests. By default, Flutter renders them as solid black borders to
+[avoid flakiness](https://api.flutter.dev/flutter/rendering/debugDisableShadows.html), but we handle this by using a fuzzy comparator.
+- It enables a fuzzy comparator. Flutter's default behavior is to expect pixel-perfect matches in golden tests, but for our purposes, we can allow a small (0.1% configurable) mismatch without issue.
+
+Here is how our code looks before and after using these convenience methods:
 
 ```dart
-// OLD
-await expectLater(find.byType(MaterialApp), matchesGoldenFile('metadata/en-US/images/phoneScreenshots/1_home.png'));
-// NEW
-await tester.expectScreenshot(device, '1_home');
-```
+// Without convenience methods
+testWidgets('My screenshot test', (tester) async {
+  // ...
+  debugDisableShadows = false;
+  tester.useFuzzyComparator();
+  await expectLater(find.byType(MaterialApp), matchesGoldenFile('metadata/en-US/images/phoneScreenshots/1_home.png'));
+  debugDisableShadows = true;
+});
 
-`tester.expectScreenshot` gives us two benefits:
-- It automatically determines the golden file path.
-- It enables a fuzzy comparator. Flutter's default behavior is to expect pixel-perfect matches in golden tests, but for our purposes, we can allow a small (0.1% configurable) mismatch without issue.
+// With convenience methods
+testGoldens('My screenshot test', (tester) async {
+  // ...
+  await tester.expectScreenshot(device, '1_home');
+});
+```
 
 ## Usage with regular golden tests
 
@@ -71,10 +81,9 @@ You can also use this package for regular golden tests, not just for app store s
   await tester.pumpWidget(app);
   ```
   Use the `ScreenshotApp.withConditionalTitlebar` constructor instead to add a title bar on desktop platforms (like in the image above).
-- Before the `matchesGoldenFile` line, call these methods:
+- Before the `matchesGoldenFile` line, load the app's assets (fonts and images):
   ```dart
-  await tester.precacheImagesInWidgetTree();
-  await tester.loadFonts();
+  await tester.loadAssets();
   await tester.pump();
 
   await expectLater(find.byType(MaterialApp), matchesGoldenFile(...));
@@ -82,8 +91,8 @@ You can also use this package for regular golden tests, not just for app store s
 
 ## Other notes
 
-- Always use `find.byType(MaterialApp)` not `find.byType(MyWidget)` when taking screenshots, so that the device frame is included in the golden image.
-- `tester.loadFonts()` will replace any missing fonts with Roboto. If you wish to avoid this, ensure all font files you need are bundled with your app.
+- Always use `find.byType(MaterialApp)` not `find.byType(MyWidget)` for your golden comparison, so that the device frame is included in the golden image. You don't need to worry about this when using `tester.expectScreenshot`.
+- `tester.loadAssets()` will replace any missing fonts with Roboto. If you wish to avoid this, ensure all font files you need are bundled with your app.
 - If your golden images don't need to be high-resolution, you can swap `GoldenScreenshotDevices` with `GoldenSmallDevices` which have smaller resolutions to speed up tests.
 
 ## Customization

@@ -114,8 +114,8 @@ extension ScreenshotTester on WidgetTester {
   /// file comparator to allow a small amount of difference between
   /// the golden and the test image.
   ///
-  /// You may wish to use `tester.expectScreenshot` instead, which already
-  /// uses this method.
+  /// You most likely do not need to call this method directly.
+  /// It's called automatically by [testGoldens].
   void useFuzzyComparator({
     double allowedDiffPercent = kAllowedDiffPercent,
   }) {
@@ -135,8 +135,8 @@ extension ScreenshotTester on WidgetTester {
     );
   }
 
-  /// Use this method instead of the usual [expectLater] to allow
-  /// small pixel differences between the golden and the test image.
+  /// Takes a screenshot and compares it to a golden file.
+  /// The golden file's path is determined by the [ScreenshotDevice].
   ///
   /// By default, this will use the [MaterialApp] widget
   /// (which is a child of the [ScreenshotApp] widget).
