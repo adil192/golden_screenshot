@@ -1,3 +1,10 @@
+## 7.2.0
+
+- Added `tester.loadAssets()`, replacing the previous methods for loading images and fonts. This method loads images and fonts at once, simplifying the API.
+- Deprecated `tester.loadFonts()`, `tester.precacheImagesInWidgetTree()`, and `tester.precacheTopbarImages()`. Use `tester.loadAssets()` instead.
+- It is now optional to pass `allowedDiffPercent` to `tester.useFuzzyComparator()`. If not provided, it defaults to 0.1 percent.
+- Added an example to the README of using a custom frame for more than just system UIs.
+
 ## 7.1.0
 
 - No need to use `ScreenshotConditionalTitlebar` widget directly anymore. Instead, use the `ScreenshotApp.withConditionalTitlebar` constructor to do the same thing with less code.
