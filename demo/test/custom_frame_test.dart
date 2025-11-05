@@ -20,7 +20,6 @@ void main() {
     await tester.loadAssets();
     await tester.pump();
 
-    tester.useFuzzyComparator();
     await expectLater(
       find.byType(MaterialApp),
       matchesGoldenFile('custom_frame_test.png'),

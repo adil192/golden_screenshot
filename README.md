@@ -77,7 +77,6 @@ You can also use this package for regular golden tests, not just for app store s
   await tester.loadFonts();
   await tester.pump();
 
-  tester.useFuzzyComparator();
   await expectLater(find.byType(MaterialApp), matchesGoldenFile(...));
   ```
 

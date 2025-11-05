@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
-const _kAllowedDiffPercent = 0.1;
+@internal
+const kAllowedDiffPercent = 0.1;
 
 /// An extension on [WidgetTester] that provides some
 /// convenience methods for screenshot tests
@@ -116,12 +117,12 @@ extension ScreenshotTester on WidgetTester {
   /// You may wish to use `tester.expectScreenshot` instead, which already
   /// uses this method.
   void useFuzzyComparator({
-    double allowedDiffPercent = _kAllowedDiffPercent,
+    double allowedDiffPercent = kAllowedDiffPercent,
   }) {
-    if (kIsWeb) {
-      // We can't yet use FuzzyComparator on the web
-      return;
-    }
+    // We can't yet use FuzzyComparator on the web
+    if (kIsWeb) return;
+    // No need to use a fuzzy comparator if the allowed difference is zero
+    if (allowedDiffPercent <= 0) return;
 
     final previousComparator = goldenFileComparator;
     if (previousComparator is! FuzzyComparator) {
@@ -144,11 +145,12 @@ extension ScreenshotTester on WidgetTester {
     ScreenshotDevice device,
     String goldenFileName, {
     String? langCode,
-    double allowedDiffPercent = _kAllowedDiffPercent,
+    @Deprecated('Use `allowedDiffPercent` in `testGoldens()` instead. '
+        '`expectScreenshot` no longer sets the comparator.')
+    double allowedDiffPercent = kAllowedDiffPercent,
     Finder? finder,
   }) async {
     finder ??= find.byType(MaterialApp);
-    useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
     await expectLater(
       finder,
       device.matchesGoldenFile(goldenFileName, langCode: langCode),
@@ -163,7 +165,7 @@ extension ScreenshotTester on WidgetTester {
 
   @Deprecated('Use useFuzzyComparator instead')
   void useScreenshotComparator({
-    double allowedDiffPercent = _kAllowedDiffPercent,
+    double allowedDiffPercent = kAllowedDiffPercent,
   }) =>
       useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
 
