@@ -68,8 +68,7 @@ void _screenshot(
         await pumpApp(tester, device);
 
         // Precache the images and fonts so they're ready for the screenshot.
-        await tester.precacheImagesInWidgetTree();
-        await tester.loadFonts();
+        await tester.loadAssets();
 
         // Pump the widget for a second to ensure animations are complete.
         await tester.pumpFrames(

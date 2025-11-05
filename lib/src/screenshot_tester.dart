@@ -9,10 +9,82 @@ const _kAllowedDiffPercent = 0.1;
 /// convenience methods for screenshot tests
 /// and golden tests in general.
 extension ScreenshotTester on WidgetTester {
-  /// Prefetches [images] into Flutter's image cache.
+  /// Loads the images and fonts required by the current widget tree.
+  /// You should call this method after [pumpWidget] and before the golden
+  /// comparison.
+  /// In most cases, you do not need to pass any parameters to this method.
   ///
-  /// If you don't run this method, images won't load in time
-  /// for the screenshot test to capture them.
+  /// ### Why is this needed?
+  ///
+  /// By default, Flutter uses the `Ahem` font in tests which renders each
+  /// character as a filled rectangle (not readable text).
+  /// Additionally, images used in the widget tree take a few moments to load,
+  /// and if left alone, won't be loaded in time for the golden comparison.
+  ///
+  /// In short, you need to load your fonts and images!
+  ///
+  /// ### Parameters
+  ///
+  /// All of these parameters are optional and usually not needed...
+  ///
+  /// #### [overriddenFonts]: [kOverriddenFonts]
+  ///
+  /// If your app's text theme uses a font which isn't bundled with your app,
+  /// it'll fall back to `Ahem`
+  /// (regardless of any [TextStyle.fontFamilyFallback]s).
+  /// In that case, you need to provide the list of such fonts like this:
+  /// ```dart
+  ///   overriddenFonts: ['Comic Sans', ...kOverriddenFonts],
+  /// ```
+  ///
+  /// #### [searchWidgetTreeForImages]: `true`
+  ///
+  /// Set this to false to skip searching the widget tree for images.
+  /// You must then manually provide [imagesToInclude] if you want to load
+  /// any images.
+  ///
+  /// #### [skipOffstageImages]: `true`
+  ///
+  /// When searching the widget tree for images, offscreen images are skipped
+  /// since they are not visible anyway.
+  /// Set this to false to include offscreen images as well.
+  ///
+  /// #### [imagesToInclude]: `null`
+  ///
+  /// A list of images to include in addition to any found in the widget tree,
+  /// e.g.:
+  /// ```dart
+  ///  imagesToInclude: [AssetImage('assets/logo.png')],
+  /// ```
+  ///
+  /// #### [widgetType]: [ScreenshotApp]
+  ///
+  /// Flutter's [precacheImage] method requires a [BuildContext].
+  /// For this, we get the context from a widget of this type.
+  /// Specify a different type if you aren't using [ScreenshotApp].
+  Future<void> loadAssets({
+    Iterable<String> overriddenFonts = kOverriddenFonts,
+    bool searchWidgetTreeForImages = true,
+    bool skipOffstageImages = true,
+    List<ImageProvider>? imagesToInclude,
+    Type widgetType = ScreenshotApp,
+  }) =>
+      runAsync(() => Future.wait([
+            loadAppFonts(overriddenFonts: overriddenFonts),
+            _loadImages(
+              searchWidgetTree: searchWidgetTreeForImages,
+              skipOffstage: skipOffstageImages,
+              include: imagesToInclude,
+              widgetType: widgetType,
+            ),
+          ]));
+
+  /// Finds all the [Image]s in the widget tree and loads them into the image
+  /// cache. You can optionally specify images that won't be found in the
+  /// widget tree to be loaded as well in the [include] list.
+  ///
+  /// If you don't run this method, images may show up as blank, or may
+  /// sometimes show sometimes not, depending on whether they load in time.
   ///
   /// This method should only be called after [pumpWidget]
   /// since a widget is needed to provide a [BuildContext]
@@ -21,64 +93,31 @@ extension ScreenshotTester on WidgetTester {
   /// If you aren't using [ScreenshotApp] somewhere in your widget tree,
   /// you can pass a different [widgetType] to find the widget
   /// that will provide the [BuildContext].
-  ///
-  /// See also [precacheTopbarImages] which precaches the device frame images.
-  Future<void> precacheImages(
-    List<ImageProvider> images, {
+  Future<void> _loadImages({
+    bool searchWidgetTree = true,
+    bool skipOffstage = true,
     Type widgetType = ScreenshotApp,
+    List<ImageProvider>? include,
   }) {
     if (kIsWeb) {
       // This times out with `flutter test --platform chrome`
       return Future.value();
     }
+
     final context = element(find.byType(widgetType));
-    return runAsync(
-      () => Future.wait(
-        images.map((image) => precacheImage(image, context)),
-      ),
+
+    final imageWidgets = searchWidgetTree
+        ? widgetList<Image>(find.bySubtype<Image>(skipOffstage: skipOffstage))
+        : const <Image>[];
+    final imageProviders = [
+      ...imageWidgets.map((widget) => widget.image),
+      ...?include,
+    ];
+
+    return Future.wait(
+      imageProviders.map((image) => precacheImage(image, context)),
     );
   }
-
-  /// Prefetches all [Image]s found in the widget tree.
-  ///
-  /// This method should only be called after [pumpWidget].
-  /// See [precacheImages] for more details.
-  Future<void> precacheImagesInWidgetTree({
-    bool skipOffstage = true,
-    Type widgetType = ScreenshotApp,
-  }) {
-    final imageWidgets = widgetList<Image>(find.bySubtype<Image>(
-      skipOffstage: skipOffstage,
-    ));
-    final imageProviders = imageWidgets.map((widget) => widget.image).toList();
-    return precacheImages(imageProviders, widgetType: widgetType);
-  }
-
-  /// Prefetches the top bar images used by [ScreenshotFrame].
-  ///
-  /// This method should only be called after [pumpWidget].
-  /// See [precacheImages] for more details.
-  Future<void> precacheTopbarImages({
-    Type widgetType = ScreenshotApp,
-  }) =>
-      precacheImages(
-        const [
-          ScreenshotFrame.androidPhoneTopBarImage,
-          ScreenshotFrame.iphoneTopBarImage,
-          ScreenshotFrame.ipadTopBarImage,
-        ],
-        widgetType: widgetType,
-      );
-
-  /// {@macro loadAppFonts}
-  ///
-  /// ```dart
-  /// await tester.loadFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
-  /// ```
-  Future<void> loadFonts({
-    Iterable<String> overriddenFonts = kOverriddenFonts,
-  }) =>
-      runAsync(() => loadAppFonts(overriddenFonts: overriddenFonts));
 
   /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
@@ -105,12 +144,6 @@ extension ScreenshotTester on WidgetTester {
     );
   }
 
-  @Deprecated('Use useFuzzyComparator instead')
-  void useScreenshotComparator({
-    double allowedDiffPercent = _kAllowedDiffPercent,
-  }) =>
-      useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
-
   /// Use this method instead of the usual [expectLater] to allow
   /// small pixel differences between the golden and the test image.
   ///
@@ -131,4 +164,62 @@ extension ScreenshotTester on WidgetTester {
       device.matchesGoldenFile(goldenFileName, langCode: langCode),
     );
   }
+
+  // ========================= //
+  //                           //
+  // Deprecated methods below. //
+  //                           //
+  // ========================= //
+
+  @Deprecated('Use useFuzzyComparator instead')
+  void useScreenshotComparator({
+    double allowedDiffPercent = _kAllowedDiffPercent,
+  }) =>
+      useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
+
+  @Deprecated('Use `loadAssets()` instead, '
+      'which loads all needed images and fonts in one call.')
+  Future<void> precacheImages(
+    List<ImageProvider> images, {
+    Type widgetType = ScreenshotApp,
+  }) =>
+      runAsync(() => _loadImages(
+            searchWidgetTree: false,
+            widgetType: widgetType,
+            include: images,
+          ));
+
+  @Deprecated('Use `loadAssets()` instead, '
+      'which loads all needed images and fonts in one call.')
+  Future<void> precacheImagesInWidgetTree({
+    bool skipOffstage = true,
+    Type widgetType = ScreenshotApp,
+  }) =>
+      runAsync(() => _loadImages(
+            skipOffstage: skipOffstage,
+            widgetType: widgetType,
+          ));
+
+  @Deprecated('Use `loadAssets()` instead, '
+      'which loads all needed images and fonts in one call.')
+  Future<void> precacheTopbarImages({
+    Type widgetType = ScreenshotApp,
+  }) =>
+      runAsync(() => _loadImages(
+            searchWidgetTree: false,
+            widgetType: widgetType,
+            include: const [
+              ScreenshotFrame.androidPhoneTopBarImage,
+              ScreenshotFrame.androidTabletTopBarImage,
+              ScreenshotFrame.iphoneTopBarImage,
+              ScreenshotFrame.ipadTopBarImage,
+            ],
+          ));
+
+  @Deprecated('Use `loadAssets()` instead, '
+      'which loads all needed images and fonts in one call.')
+  Future<void> loadFonts({
+    Iterable<String> overriddenFonts = kOverriddenFonts,
+  }) =>
+      runAsync(() => loadAppFonts(overriddenFonts: overriddenFonts));
 }

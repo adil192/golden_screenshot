@@ -17,8 +17,7 @@ void main() {
       ScreenshotApp(device: device, home: DemoHomePage()),
     );
 
-    await tester.precacheImagesInWidgetTree();
-    await tester.loadFonts();
+    await tester.loadAssets();
     await tester.pump();
 
     tester.useFuzzyComparator();
