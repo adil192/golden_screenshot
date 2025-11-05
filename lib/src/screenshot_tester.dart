@@ -74,30 +74,20 @@ extension ScreenshotTester on WidgetTester {
             _loadImages(
               searchWidgetTree: searchWidgetTreeForImages,
               skipOffstage: skipOffstageImages,
-              include: imagesToInclude,
+              imagesToInclude: imagesToInclude,
               widgetType: widgetType,
             ),
           ]));
 
   /// Finds all the [Image]s in the widget tree and loads them into the image
-  /// cache. You can optionally specify images that won't be found in the
-  /// widget tree to be loaded as well in the [include] list.
+  /// cache.
   ///
-  /// If you don't run this method, images may show up as blank, or may
-  /// sometimes show sometimes not, depending on whether they load in time.
-  ///
-  /// This method should only be called after [pumpWidget]
-  /// since a widget is needed to provide a [BuildContext]
-  /// required to precache the images.
-  ///
-  /// If you aren't using [ScreenshotApp] somewhere in your widget tree,
-  /// you can pass a different [widgetType] to find the widget
-  /// that will provide the [BuildContext].
+  /// See [loadAssets] for the parameters.
   Future<void> _loadImages({
     bool searchWidgetTree = true,
     bool skipOffstage = true,
     Type widgetType = ScreenshotApp,
-    List<ImageProvider>? include,
+    List<ImageProvider>? imagesToInclude,
   }) {
     if (kIsWeb) {
       // This times out with `flutter test --platform chrome`
@@ -111,7 +101,7 @@ extension ScreenshotTester on WidgetTester {
         : const <Image>[];
     final imageProviders = [
       ...imageWidgets.map((widget) => widget.image),
-      ...?include,
+      ...?imagesToInclude,
     ];
 
     return Future.wait(
@@ -186,7 +176,7 @@ extension ScreenshotTester on WidgetTester {
       runAsync(() => _loadImages(
             searchWidgetTree: false,
             widgetType: widgetType,
-            include: images,
+            imagesToInclude: images,
           ));
 
   @Deprecated('Use `loadAssets()` instead, '
@@ -208,7 +198,7 @@ extension ScreenshotTester on WidgetTester {
       runAsync(() => _loadImages(
             searchWidgetTree: false,
             widgetType: widgetType,
-            include: const [
+            imagesToInclude: const [
               ScreenshotFrame.androidPhoneTopBarImage,
               ScreenshotFrame.androidTabletTopBarImage,
               ScreenshotFrame.iphoneTopBarImage,

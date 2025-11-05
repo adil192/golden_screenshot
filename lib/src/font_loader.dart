@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 typedef JsonMap = Map<String, dynamic>;
 
-/// {@template loadAppFonts}
 /// Flutter uses the `Ahem` font by default in golden tests
 /// which displays a filled rectangle for each character,
 /// which of course isn't suitable for app stores.
@@ -18,7 +17,6 @@ typedef JsonMap = Map<String, dynamic>;
 /// the font fallbacks will not be applied. Ahem will be used instead.
 /// In this case, please provide the [overriddenFonts] parameter like this
 /// with the fonts that should be forced to use Roboto instead of Ahem:
-/// {@endtemplate}
 ///
 /// ```dart
 /// await loadAppFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
