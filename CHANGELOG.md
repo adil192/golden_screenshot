@@ -1,3 +1,8 @@
+## 8.0.1
+
+- If there's no images to precache, `tester.loadAssets()` will no longer try to locate a `BuildContext`, avoiding unnecessary errors.
+- Simplified the example test code.
+
 ## 8.0.0
 
 **Migration needed**: Remove any calls to `tester.useFuzzyComparator()`, and make sure you're using `testGoldens` instead of `testWidgets`.
