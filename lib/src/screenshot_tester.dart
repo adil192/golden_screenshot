@@ -95,8 +95,6 @@ extension ScreenshotTester on WidgetTester {
       return Future.value();
     }
 
-    final context = element(find.byType(widgetType));
-
     final imageWidgets = searchWidgetTree
         ? widgetList<Image>(find.bySubtype<Image>(skipOffstage: skipOffstage))
         : const <Image>[];
@@ -104,7 +102,11 @@ extension ScreenshotTester on WidgetTester {
       ...imageWidgets.map((widget) => widget.image),
       ...?imagesToInclude,
     ];
+    if (imageProviders.isEmpty) {
+      return Future.value();
+    }
 
+    final context = element(find.byType(widgetType));
     return Future.wait(
       imageProviders.map((image) => precacheImage(image, context)),
     );
