@@ -41,6 +41,9 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     required this.title,
     required this.device,
     required this.child,
+    this.isClosable,
+    this.isMaximizable,
+    this.isMinimizable,
   }) : titleBar = null;
 
   const ScreenshotConditionalTitlebar.manual({
@@ -48,12 +51,18 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     required this.titleBar,
     required this.device,
     required this.child,
-  }) : title = null;
+  })  : title = null,
+        isClosable = null,
+        isMaximizable = null,
+        isMinimizable = null;
 
   final PreferredSizeWidget? titleBar;
   final Widget? title;
   final ScreenshotDevice device;
   final Widget child;
+  final bool? isClosable;
+  final bool? isMaximizable;
+  final bool? isMinimizable;
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +75,18 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
       return child;
     }
 
+    /// On Linux, only show the close button by default, not maximize/minimize.
+    /// https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines#default-settings
+    final onlyClosable = yaruPlatform == YaruWindowControlPlatform.yaru;
+
     return Scaffold(
       appBar: titleBar ??
           YaruWindowTitleBar(
             title: title,
             isActive: true,
-            isClosable: true,
-            isMaximizable: true,
-            isMinimizable: true,
+            isClosable: isClosable ?? true,
+            isMaximizable: isMaximizable ?? !onlyClosable,
+            isMinimizable: isMinimizable ?? !onlyClosable,
             platform: yaruPlatform,
           ),
       body: child,
