@@ -1,3 +1,8 @@
+## 8.1.0
+
+- The `ScreenshotConditionalTitlebar` widget now hides the minimise/maximize buttons by default on Linux/Flathub screenshots, to comply with [Flathub's quality guidelines](https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines#default-settings).
+- You can override this behaviour by passing `isMinimizable`, `isMaximizable`, and `isClosable` parameters to `ScreenshotConditionalTitlebar` or `ScreenshotApp.withConditionalTitlebar`.
+
 ## 8.0.1
 
 - If there's no images to precache, `tester.loadAssets()` will no longer try to locate a `BuildContext`, avoiding unnecessary errors.
