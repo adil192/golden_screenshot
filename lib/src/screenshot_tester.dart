@@ -106,6 +106,12 @@ extension ScreenshotTester on WidgetTester {
       return Future.value();
     }
 
+    addTearDown(() async {
+      imageCache
+        ..clear()
+        ..clearLiveImages();
+    });
+
     final context = element(find.byType(widgetType));
     return Future.wait(
       imageProviders.map((image) => precacheImage(image, context)),
