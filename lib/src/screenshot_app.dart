@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
@@ -128,6 +129,18 @@ class ScreenshotApp extends MaterialApp {
 }
 
 class _ScreenshotAppState extends State<ScreenshotApp> {
+  @override
+  void initState() {
+    super.initState();
+    debugDefaultTargetPlatformOverride = widget.device.platform;
+  }
+
+  @override
+  void dispose() {
+    debugDefaultTargetPlatformOverride = null;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return _ResizedBox(
