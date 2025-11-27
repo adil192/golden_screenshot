@@ -1,3 +1,7 @@
+## 8.1.1
+
+- Updated dependency constraints to support `yaru 9.0.0`.
+
 ## 8.1.0
 
 - The `ScreenshotConditionalTitlebar` widget now hides the minimise/maximize buttons by default on Linux/Flathub screenshots, to comply with [Flathub's quality guidelines](https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines#default-settings).
