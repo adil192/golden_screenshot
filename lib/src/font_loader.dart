@@ -53,7 +53,7 @@ Future<void> loadAppFonts({
   }
 
   // Now override [fontsToReplaceWithRoboto]
-  for (final family in Set.from(fontsToReplaceWithRoboto)
+  for (final family in fontsToReplaceWithRoboto.toSet()
     ..addAll(overriddenFonts)) {
     if (_appleFontFamilies.contains(family) && AppleFonts.available) {
       // Apple fonts are available, no need to override them with Roboto
@@ -120,7 +120,7 @@ const kFontsToReplaceWithRoboto = {
   'sans-serif',
 };
 
-const _appleFontFamilies = [
+const _appleFontFamilies = {
   'CupertinoSystemDisplay',
   'CupertinoSystemText',
   '.AppleSystemUIFont',
@@ -128,7 +128,7 @@ const _appleFontFamilies = [
   '.SF Pro Text',
   '.SF UI Display',
   '.SF UI Text',
-];
+};
 
 @Deprecated('Use kFontsToReplaceWithRoboto instead')
 const kOverriddenFonts = kFontsToReplaceWithRoboto;
