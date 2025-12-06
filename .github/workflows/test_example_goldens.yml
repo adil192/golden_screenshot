@@ -38,6 +38,10 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Download Apple Fonts
+        working-directory: demo
+        run: dart run golden_screenshot:download_apple_fonts
+
       - name: Run tests
         working-directory: demo
         run: flutter test --coverage --coverage-path=../coverage/lcov.info --coverage-package=golden_screenshot

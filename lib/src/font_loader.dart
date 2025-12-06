@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_screenshot/src/apple_fonts.dart';
 
 typedef JsonMap = Map<String, dynamic>;
 
@@ -41,19 +42,27 @@ Future<void> loadAppFonts({
   /// The `packages/golden_screenshot/Roboto` family from this package,
   /// which we'll use to override [overriddenFonts].
   JsonMap? robotoFontObject;
+  // TODO: Move roboto to file not asset and load it like we do Apple fonts.
   const robotoFamilyWithPackage = 'packages/golden_screenshot/Roboto';
 
   final fontLoadingFutures = <Future<void>>[];
   for (final JsonMap fontObject in fontManifest) {
     final family = fontObject['family'] as String;
-    fontLoadingFutures.add(loadFont(family, fontObject));
+    fontLoadingFutures.add(loadFontAsset(family, fontObject));
     if (family == robotoFamilyWithPackage) robotoFontObject = fontObject;
+  }
+  await for (final (:family, :fonts) in AppleFonts.getFontFamilies()) {
+    fontLoadingFutures.add(loadFontFiles(family, fonts));
   }
 
   if (robotoFontObject != null) {
     // Now override [overriddenFonts] with our Roboto font
     for (final family in overriddenFonts) {
-      fontLoadingFutures.add(loadFont(family, robotoFontObject));
+      if (_appleFontFamilies.contains(family) && AppleFonts.available) {
+        // Apple fonts are available, no need to override them with Roboto
+        continue;
+      }
+      fontLoadingFutures.add(loadFontAsset(family, robotoFontObject));
     }
   } else {
     debugPrint(
@@ -67,11 +76,20 @@ Future<void> loadAppFonts({
   await Future.wait(fontLoadingFutures);
 }
 
-Future<void> loadFont(String family, JsonMap fontObject) {
+Future<void> loadFontAsset(String family, JsonMap fontObject) {
   final fontLoader = FontLoader(family);
   for (final JsonMap fontDef in fontObject['fonts'] as List) {
     final assetPath = fontDef['asset'] as String;
     final assetBytesFuture = rootBundle.load(assetPath);
+    fontLoader.addFont(assetBytesFuture);
+  }
+  return fontLoader.load();
+}
+
+Future<void> loadFontFiles(String family, List<Uint8List> files) {
+  final fontLoader = FontLoader(family);
+  for (final file in files) {
+    final assetBytesFuture = Future.value(ByteData.view(file.buffer));
     fontLoader.addFont(assetBytesFuture);
   }
   return fontLoader.load();
@@ -96,6 +114,14 @@ const kOverriddenFonts = {
   'Segoe UI',
 
   // Apple
+  ..._appleFontFamilies,
+
+  // Other
+  'system-ui',
+  'sans-serif',
+};
+
+const _appleFontFamilies = [
   'CupertinoSystemDisplay',
   'CupertinoSystemText',
   '.AppleSystemUIFont',
@@ -103,8 +129,4 @@ const kOverriddenFonts = {
   '.SF Pro Text',
   '.SF UI Display',
   '.SF UI Text',
-
-  // Other
-  'system-ui',
-  'sans-serif',
-};
+];
