@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/src/apple_fonts.dart';
+import 'package:golden_screenshot/src/roboto_fonts.dart';
 
 typedef JsonMap = Map<String, dynamic>;
 
@@ -39,38 +40,23 @@ Future<void> loadAppFonts({
     (json) async => jsonDecode(json) as List,
   );
 
-  /// The `packages/golden_screenshot/Roboto` family from this package,
-  /// which we'll use to override [overriddenFonts].
-  JsonMap? robotoFontObject;
-  // TODO: Move roboto to file not asset and load it like we do Apple fonts.
-  const robotoFamilyWithPackage = 'packages/golden_screenshot/Roboto';
-
   final fontLoadingFutures = <Future<void>>[];
   for (final JsonMap fontObject in fontManifest) {
     final family = fontObject['family'] as String;
+    if (family == RobotoFonts.familyWithPackage) continue;
     fontLoadingFutures.add(loadFontAsset(family, fontObject));
-    if (family == robotoFamilyWithPackage) robotoFontObject = fontObject;
   }
   await for (final (:family, :fonts) in AppleFonts.getFontFamilies()) {
     fontLoadingFutures.add(loadFontFiles(family, fonts));
   }
 
-  if (robotoFontObject != null) {
-    // Now override [overriddenFonts] with our Roboto font
-    for (final family in overriddenFonts) {
-      if (_appleFontFamilies.contains(family) && AppleFonts.available) {
-        // Apple fonts are available, no need to override them with Roboto
-        continue;
-      }
-      fontLoadingFutures.add(loadFontAsset(family, robotoFontObject));
+  // Now override [overriddenFonts] with our Roboto font
+  for (final family in overriddenFonts) {
+    if (_appleFontFamilies.contains(family) && AppleFonts.available) {
+      // Apple fonts are available, no need to override them with Roboto
+      continue;
     }
-  } else {
-    debugPrint(
-      'Warning: The Roboto font provided by golden_screenshot '
-      'could not be found in the FontManifest.json.\n'
-      'This is likely a bug in golden_screenshot, please file an issue at '
-      'https://github.com/adil192/golden_screenshot/issues',
-    );
+    fontLoadingFutures.add(loadRoboto(family));
   }
 
   await Future.wait(fontLoadingFutures);
@@ -81,6 +67,16 @@ Future<void> loadFontAsset(String family, JsonMap fontObject) {
   for (final JsonMap fontDef in fontObject['fonts'] as List) {
     final assetPath = fontDef['asset'] as String;
     final assetBytesFuture = rootBundle.load(assetPath);
+    fontLoader.addFont(assetBytesFuture);
+  }
+  return fontLoader.load();
+}
+
+/// Different to [loadFontAsset] because we don't want to read the asset
+/// into memory multiple times. [RobotoFonts.assetFutures] is only created once.
+Future<void> loadRoboto([String family = RobotoFonts.familyWithPackage]) async {
+  final fontLoader = FontLoader(family);
+  for (final assetBytesFuture in RobotoFonts.assetFutures) {
     fontLoader.addFont(assetBytesFuture);
   }
   return fontLoader.load();
