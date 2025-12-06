@@ -43,7 +43,7 @@ extension _AppleFontsDownloader on AppleFonts {
   static Future<void> _downloadDmg() async {
     const url =
         'https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg';
-    print('Downloading Apple fonts from $url...');
+    print('Downloading Apple fonts from $url ...');
     final uri = Uri.parse(url);
     await _download(uri, _tmpDmgFile);
   }
@@ -72,7 +72,7 @@ extension _AppleFontsDownloader on AppleFonts {
 
     // Download 7zr binary.
     final url = _sevenZipDownloadUrl;
-    print('Downloading 7zr binary from $url...');
+    print('Downloading 7zr binary from $url ...');
     final uri = Uri.parse(url);
     final downloadedFile = File(p.join(_tmp, p.basename(url)));
     await _download(uri, downloadedFile);
@@ -104,7 +104,7 @@ extension _AppleFontsDownloader on AppleFonts {
 
   static Future<void> _extractDmg() async {
     final exe = _sevenZipBinary!;
-    print('Extracting (1/4) .dmg using $exe...');
+    print('Extracting (1/4) .pkg out of .dmg using $exe...');
     final extractedDmgDir = Directory(p.join(_tmp, 'extracted_dmg'));
     await extractedDmgDir.create(recursive: true);
     var result = await Process.run(
@@ -114,7 +114,7 @@ extension _AppleFontsDownloader on AppleFonts {
           'Failed to extract .dmg: ${result.stderr}\n${result.stdout}');
     }
 
-    print('Extracting (2/4) .pkg from .dmg using $exe...');
+    print('Extracting (2/4) Payload out of .pkg using $exe...');
     final pkgFile =
         p.join(extractedDmgDir.path, 'SFProFonts', 'SF Pro Fonts.pkg');
     final extractedPkgDir = Directory(p.join(_tmp, 'extracted_pkg'));
@@ -126,20 +126,28 @@ extension _AppleFontsDownloader on AppleFonts {
           'Failed to extract .pkg: ${result.stderr}\n${result.stdout}');
     }
 
-    print('Extracting (3/4) Payload from .pkg using $exe...');
-    final payloadFile =
-        p.join(extractedPkgDir.path, 'SFProFonts.pkg', 'Payload');
-    final extractedPayloadDir = Directory(p.join(_tmp, 'extracted_payload'));
-    await extractedPayloadDir.create(recursive: true);
-    result = await Process.run(
-        exe, ['x', payloadFile, '-o${extractedPayloadDir.path}', '-y']);
-    if (result.exitCode != 0) {
-      throw StateError(
-          'Failed to extract Payload: ${result.stderr}\n${result.stdout}');
+    // Sometimes the above gives us `Payload~` (cpio) directly, sometimes it's
+    // `Payload` (gzip) which contains `Payload~` (cpio).
+    var payloadCpioFile = p.join(extractedPkgDir.path, 'Payload~');
+    if (!File(payloadCpioFile).existsSync()) {
+      print('Extracting (3/4) Payload~ out of Payload using $exe...');
+      final payloadFile =
+          p.join(extractedPkgDir.path, 'SFProFonts.pkg', 'Payload');
+      final extractedPayloadDir = Directory(p.join(_tmp, 'extracted_payload'));
+      await extractedPayloadDir.create(recursive: true);
+      result = await Process.run(
+          exe, ['x', payloadFile, '-o${extractedPayloadDir.path}', '-y']);
+      if (result.exitCode != 0) {
+        throw StateError(
+            'Failed to extract Payload: ${result.stderr}\n${result.stdout}');
+      }
+      payloadCpioFile = p.join(extractedPayloadDir.path, 'Payload~');
+    } else {
+      print(
+          'Extracting (3/4) Payload~ out of Payload not needed, already cpio.');
     }
 
-    print('Extracting (4/4) fonts from Payload using $exe...');
-    final payloadCpioFile = p.join(extractedPayloadDir.path, 'Payload~');
+    print('Extracting (4/4) fonts from Payload~ using $exe...');
     final extractedPayloadCpioDir =
         Directory(p.join(_tmp, 'extracted_payload_cpio'));
     await Process.run(
