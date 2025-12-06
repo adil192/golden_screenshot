@@ -1,3 +1,15 @@
+## 8.2.0
+
+**Features**
+- Apple devices now use the official San Francisco Pro fonts to match real devices.
+  - Due to licensing restrictions, these fonts are not bundled with the package.
+  - You need to run `dart run golden_screenshot:download_apple_fonts` to download them.
+  - If you haven't done this, Roboto will be used instead (just like before), and your tests will remind you to run the command.
+- When using `ScreenshotApp`, Flutter's `defaultTargetPlatform` is now overridden to match the device's platform.
+
+**Performance**
+- Only one copy of Roboto is stored in memory now. Previously, each font fallback had its own copy of Roboto which wasted RAM.
+
 ## 8.1.0
 
 - The `ScreenshotConditionalTitlebar` widget now hides the minimise/maximize buttons by default on Linux/Flathub screenshots, to comply with [Flathub's quality guidelines](https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines#default-settings).
