@@ -9,16 +9,20 @@ import 'package:path/path.dart' as p;
 ///
 /// Run `dart run golden_screenshot:download_apple_fonts` to download them.
 abstract class AppleFonts {
-  // TODO: Store this in home directory?
-  static final fontsDirectory = Directory(p.join('.dart_tool', 'SF-Pro'));
+  static final fontsDirectory =
+      Directory(p.join(_pubCache, 'golden_screenshot', 'SF-Pro'))
+        ..createSync(recursive: true);
 
-  static final allOtfFiles = !fontsDirectory.existsSync()
-      ? const <File>[]
-      : fontsDirectory
-          .listSync()
-          .whereType<File>()
-          .where((file) => p.extension(file.path).toLowerCase() == '.otf')
-          .toList();
+  static final _pubCache = Platform.environment['PUB_CACHE'] ??
+      (Platform.isWindows
+          ? p.join(Platform.environment['LOCALAPPDATA']!, 'Pub', 'Cache')
+          : p.join(Platform.environment['HOME']!, '.pub-cache'));
+
+  static final allOtfFiles = fontsDirectory
+      .listSync()
+      .whereType<File>()
+      .where((file) => p.extension(file.path).toLowerCase() == '.otf')
+      .toList();
   static final available = (() {
     final available = allOtfFiles.isNotEmpty;
     if (!available) {

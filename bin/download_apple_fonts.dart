@@ -6,11 +6,6 @@ import 'package:golden_screenshot/src/apple_fonts.dart';
 import 'package:path/path.dart' as p;
 
 Future<void> main() async {
-  if (!File('pubspec.yaml').existsSync()) {
-    throw StateError(
-      'This script must be run from the root of your Flutter app.',
-    );
-  }
   await _AppleFontsDownloader.downloadFonts();
 }
 
@@ -22,7 +17,7 @@ extension _AppleFontsDownloader on AppleFonts {
     print('See the license for details: https://developer.apple.com/fonts/');
     print('');
 
-    if (fontsDirectory.existsSync()) {
+    if (AppleFonts.allOtfFiles.isNotEmpty) {
       print('Apple system fonts already downloaded at ${fontsDirectory.path}');
       return;
     }
