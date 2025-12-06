@@ -36,8 +36,6 @@ screenshots:
     path: demo/metadata/en-US/images/macbookScreenshots/2_chat_jane.png
 
 dependencies:
-  archive: ^4.0.7
-  crypto: ^3.0.7
   flutter:
     sdk: flutter
   flutter_test:

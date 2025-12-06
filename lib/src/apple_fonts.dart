@@ -9,10 +9,8 @@ import 'package:path/path.dart' as p;
 ///
 /// Run `dart run golden_screenshot:download_apple_fonts` to download them.
 abstract class AppleFonts {
-  static final fontsDirectory =
-      Directory(p.join('.dart_tool', 'Apple-system-fonts'));
-  static final fontsZipFile =
-      File(p.join('.dart_tool', 'Apple-system-fonts.zip'));
+  // TODO: Store this in home directory?
+  static final fontsDirectory = Directory(p.join('.dart_tool', 'SF-Pro'));
 
   static final allOtfFiles = !fontsDirectory.existsSync()
       ? const <File>[]

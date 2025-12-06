@@ -2,8 +2,6 @@
 
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
-import 'package:crypto/crypto.dart';
 import 'package:golden_screenshot/src/apple_fonts.dart';
 import 'package:path/path.dart' as p;
 
@@ -17,34 +15,153 @@ Future<void> main() async {
 }
 
 extension _AppleFontsDownloader on AppleFonts {
-  static final fontsDirectory = AppleFonts.fontsDirectory;
-  static final fontsZipFile = AppleFonts.fontsZipFile;
-
   static Future<void> downloadFonts() async {
-    print('Use of Apple fonts is subject to their license: '
-        'https://developer.apple.com/fonts/'
-        '\n');
+    print(
+        'This script will download and extract the fonts directly from Apple.');
+    print('Do not redistribute the fonts or bundle them in production.');
+    print('See the license for details: https://developer.apple.com/fonts/');
+    print('');
 
     if (fontsDirectory.existsSync()) {
       print('Apple system fonts already downloaded at ${fontsDirectory.path}');
       return;
     }
 
-    await _downloadZip();
-    await _checkZipHash();
-    await _extractFonts();
-    await _deleteZip();
+    await _downloadDmg();
+    await _findOrDownload7z();
+    await _extractDmg();
+    await Directory(_tmp).delete(recursive: true);
   }
 
-  static Future<void> _downloadZip() async {
-    if (fontsZipFile.existsSync()) {
-      print('Already downloaded: ${fontsZipFile.path}');
+  static final fontsDirectory = AppleFonts.fontsDirectory;
+
+  static final _tmp =
+      Directory.systemTemp.createTempSync('golden_screenshot').path;
+  static final _tmpDmgFile = File(p.join(_tmp, 'SF-Pro.dmg'));
+  static String? _sevenZipBinary;
+
+  static Future<void> _downloadDmg() async {
+    const url =
+        'https://devimages-cdn.apple.com/design/resources/download/SF-Pro.dmg';
+    print('Downloading Apple fonts from $url...');
+    final uri = Uri.parse(url);
+    await _download(uri, _tmpDmgFile);
+  }
+
+  static Future<void> _findOrDownload7z() async {
+    if (_sevenZipBinary != null) return;
+
+    // See if 7z is already installed.
+    for (final cmd in [
+      '7zzs',
+      '7zz',
+      '7z',
+      if (Platform.isWindows) 'C:\\Program Files\\7-Zip\\7z.exe',
+      if (Platform.isWindows) 'C:\\Program Files (x86)\\7-Zip\\7z.exe',
+    ]) {
+      try {
+        final result = Process.runSync(cmd, []);
+        if (result.exitCode != 0) continue;
+      } on ProcessException {
+        continue;
+      }
+      print('Using $cmd from PATH.');
+      _sevenZipBinary = cmd;
       return;
     }
 
-    final uri = Uri.parse(
-      'https://github.com/apple-fonts/Apple-system-fonts/releases/download/2023-06-06/Apple-system-fonts.zip',
-    );
+    // Download 7zr binary.
+    final url = _sevenZipDownloadUrl;
+    print('Downloading 7zr binary from $url...');
+    final uri = Uri.parse(url);
+    final downloadedFile = File(p.join(_tmp, p.basename(url)));
+    await _download(uri, downloadedFile);
+
+    if (p.extension(downloadedFile.path).toLowerCase() == '.exe') {
+      _sevenZipBinary = downloadedFile.path;
+      return;
+    }
+
+    // Extract the archive and find the 7zr binary.
+    final extractedDir = Directory(p.join(_tmp, 'extracted7z'))..createSync();
+    final tarResult = await Process.run(
+        'tar', ['-xf', downloadedFile.path, '-C', extractedDir.path]);
+    if (tarResult.exitCode != 0) {
+      throw StateError(
+          'Failed to extract 7zr archive: ${tarResult.stderr}\n${tarResult.stdout}');
+    }
+    final extracted7zzs = File(p.join(extractedDir.path, '7zzs'));
+    final extracted7zz = File(p.join(extractedDir.path, '7zz'));
+    if (extracted7zzs.existsSync()) {
+      _sevenZipBinary = extracted7zzs.path;
+    } else if (extracted7zz.existsSync()) {
+      _sevenZipBinary = extracted7zz.path;
+    } else {
+      throw StateError(
+          'Could not find 7zr binary in extracted archive (${extractedDir.path}).');
+    }
+  }
+
+  static Future<void> _extractDmg() async {
+    final exe = _sevenZipBinary!;
+    print('Extracting (1/4) .dmg using $exe...');
+    final extractedDmgDir = Directory(p.join(_tmp, 'extracted_dmg'));
+    await extractedDmgDir.create(recursive: true);
+    var result = await Process.run(
+        exe, ['x', _tmpDmgFile.path, '-o${extractedDmgDir.path}', '-y']);
+    if (result.exitCode != 0) {
+      throw StateError(
+          'Failed to extract .dmg: ${result.stderr}\n${result.stdout}');
+    }
+
+    print('Extracting (2/4) .pkg from .dmg using $exe...');
+    final pkgFile =
+        p.join(extractedDmgDir.path, 'SFProFonts', 'SF Pro Fonts.pkg');
+    final extractedPkgDir = Directory(p.join(_tmp, 'extracted_pkg'));
+    await extractedPkgDir.create(recursive: true);
+    result = await Process.run(
+        exe, ['x', pkgFile, '-o${extractedPkgDir.path}', '-y']);
+    if (result.exitCode != 0) {
+      throw StateError(
+          'Failed to extract .pkg: ${result.stderr}\n${result.stdout}');
+    }
+
+    print('Extracting (3/4) Payload from .pkg using $exe...');
+    final payloadFile =
+        p.join(extractedPkgDir.path, 'SFProFonts.pkg', 'Payload');
+    final extractedPayloadDir = Directory(p.join(_tmp, 'extracted_payload'));
+    await extractedPayloadDir.create(recursive: true);
+    result = await Process.run(
+        exe, ['x', payloadFile, '-o${extractedPayloadDir.path}', '-y']);
+    if (result.exitCode != 0) {
+      throw StateError(
+          'Failed to extract Payload: ${result.stderr}\n${result.stdout}');
+    }
+
+    print('Extracting (4/4) fonts from Payload using $exe...');
+    final payloadCpioFile = p.join(extractedPayloadDir.path, 'Payload~');
+    final extractedPayloadCpioDir =
+        Directory(p.join(_tmp, 'extracted_payload_cpio'));
+    await Process.run(
+        exe, ['x', payloadCpioFile, '-o${extractedPayloadCpioDir.path}', '-y']);
+    if (result.exitCode != 0) {
+      throw StateError(
+          'Failed to extract Payload cpio: ${result.stderr}\n${result.stdout}');
+    }
+
+    print('Copying fonts to ${fontsDirectory.path}...');
+    final fontFiles =
+        Directory(p.join(extractedPayloadCpioDir.path, 'Library', 'Fonts'));
+    await fontsDirectory.create(recursive: true);
+    await for (final entity in fontFiles.list()) {
+      if (entity is! File) continue;
+      final fileName = p.basename(entity.path);
+      final destinationFile = File(p.join(fontsDirectory.path, fileName));
+      await entity.copy(destinationFile.path);
+    }
+  }
+
+  static Future<void> _download(Uri uri, File destination) async {
     final client = HttpClient()
       // Respect the http(s)_proxy environment variables.
       ..findProxy = HttpClient.findProxyFromEnvironment;
@@ -53,48 +170,52 @@ extension _AppleFontsDownloader on AppleFonts {
     if (response.statusCode != 200) {
       throw HttpException('The request to $uri failed.', uri: uri);
     }
-    await fontsZipFile.create();
-    await response.pipe(fontsZipFile.openWrite());
-    print('Downloaded Apple system fonts to ${fontsZipFile.path}');
+    await destination.create(recursive: true);
+    await response.pipe(destination.openWrite());
+    print('Downloaded ${destination.path}.');
   }
 
-  static Future<void> _checkZipHash() async {
-    final hash = await _hashFile(fontsZipFile);
-    const expectedHash =
-        '834752b0a556ee8b716af2a4b6259c27473f4890b93bc1352467a3ed6bde3130';
-    if (hash != expectedHash) {
-      throw Exception(
-          'Downloaded file hash does not match expected hash: $hash');
+  static String get _sevenZipDownloadUrl {
+    final arch = Arch.current;
+    if (Platform.isWindows) {
+      throw UnsupportedError(
+          'Please install 7-Zip from https://www.7-zip.org/.\n'
+          'If it\'s already installed, consider adding it to your PATH.');
+    } else if (Platform.isMacOS) {
+      return 'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-mac.tar.xz';
     } else {
-      print('Hash verified for ${fontsZipFile.path}');
+      return switch (arch) {
+        Arch.x64 =>
+          'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-x64.tar.xz',
+        Arch.arm64 =>
+          'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-arm64.tar.xz',
+      };
     }
   }
+}
 
-  static Future<String> _hashFile(File file) async {
-    final bytes = await file.readAsBytes();
-    return sha256.convert(bytes).toString();
-  }
+enum Arch {
+  x64,
+  arm64;
 
-  static Future<void> _extractFonts() async {
-    final inputStream = InputFileStream(fontsZipFile.path);
-    final archive = ZipDecoder().decodeStream(inputStream);
-    var numFiles = 0;
-    for (final file in archive) {
-      if (!file.isFile) continue;
-      final fileName = p.basename(file.name);
-      final outputFile = File(p.join(fontsDirectory.path, fileName));
-      await outputFile.create(recursive: true);
-      final outputStream = OutputFileStream(outputFile.path);
-      file.writeContent(outputStream);
-      outputStream.closeSync();
-      numFiles++;
+  static final Arch current = () {
+    final archRaw = _currentRaw.trim().toLowerCase();
+    if (archRaw.contains('aarch') || archRaw.contains('arm')) {
+      return Arch.arm64;
+    } else {
+      return Arch.x64;
     }
-    print('Extracted $numFiles fonts to ${fontsDirectory.path}');
-    await inputStream.close();
-  }
+  }();
 
-  static Future<void> _deleteZip() async {
-    await fontsZipFile.delete();
-    print('Deleted ${fontsZipFile.path}');
-  }
+  static final _currentRaw = () {
+    if (Platform.isWindows) {
+      final arch = Platform.environment['PROCESSOR_ARCHITECTURE'];
+      if (arch != null && arch.isNotEmpty) return arch;
+    } else {
+      final result = Process.runSync('uname', ['-m']);
+      if (result.exitCode == 0) return result.stdout as String;
+    }
+    print('Could not detect platform architecture, defaulting to x64.');
+    return 'x64';
+  }();
 }
