@@ -17,14 +17,16 @@ typedef JsonMap = Map<String, dynamic>;
 /// Note that if your app specifies a custom font (e.g. Comic Sans)
 /// with font fallbacks, but does not include said custom font,
 /// the font fallbacks will not be applied. Ahem will be used instead.
-/// In this case, please provide the [overriddenFonts] parameter like this
-/// with the fonts that should be forced to use Roboto instead of Ahem:
+/// In this case, please provide the [fontsToReplaceWithRoboto] parameter
+/// with the fonts that should be forced to use Roboto instead of Ahem, e.g.:
 ///
 /// ```dart
-/// await loadAppFonts(overriddenFonts: ['Comic Sans', ...kOverriddenFonts]);
+/// await loadAppFonts(fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto]);
 /// ```
 Future<void> loadAppFonts({
-  Iterable<String> overriddenFonts = kOverriddenFonts,
+  Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+  @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+  Iterable<String> overriddenFonts = const [],
 }) async {
   if (kIsWeb) {
     // rootBundle not available on web
@@ -50,8 +52,9 @@ Future<void> loadAppFonts({
     fontLoadingFutures.add(loadFontFiles(family, fonts));
   }
 
-  // Now override [overriddenFonts] with our Roboto font
-  for (final family in overriddenFonts) {
+  // Now override [fontsToReplaceWithRoboto]
+  for (final family in Set.from(fontsToReplaceWithRoboto)
+    ..addAll(overriddenFonts)) {
     if (_appleFontFamilies.contains(family) && AppleFonts.available) {
       // Apple fonts are available, no need to override them with Roboto
       continue;
@@ -94,7 +97,7 @@ Future<void> loadFontFiles(String family, List<Uint8List> files) {
 /// The fonts overridden by Roboto in [loadAppFonts].
 ///
 /// This list represents the default fonts used by Flutter on various platforms.
-const kOverriddenFonts = {
+const kFontsToReplaceWithRoboto = {
   // Android
   'Inter',
   'Roboto',
@@ -126,3 +129,6 @@ const _appleFontFamilies = [
   '.SF UI Display',
   '.SF UI Text',
 ];
+
+@Deprecated('Use kFontsToReplaceWithRoboto instead')
+const kOverriddenFonts = kFontsToReplaceWithRoboto;

@@ -1,0 +1,13 @@
+import 'package:golden_screenshot/golden_screenshot.dart';
+
+void main() {
+  testGoldens('fontsToReplaceWithRoboto', (tester) async {
+    // This fix isn't working for some reason :(
+    await tester
+        .loadAssets(overriddenFonts: ['Comic Sans', ...kFontsToReplaceWithRoboto]);
+
+    await tester.runAsync(() => loadAppFonts(
+          fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto],
+        ));
+  });
+}

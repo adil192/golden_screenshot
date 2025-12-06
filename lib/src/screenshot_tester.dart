@@ -28,14 +28,14 @@ extension ScreenshotTester on WidgetTester {
   ///
   /// All of these parameters are optional and usually not needed...
   ///
-  /// #### [overriddenFonts]: [kOverriddenFonts]
+  /// #### [fontsToReplaceWithRoboto]: [kFontsToReplaceWithRoboto]
   ///
   /// If your app's text theme uses a font which isn't bundled with your app,
   /// it'll fall back to `Ahem`
   /// (regardless of any [TextStyle.fontFamilyFallback]s).
   /// In that case, you need to provide the list of such fonts like this:
   /// ```dart
-  ///   overriddenFonts: ['Comic Sans', ...kOverriddenFonts],
+  ///   fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto],
   /// ```
   ///
   /// #### [searchWidgetTreeForImages]: `true`
@@ -64,14 +64,20 @@ extension ScreenshotTester on WidgetTester {
   /// For this, we get the context from a widget of this type.
   /// Specify a different type if you aren't using [ScreenshotApp].
   Future<void> loadAssets({
-    Iterable<String> overriddenFonts = kOverriddenFonts,
+    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> overriddenFonts = const [],
     bool searchWidgetTreeForImages = true,
     bool skipOffstageImages = true,
     List<ImageProvider>? imagesToInclude,
     Type widgetType = ScreenshotApp,
   }) =>
       runAsync(() => Future.wait([
-            loadAppFonts(overriddenFonts: overriddenFonts),
+            loadAppFonts(
+              fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+              // ignore: deprecated_member_use_from_same_package
+              overriddenFonts: overriddenFonts,
+            ),
             _loadImages(
               searchWidgetTree: searchWidgetTreeForImages,
               skipOffstage: skipOffstageImages,
@@ -213,7 +219,12 @@ extension ScreenshotTester on WidgetTester {
   @Deprecated('Use `loadAssets()` instead, '
       'which loads all needed images and fonts in one call.')
   Future<void> loadFonts({
-    Iterable<String> overriddenFonts = kOverriddenFonts,
+    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> overriddenFonts = const [],
   }) =>
-      runAsync(() => loadAppFonts(overriddenFonts: overriddenFonts));
+      runAsync(() => loadAppFonts(
+            fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+            overriddenFonts: overriddenFonts,
+          ));
 }
