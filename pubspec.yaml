@@ -43,7 +43,7 @@ dependencies:
   matcher: ^0.12.16+1
   path: ^1.9.1
   web: ^1.1.0
-  yaru: ^8.3.0
+  yaru: ">=8.2.0 <10.0.0"
 
 dev_dependencies:
   flutter_lints: ^6.0.0
