@@ -46,10 +46,10 @@ Future<void> loadAppFonts({
   for (final JsonMap fontObject in fontManifest) {
     final family = fontObject['family'] as String;
     if (family == RobotoFonts.familyWithPackage) continue;
-    fontLoadingFutures.add(loadFontAsset(family, fontObject));
+    fontLoadingFutures.add(_loadFontAsset(family, fontObject));
   }
   await for (final (:family, :fonts) in AppleFonts.getFontFamilies()) {
-    fontLoadingFutures.add(loadFontFiles(family, fonts));
+    fontLoadingFutures.add(_loadFontFiles(family, fonts));
   }
 
   // Now override [fontsToReplaceWithRoboto]
@@ -59,13 +59,13 @@ Future<void> loadAppFonts({
       // Apple fonts are available, no need to override them with Roboto
       continue;
     }
-    fontLoadingFutures.add(loadRoboto(family));
+    fontLoadingFutures.add(_loadRoboto(family));
   }
 
   await Future.wait(fontLoadingFutures);
 }
 
-Future<void> loadFontAsset(String family, JsonMap fontObject) {
+Future<void> _loadFontAsset(String family, JsonMap fontObject) {
   final fontLoader = FontLoader(family);
   for (final JsonMap fontDef in fontObject['fonts'] as List) {
     final assetPath = fontDef['asset'] as String;
@@ -75,9 +75,10 @@ Future<void> loadFontAsset(String family, JsonMap fontObject) {
   return fontLoader.load();
 }
 
-/// Different to [loadFontAsset] because we don't want to read the asset
+/// Different to [_loadFontAsset] because we don't want to read the asset
 /// into memory multiple times. [RobotoFonts.assetFutures] is only created once.
-Future<void> loadRoboto([String family = RobotoFonts.familyWithPackage]) async {
+Future<void> _loadRoboto(
+    [String family = RobotoFonts.familyWithPackage]) async {
   final fontLoader = FontLoader(family);
   for (final assetBytesFuture in RobotoFonts.assetFutures) {
     fontLoader.addFont(assetBytesFuture);
@@ -85,7 +86,7 @@ Future<void> loadRoboto([String family = RobotoFonts.familyWithPackage]) async {
   return fontLoader.load();
 }
 
-Future<void> loadFontFiles(String family, List<Uint8List> files) {
+Future<void> _loadFontFiles(String family, List<Uint8List> files) {
   final fontLoader = FontLoader(family);
   for (final file in files) {
     final assetBytesFuture = Future.value(ByteData.view(file.buffer));
