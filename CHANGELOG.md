@@ -1,3 +1,17 @@
+## 9.0.0
+
+**Migration possibly needed**: If some fonts are missing in your goldens after updating, you should pass the names of those fonts to the `alsoLoadTheseFonts` parameter of `tester.loadAssets()`. See below for more details.
+
+- Only fonts found in the widget tree will be loaded now.
+  - This cut down golden_screenshot's testing time from ~25 seconds to ~15 seconds.
+  - The actual speedup may not be as dramatic in your app since it only reduces font loading in goldens (not unit tests or regular widget tests).
+  - Tests will also use less RAM now, especially critical for computers or CI systems with low memory.
+- Added the `alsoLoadTheseFonts` parameter to `tester.loadAssets()`, allowing you to specify additional fonts to load beyond those found in the widget tree.
+  - This is useful if you use fonts in ways that don't show up in the widget tree, e.g. inside a CustomPainter's paint function.
+- Renamed some parameters for clarity:
+  - `overriddenFonts` to `fontsToReplaceWithRoboto`
+  - `kOverriddenFonts` to `kFontsToReplaceWithRoboto`
+
 ## 8.2.0
 
 **Features**
