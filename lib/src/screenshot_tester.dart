@@ -28,6 +28,13 @@ extension ScreenshotTester on WidgetTester {
   ///
   /// All of these parameters are optional and usually not needed...
   ///
+  /// ### [alsoLoadTheseFonts]: `null`
+  ///
+  /// By default, only fonts found in the widget tree are loaded.
+  ///
+  /// If you use fonts that are not directly referenced in the widget tree,
+  /// such as in a CustomPainter, provide them here to ensure they're loaded.
+  ///
   /// #### [fontsToReplaceWithRoboto]: [kFontsToReplaceWithRoboto]
   ///
   /// If your app's text theme uses a font which isn't bundled with your app,
@@ -64,6 +71,7 @@ extension ScreenshotTester on WidgetTester {
   /// For this, we get the context from a widget of this type.
   /// Specify a different type if you aren't using [ScreenshotApp].
   Future<void> loadAssets({
+    Iterable<String>? alsoLoadTheseFonts,
     Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
     @Deprecated('This was renamed to fontsToReplaceWithRoboto')
     Iterable<String> overriddenFonts = const [],
@@ -71,26 +79,28 @@ extension ScreenshotTester on WidgetTester {
     bool skipOffstageImages = true,
     List<ImageProvider>? imagesToInclude,
     Type widgetType = ScreenshotApp,
-  }) =>
-      runAsync(() => Future.wait([
-            loadAppFonts(
-              fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
-              // ignore: deprecated_member_use_from_same_package
-              overriddenFonts: overriddenFonts,
-            ),
-            _loadImages(
-              searchWidgetTree: searchWidgetTreeForImages,
-              skipOffstage: skipOffstageImages,
-              imagesToInclude: imagesToInclude,
-              widgetType: widgetType,
-            ),
-          ]));
+  }) => runAsync(
+    () => Future.wait([
+      _findAndLoadFonts(
+        alsoLoadTheseFonts: alsoLoadTheseFonts,
+        fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+        // ignore: deprecated_member_use_from_same_package
+        overriddenFonts: overriddenFonts,
+      ),
+      _findAndLoadImages(
+        searchWidgetTree: searchWidgetTreeForImages,
+        skipOffstage: skipOffstageImages,
+        imagesToInclude: imagesToInclude,
+        widgetType: widgetType,
+      ),
+    ]),
+  );
 
   /// Finds all the [Image]s in the widget tree and loads them into the image
   /// cache.
   ///
   /// See [loadAssets] for the parameters.
-  Future<void> _loadImages({
+  Future<void> _findAndLoadImages({
     bool searchWidgetTree = true,
     bool skipOffstage = true,
     Type widgetType = ScreenshotApp,
@@ -118,15 +128,65 @@ extension ScreenshotTester on WidgetTester {
     );
   }
 
+  /// Finds all fonts used in the widget tree and loads them.
+  ///
+  /// See [loadAssets] for the parameters.
+  Future<void> _findAndLoadFonts({
+    Iterable<String>? alsoLoadTheseFonts,
+    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> overriddenFonts = const [],
+  }) {
+    if (kIsWeb) {
+      // rootBundle not available on web
+      // https://github.com/flutter/flutter/issues/159879
+      return Future.value();
+    }
+
+    final onlyLoadTheseFonts = alsoLoadTheseFonts?.toSet() ?? <String>{};
+
+    for (final widget in widgetList<Text>(find.bySubtype<Text>())) {
+      final style = widget.style;
+      if (style == null) continue;
+      if (style.fontFamily == null) continue;
+      onlyLoadTheseFonts.add(style.fontFamily!);
+    }
+    for (final widget in widgetList<RichText>(find.bySubtype<RichText>())) {
+      final style = widget.text.style;
+      if (style == null) continue;
+      if (style.fontFamily == null) continue;
+      onlyLoadTheseFonts.add(style.fontFamily!);
+    }
+    for (final widget in widgetList<DefaultTextStyle>(
+      find.bySubtype<DefaultTextStyle>(),
+    )) {
+      final style = widget.style;
+      if (style.fontFamily == null) continue;
+      onlyLoadTheseFonts.add(style.fontFamily!);
+    }
+    for (final widget in widgetList<Theme>(find.bySubtype<Theme>())) {
+      final textTheme = widget.data.textTheme;
+      for (final textStyle in textTheme.styles) {
+        if (textStyle.fontFamily == null) continue;
+        onlyLoadTheseFonts.add(textStyle.fontFamily!);
+      }
+    }
+
+    return loadAppFonts(
+      onlyLoadTheseFonts: onlyLoadTheseFonts,
+      fontsToReplaceWithRoboto: fontsToReplaceWithRoboto,
+      // ignore: deprecated_member_use_from_same_package
+      overriddenFonts: overriddenFonts,
+    );
+  }
+
   /// Uses a [FuzzyComparator] instead of the default golden
   /// file comparator to allow a small amount of difference between
   /// the golden and the test image.
   ///
   /// You most likely do not need to call this method directly.
   /// It's called automatically by [testGoldens].
-  void useFuzzyComparator({
-    double allowedDiffPercent = kAllowedDiffPercent,
-  }) {
+  void useFuzzyComparator({double allowedDiffPercent = kAllowedDiffPercent}) {
     // We can't yet use FuzzyComparator on the web
     if (kIsWeb) return;
     // No need to use a fuzzy comparator if the allowed difference is zero
@@ -153,8 +213,10 @@ extension ScreenshotTester on WidgetTester {
     ScreenshotDevice device,
     String goldenFileName, {
     String? langCode,
-    @Deprecated('Use `allowedDiffPercent` in `testGoldens()` instead. '
-        '`expectScreenshot` no longer sets the comparator.')
+    @Deprecated(
+      'Use `allowedDiffPercent` in `testGoldens()` instead. '
+      '`expectScreenshot` no longer sets the comparator.',
+    )
     double allowedDiffPercent = kAllowedDiffPercent,
     Finder? finder,
   }) async {
@@ -174,57 +236,85 @@ extension ScreenshotTester on WidgetTester {
   @Deprecated('Use useFuzzyComparator instead')
   void useScreenshotComparator({
     double allowedDiffPercent = kAllowedDiffPercent,
-  }) =>
-      useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
+  }) => useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
 
-  @Deprecated('Use `loadAssets()` instead, '
-      'which loads all needed images and fonts in one call.')
+  @Deprecated(
+    'Use `loadAssets()` instead, '
+    'which loads all needed images and fonts in one call.',
+  )
   Future<void> precacheImages(
     List<ImageProvider> images, {
     Type widgetType = ScreenshotApp,
-  }) =>
-      runAsync(() => _loadImages(
-            searchWidgetTree: false,
-            widgetType: widgetType,
-            imagesToInclude: images,
-          ));
+  }) => runAsync(
+    () => _findAndLoadImages(
+      searchWidgetTree: false,
+      widgetType: widgetType,
+      imagesToInclude: images,
+    ),
+  );
 
-  @Deprecated('Use `loadAssets()` instead, '
-      'which loads all needed images and fonts in one call.')
+  @Deprecated(
+    'Use `loadAssets()` instead, '
+    'which loads all needed images and fonts in one call.',
+  )
   Future<void> precacheImagesInWidgetTree({
     bool skipOffstage = true,
     Type widgetType = ScreenshotApp,
-  }) =>
-      runAsync(() => _loadImages(
-            skipOffstage: skipOffstage,
-            widgetType: widgetType,
-          ));
+  }) => runAsync(
+    () =>
+        _findAndLoadImages(skipOffstage: skipOffstage, widgetType: widgetType),
+  );
 
-  @Deprecated('Use `loadAssets()` instead, '
-      'which loads all needed images and fonts in one call.')
-  Future<void> precacheTopbarImages({
-    Type widgetType = ScreenshotApp,
-  }) =>
-      runAsync(() => _loadImages(
-            searchWidgetTree: false,
-            widgetType: widgetType,
-            imagesToInclude: const [
-              ScreenshotFrame.androidPhoneTopBarImage,
-              ScreenshotFrame.androidTabletTopBarImage,
-              ScreenshotFrame.iphoneTopBarImage,
-              ScreenshotFrame.ipadTopBarImage,
-            ],
-          ));
+  @Deprecated(
+    'Use `loadAssets()` instead, '
+    'which loads all needed images and fonts in one call.',
+  )
+  Future<void> precacheTopbarImages({Type widgetType = ScreenshotApp}) =>
+      runAsync(
+        () => _findAndLoadImages(
+          searchWidgetTree: false,
+          widgetType: widgetType,
+          imagesToInclude: const [
+            ScreenshotFrame.androidPhoneTopBarImage,
+            ScreenshotFrame.androidTabletTopBarImage,
+            ScreenshotFrame.iphoneTopBarImage,
+            ScreenshotFrame.ipadTopBarImage,
+          ],
+        ),
+      );
 
-  @Deprecated('Use `loadAssets()` instead, '
-      'which loads all needed images and fonts in one call.')
+  @Deprecated(
+    'Use `loadAssets()` instead, '
+    'which loads all needed images and fonts in one call.',
+  )
   Future<void> loadFonts({
     Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
     @Deprecated('This was renamed to fontsToReplaceWithRoboto')
     Iterable<String> overriddenFonts = const [],
-  }) =>
-      runAsync(() => loadAppFonts(
-            fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
-            overriddenFonts: overriddenFonts,
-          ));
+  }) => runAsync(
+    () => loadAppFonts(
+      fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+      overriddenFonts: overriddenFonts,
+    ),
+  );
+}
+
+extension _IterableTextTheme on TextTheme {
+  Iterable<TextStyle> get styles => [
+    ?displayLarge,
+    ?displayMedium,
+    ?displaySmall,
+    ?headlineLarge,
+    ?headlineMedium,
+    ?headlineSmall,
+    ?titleLarge,
+    ?titleMedium,
+    ?titleSmall,
+    ?bodyLarge,
+    ?bodyMedium,
+    ?bodySmall,
+    ?labelLarge,
+    ?labelMedium,
+    ?labelSmall,
+  ];
 }

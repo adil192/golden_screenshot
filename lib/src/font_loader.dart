@@ -14,7 +14,11 @@ typedef JsonMap = Map<String, dynamic>;
 ///
 /// This method loads proper fonts for the app to use in golden tests.
 ///
-/// Note that if your app specifies a custom font (e.g. Comic Sans)
+/// Note: Loading every single font can use up a lot of RAM and slow down
+/// your tests. Prefer using [tester.loadAssets] where possible to only load
+/// the fonts your widget tree uses, or manually specify [onlyLoadTheseFonts].
+///
+/// Note: If your app specifies a custom font (e.g. Comic Sans)
 /// with font fallbacks, but does not include said custom font,
 /// the font fallbacks will not be applied. Ahem will be used instead.
 /// In this case, please provide the [fontsToReplaceWithRoboto] parameter
@@ -24,7 +28,21 @@ typedef JsonMap = Map<String, dynamic>;
 /// await loadAppFonts(fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto]);
 /// ```
 Future<void> loadAppFonts({
+  /// If provided, only these fonts will be loaded.
+  ///
+  /// This takes precedence over [fontsToReplaceWithRoboto].
+  Set<String>? onlyLoadTheseFonts,
+
+  /// Fonts we don't actually have, so we load Roboto in their place.
+  ///
+  /// If a font is in both [fontsToReplaceWithRoboto] and [onlyLoadTheseFonts],
+  /// [onlyLoadTheseFonts] takes precedence and the font will not be loaded.
+  ///
+  /// If Apple fonts are in [fontsToReplaceWithRoboto] but they're actually
+  /// available, the real fonts will be used instead of Roboto.
   Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+
+  /// This was renamed to [fontsToReplaceWithRoboto] for clarity.
   @Deprecated('This was renamed to fontsToReplaceWithRoboto')
   Iterable<String> overriddenFonts = const [],
 }) async {
@@ -45,16 +63,29 @@ Future<void> loadAppFonts({
   final fontLoadingFutures = <Future<void>>[];
   for (final JsonMap fontObject in fontManifest) {
     final family = fontObject['family'] as String;
+    if (onlyLoadTheseFonts != null && !onlyLoadTheseFonts.contains(family)) {
+      continue;
+    }
     if (family == RobotoFonts.familyWithPackage) continue;
     fontLoadingFutures.add(_loadFontAsset(family, fontObject));
   }
-  await for (final (:family, :fonts) in AppleFonts.getFontFamilies()) {
-    fontLoadingFutures.add(_loadFontFiles(family, fonts));
+  final wantsAppleFonts =
+      onlyLoadTheseFonts?.any(_appleFontFamilies.contains) ?? true;
+  if (wantsAppleFonts && AppleFonts.available) {
+    await for (final (:family, :fonts) in AppleFonts.getFontFamilies()) {
+      if (onlyLoadTheseFonts != null && !onlyLoadTheseFonts.contains(family)) {
+        continue;
+      }
+      fontLoadingFutures.add(_loadFontFiles(family, fonts));
+    }
   }
 
   // Now override [fontsToReplaceWithRoboto]
-  for (final family in fontsToReplaceWithRoboto.toSet()
-    ..addAll(overriddenFonts)) {
+  for (final family
+      in fontsToReplaceWithRoboto.toSet()..addAll(overriddenFonts)) {
+    if (onlyLoadTheseFonts != null && !onlyLoadTheseFonts.contains(family)) {
+      continue;
+    }
     if (_appleFontFamilies.contains(family) && AppleFonts.available) {
       // Apple fonts are available, no need to override them with Roboto
       continue;
@@ -77,8 +108,9 @@ Future<void> _loadFontAsset(String family, JsonMap fontObject) {
 
 /// Different to [_loadFontAsset] because we don't want to read the asset
 /// into memory multiple times. [RobotoFonts.assetFutures] is only created once.
-Future<void> _loadRoboto(
-    [String family = RobotoFonts.familyWithPackage]) async {
+Future<void> _loadRoboto([
+  String family = RobotoFonts.familyWithPackage,
+]) async {
   final fontLoader = FontLoader(family);
   for (final assetBytesFuture in RobotoFonts.assetFutures) {
     fontLoader.addFont(assetBytesFuture);
