@@ -140,7 +140,6 @@ const kFontsToReplaceWithRoboto = {
   'Cantarell',
   'Noto Sans',
   'Ubuntu',
-  'packages/yaru/Ubuntu',
 
   // Windows
   'Segoe UI',
