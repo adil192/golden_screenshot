@@ -3,11 +3,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
 void main() {
-  testGoldens('Font weights in goldens', (tester) async {
+  group('Font weights with', () {
+    _testFontWeights(GoldenScreenshotDevices.iphone);
+    _testFontWeights(GoldenScreenshotDevices.androidPhone);
+  });
+}
+
+void _testFontWeights(GoldenScreenshotDevices goldenDevice) {
+  testGoldens(goldenDevice.name, (tester) async {
     await tester.pumpWidget(
       ScreenshotApp(
-        device: GoldenScreenshotDevices.iphone.device,
-        theme: ThemeData(colorSchemeSeed: Colors.blue),
+        device: goldenDevice.device,
+        theme: ThemeData(
+          colorSchemeSeed: Colors.blue,
+          platform: goldenDevice.device.platform,
+        ),
         frameColors: ScreenshotFrameColors.dark,
         home: Scaffold(
           appBar: AppBar(title: const Text('Font Weight Test')),
@@ -32,7 +42,7 @@ void main() {
 
     await expectLater(
       find.byType(MaterialApp),
-      matchesGoldenFile('font_weight_test.png'),
+      matchesGoldenFile('font_weight_test_${goldenDevice.name}.png'),
     );
   });
 }
