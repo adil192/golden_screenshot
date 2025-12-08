@@ -1,3 +1,10 @@
+## 9.1.0
+
+- Replaced Roboto with the more modern Inter as the default fallback font.
+- Renamed some parameters as necessary:
+  - `fontsToReplaceWithRoboto` to `fontsToMock`
+  - `kFontsToReplaceWithRoboto` to `kFontsToMock`
+
 ## 9.0.1
 
 - Fixed an issue where some icon fonts were not found in `tester.loadAssets()`.
