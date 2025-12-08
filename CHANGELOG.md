@@ -1,3 +1,8 @@
+## 9.0.1
+
+- Fixed an issue where some icon fonts were not found in `tester.loadAssets()`.
+- Deprecated the `widgetType` parameter of `tester.loadAssets()`. It is no longer needed or used.
+
 ## 9.0.0
 
 **Migration possibly needed**: If some fonts are missing in your goldens after updating, you should pass the names of those fonts to the `alsoLoadTheseFonts` parameter of `tester.loadAssets()`. See below for more details.
