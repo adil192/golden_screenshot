@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
@@ -140,30 +141,25 @@ extension ScreenshotTester on WidgetTester {
 
     final onlyLoadTheseFonts = alsoLoadTheseFonts?.toSet() ?? <String>{};
 
-    for (final widget in widgetList<Text>(find.bySubtype<Text>())) {
-      final style = widget.style;
-      if (style == null) continue;
-      if (style.fontFamily == null) continue;
-      onlyLoadTheseFonts.add(style.fontFamily!);
-    }
-    for (final widget in widgetList<RichText>(find.bySubtype<RichText>())) {
-      final style = widget.text.style;
-      if (style == null) continue;
-      if (style.fontFamily == null) continue;
-      onlyLoadTheseFonts.add(style.fontFamily!);
+    for (final paragraph in renderObjectList<RenderParagraph>(
+      find.bySubtype<RichText>(), // includes [Text] as well
+    )) {
+      final strutStyleFont = paragraph.strutStyle?.fontFamily;
+      if (strutStyleFont != null) onlyLoadTheseFonts.add(strutStyleFont);
+      final textStyleFont = paragraph.text.style?.fontFamily;
+      if (textStyleFont != null) onlyLoadTheseFonts.add(textStyleFont);
     }
     for (final widget in widgetList<DefaultTextStyle>(
       find.bySubtype<DefaultTextStyle>(),
     )) {
-      final style = widget.style;
-      if (style.fontFamily == null) continue;
-      onlyLoadTheseFonts.add(style.fontFamily!);
+      final fontFamily = widget.style.fontFamily;
+      if (fontFamily != null) onlyLoadTheseFonts.add(fontFamily);
     }
     for (final widget in widgetList<Theme>(find.bySubtype<Theme>())) {
       final textTheme = widget.data.textTheme;
       for (final textStyle in textTheme.styles) {
-        if (textStyle.fontFamily == null) continue;
-        onlyLoadTheseFonts.add(textStyle.fontFamily!);
+        final fontFamily = textStyle.fontFamily;
+        if (fontFamily != null) onlyLoadTheseFonts.add(fontFamily);
       }
     }
 
