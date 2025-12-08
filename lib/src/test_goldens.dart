@@ -21,22 +21,21 @@ void testGoldens(
   dynamic tags,
   int? retry,
   double allowedDiffPercent = kAllowedDiffPercent,
-}) =>
-    testWidgets(
-      description,
-      (tester) async {
-        debugDisableShadows = false;
-        tester.useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
-        try {
-          await callback(tester);
-        } finally {
-          debugDisableShadows = true;
-        }
-      },
-      skip: skip,
-      timeout: timeout,
-      semanticsEnabled: semanticsEnabled,
-      variant: variant,
-      tags: tags,
-      retry: retry,
-    );
+}) => testWidgets(
+  description,
+  (tester) async {
+    debugDisableShadows = false;
+    tester.useFuzzyComparator(allowedDiffPercent: allowedDiffPercent);
+    try {
+      await callback(tester);
+    } finally {
+      debugDisableShadows = true;
+    }
+  },
+  skip: skip,
+  timeout: timeout,
+  semanticsEnabled: semanticsEnabled,
+  variant: variant,
+  tags: tags,
+  retry: retry,
+);

@@ -4,11 +4,12 @@ import 'package:golden_screenshot/src/screenshot_device.dart';
 /// A builder that can add a top and bottom bar to its [child].
 ///
 /// It should also set [MediaQueryData.padding] so that [SafeArea]s work.
-typedef ScreenshotFrameBuilder = Widget Function({
-  required ScreenshotDevice device,
-  required ScreenshotFrameColors? frameColors,
-  required Widget child,
-});
+typedef ScreenshotFrameBuilder =
+    Widget Function({
+      required ScreenshotDevice device,
+      required ScreenshotFrameColors? frameColors,
+      required Widget child,
+    });
 
 /// The margin around the window for the Flathub frame.
 /// This is intended to match the Gnome screenshot tool's style.
@@ -63,8 +64,8 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBar = null,
-        bottomBar = null;
+  }) : topBar = null,
+       bottomBar = null;
 
   /// Creates a frame resembling an Android phone.
   const ScreenshotFrame.androidPhone({
@@ -72,14 +73,14 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBar = const FrameTopBar(
-          height: 156 / 3,
-          image: androidPhoneTopBarImage,
-        ),
-        bottomBar = const FrameBottomBar(
-          height: 72 / 3,
-          handleSize: Size(324 / 3, 12 / 3),
-        );
+  }) : topBar = const FrameTopBar(
+         height: 156 / 3,
+         image: androidPhoneTopBarImage,
+       ),
+       bottomBar = const FrameBottomBar(
+         height: 72 / 3,
+         handleSize: Size(324 / 3, 12 / 3),
+       );
 
   @Deprecated('This has been renamed to `ScreenshotFrame.androidPhone`')
   const ScreenshotFrame.android({
@@ -88,11 +89,11 @@ class ScreenshotFrame extends StatelessWidget {
     ScreenshotFrameColors? frameColors,
     required Widget child,
   }) : this.androidPhone(
-          key: key,
-          device: device,
-          frameColors: frameColors,
-          child: child,
-        );
+         key: key,
+         device: device,
+         frameColors: frameColors,
+         child: child,
+       );
 
   /// Creates a frame resembling an Android tablet.
   const ScreenshotFrame.androidTablet({
@@ -100,14 +101,14 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBar = const FrameTopBar(
-          height: 36 / 1.5,
-          image: androidTabletTopBarImage,
-        ),
-        bottomBar = const FrameBottomBar(
-          height: 48 / 1.5,
-          handleSize: Size(330 / 1.5, 6 / 1.5),
-        );
+  }) : topBar = const FrameTopBar(
+         height: 36 / 1.5,
+         image: androidTabletTopBarImage,
+       ),
+       bottomBar = const FrameBottomBar(
+         height: 48 / 1.5,
+         handleSize: Size(330 / 1.5, 6 / 1.5),
+       );
 
   /// Creates a shadowed window frame with no top or bottom bar.
   factory ScreenshotFrame.flathub({
@@ -115,13 +116,12 @@ class ScreenshotFrame extends StatelessWidget {
     required ScreenshotDevice device,
     ScreenshotFrameColors? frameColors,
     required Widget child,
-  }) =>
-      _FlathubScreenshotFrame(
-        key: key,
-        device: device,
-        frameColors: frameColors,
-        child: child,
-      );
+  }) => _FlathubScreenshotFrame(
+    key: key,
+    device: device,
+    frameColors: frameColors,
+    child: child,
+  );
 
   /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
   const ScreenshotFrame.iphone({
@@ -129,14 +129,8 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBar = const FrameTopBar(
-          height: 186 / 3,
-          image: iphoneTopBarImage,
-        ),
-        bottomBar = const FrameBottomBar(
-          height: 102 / 3,
-          handleSize: Size.zero,
-        );
+  }) : topBar = const FrameTopBar(height: 186 / 3, image: iphoneTopBarImage),
+       bottomBar = const FrameBottomBar(height: 102 / 3, handleSize: Size.zero);
 
   /// Creates a frame with an iPad 13" top bar and a bottom bar.
   const ScreenshotFrame.ipad({
@@ -144,14 +138,8 @@ class ScreenshotFrame extends StatelessWidget {
     required this.device,
     this.frameColors,
     required this.child,
-  })  : topBar = const FrameTopBar(
-          height: 64 / 2,
-          image: ipadTopBarImage,
-        ),
-        bottomBar = const FrameBottomBar(
-          height: 40 / 2,
-          handleSize: Size.zero,
-        );
+  }) : topBar = const FrameTopBar(height: 64 / 2, image: ipadTopBarImage),
+       bottomBar = const FrameBottomBar(height: 40 / 2, handleSize: Size.zero);
 
   /// The device that this frame will simulate.
   final ScreenshotDevice device;
@@ -202,10 +190,7 @@ class ScreenshotFrame extends StatelessWidget {
     );
 
     return MediaQuery(
-      data: mediaQuery.copyWith(
-        padding: viewPadding,
-        viewPadding: viewPadding,
-      ),
+      data: mediaQuery.copyWith(padding: viewPadding, viewPadding: viewPadding),
       child: Stack(
         children: [
           child,
@@ -217,10 +202,7 @@ class ScreenshotFrame extends StatelessWidget {
               height: topBar!.height,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  _getIconColor(
-                    context,
-                    _getStatusBarIconBrightness(context),
-                  ),
+                  _getIconColor(context, _getStatusBarIconBrightness(context)),
                   BlendMode.srcIn,
                 ),
                 child: Image(image: topBar!.image),
@@ -252,22 +234,27 @@ class ScreenshotFrame extends StatelessWidget {
 
   /// An image of the top bar of an Android phone.
   static const androidPhoneTopBarImage = AssetImage(
-      'assets/topbars/android_phone_topbar.png',
-      package: 'golden_screenshot');
+    'assets/topbars/android_phone_topbar.png',
+    package: 'golden_screenshot',
+  );
 
   /// An image of the top bar of an Android tablet.
   static const androidTabletTopBarImage = AssetImage(
-      'assets/topbars/android_tablet_topbar.png',
-      package: 'golden_screenshot');
+    'assets/topbars/android_tablet_topbar.png',
+    package: 'golden_screenshot',
+  );
 
   /// An image of the top bar of an iPhone.
   static const iphoneTopBarImage = AssetImage(
-      'assets/topbars/iphone_topbar.png',
-      package: 'golden_screenshot');
+    'assets/topbars/iphone_topbar.png',
+    package: 'golden_screenshot',
+  );
 
   /// An image of the top bar of an iPad.
-  static const ipadTopBarImage = AssetImage('assets/topbars/ipad_topbar.png',
-      package: 'golden_screenshot');
+  static const ipadTopBarImage = AssetImage(
+    'assets/topbars/ipad_topbar.png',
+    package: 'golden_screenshot',
+  );
 
   @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
   static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
@@ -305,20 +292,15 @@ class _FlathubScreenshotFrame extends ScreenshotFrame {
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: borderRadius,
-          child: child,
-        ),
+        child: ClipRRect(borderRadius: borderRadius, child: child),
       ),
     );
   }
 }
 
 class FrameTopBar {
-  const FrameTopBar({
-    required this.height,
-    required this.image,
-  }) : assert(height > 0);
+  const FrameTopBar({required this.height, required this.image})
+    : assert(height > 0);
 
   /// The size of the top bar in logical pixels.
   final double height;
@@ -328,10 +310,8 @@ class FrameTopBar {
 }
 
 class FrameBottomBar {
-  const FrameBottomBar({
-    required this.height,
-    required this.handleSize,
-  }) : assert(height > 0);
+  const FrameBottomBar({required this.height, required this.handleSize})
+    : assert(height > 0);
 
   /// The size of the bottom bar in logical pixels.
   final double height;

@@ -7,13 +7,16 @@ class FuzzyComparator extends LocalFileComparator {
   FuzzyComparator({
     required dynamic previousComparator,
     required this.allowedDiffPercent,
-  })  : assert(previousComparator is LocalFileComparator,
-            'previousComparator must be a LocalFileComparator on non-web, got $previousComparator'),
-        super(
-          // The actual file doesn't matter, just the directory.
-          Uri.parse(
-              '${(previousComparator as LocalFileComparator).basedir.path}/some_test.dart'),
-        );
+  }) : assert(
+         previousComparator is LocalFileComparator,
+         'previousComparator must be a LocalFileComparator on non-web, got $previousComparator',
+       ),
+       super(
+         // The actual file doesn't matter, just the directory.
+         Uri.parse(
+           '${(previousComparator as LocalFileComparator).basedir.path}/some_test.dart',
+         ),
+       );
 
   /// How much the golden image can differ from the test image.
   /// E.g. 0.1 means 0.1% difference is allowed.

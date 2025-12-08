@@ -12,7 +12,8 @@ Future<void> main() async {
 extension _AppleFontsDownloader on AppleFonts {
   static Future<void> downloadFonts() async {
     print(
-        'This script will download and extract the fonts directly from Apple.');
+      'This script will download and extract the fonts directly from Apple.',
+    );
     print('Do not redistribute the fonts or bundle them in production.');
     print('See the license for details: https://developer.apple.com/fonts/');
     print('');
@@ -30,8 +31,9 @@ extension _AppleFontsDownloader on AppleFonts {
 
   static final fontsDirectory = AppleFonts.fontsDirectory;
 
-  static final _tmp =
-      Directory.systemTemp.createTempSync('golden_screenshot').path;
+  static final _tmp = Directory.systemTemp
+      .createTempSync('golden_screenshot')
+      .path;
   static final _tmpDmgFile = File(p.join(_tmp, 'SF-Pro.dmg'));
   static String? _sevenZipBinary;
 
@@ -79,11 +81,16 @@ extension _AppleFontsDownloader on AppleFonts {
 
     // Extract the archive and find the 7zr binary.
     final extractedDir = Directory(p.join(_tmp, 'extracted7z'))..createSync();
-    final tarResult = await Process.run(
-        'tar', ['-xf', downloadedFile.path, '-C', extractedDir.path]);
+    final tarResult = await Process.run('tar', [
+      '-xf',
+      downloadedFile.path,
+      '-C',
+      extractedDir.path,
+    ]);
     if (tarResult.exitCode != 0) {
       throw StateError(
-          'Failed to extract 7zr archive: ${tarResult.stderr}\n${tarResult.stdout}');
+        'Failed to extract 7zr archive: ${tarResult.stderr}\n${tarResult.stdout}',
+      );
     }
     final extracted7zzs = File(p.join(extractedDir.path, '7zzs'));
     final extracted7zz = File(p.join(extractedDir.path, '7zz'));
@@ -93,7 +100,8 @@ extension _AppleFontsDownloader on AppleFonts {
       _sevenZipBinary = extracted7zz.path;
     } else {
       throw StateError(
-          'Could not find 7zr binary in extracted archive (${extractedDir.path}).');
+        'Could not find 7zr binary in extracted archive (${extractedDir.path}).',
+      );
     }
   }
 
@@ -102,23 +110,36 @@ extension _AppleFontsDownloader on AppleFonts {
     print('Extracting (1/4) .pkg out of .dmg using $exe...');
     final extractedDmgDir = Directory(p.join(_tmp, 'extracted_dmg'));
     await extractedDmgDir.create(recursive: true);
-    var result = await Process.run(
-        exe, ['x', _tmpDmgFile.path, '-o${extractedDmgDir.path}', '-y']);
+    var result = await Process.run(exe, [
+      'x',
+      _tmpDmgFile.path,
+      '-o${extractedDmgDir.path}',
+      '-y',
+    ]);
     if (result.exitCode != 0) {
       throw StateError(
-          'Failed to extract .dmg: ${result.stderr}\n${result.stdout}');
+        'Failed to extract .dmg: ${result.stderr}\n${result.stdout}',
+      );
     }
 
     print('Extracting (2/4) Payload out of .pkg using $exe...');
-    final pkgFile =
-        p.join(extractedDmgDir.path, 'SFProFonts', 'SF Pro Fonts.pkg');
+    final pkgFile = p.join(
+      extractedDmgDir.path,
+      'SFProFonts',
+      'SF Pro Fonts.pkg',
+    );
     final extractedPkgDir = Directory(p.join(_tmp, 'extracted_pkg'));
     await extractedPkgDir.create(recursive: true);
-    result = await Process.run(
-        exe, ['x', pkgFile, '-o${extractedPkgDir.path}', '-y']);
+    result = await Process.run(exe, [
+      'x',
+      pkgFile,
+      '-o${extractedPkgDir.path}',
+      '-y',
+    ]);
     if (result.exitCode != 0) {
       throw StateError(
-          'Failed to extract .pkg: ${result.stderr}\n${result.stdout}');
+        'Failed to extract .pkg: ${result.stderr}\n${result.stdout}',
+      );
     }
 
     // Sometimes the above gives us `Payload~` (cpio) directly, sometimes it's
@@ -126,35 +147,51 @@ extension _AppleFontsDownloader on AppleFonts {
     var payloadCpioFile = p.join(extractedPkgDir.path, 'Payload~');
     if (!File(payloadCpioFile).existsSync()) {
       print('Extracting (3/4) Payload~ out of Payload using $exe...');
-      final payloadFile =
-          p.join(extractedPkgDir.path, 'SFProFonts.pkg', 'Payload');
+      final payloadFile = p.join(
+        extractedPkgDir.path,
+        'SFProFonts.pkg',
+        'Payload',
+      );
       final extractedPayloadDir = Directory(p.join(_tmp, 'extracted_payload'));
       await extractedPayloadDir.create(recursive: true);
-      result = await Process.run(
-          exe, ['x', payloadFile, '-o${extractedPayloadDir.path}', '-y']);
+      result = await Process.run(exe, [
+        'x',
+        payloadFile,
+        '-o${extractedPayloadDir.path}',
+        '-y',
+      ]);
       if (result.exitCode != 0) {
         throw StateError(
-            'Failed to extract Payload: ${result.stderr}\n${result.stdout}');
+          'Failed to extract Payload: ${result.stderr}\n${result.stdout}',
+        );
       }
       payloadCpioFile = p.join(extractedPayloadDir.path, 'Payload~');
     } else {
       print(
-          'Extracting (3/4) Payload~ out of Payload not needed, already cpio.');
+        'Extracting (3/4) Payload~ out of Payload not needed, already cpio.',
+      );
     }
 
     print('Extracting (4/4) fonts from Payload~ using $exe...');
-    final extractedPayloadCpioDir =
-        Directory(p.join(_tmp, 'extracted_payload_cpio'));
-    await Process.run(
-        exe, ['x', payloadCpioFile, '-o${extractedPayloadCpioDir.path}', '-y']);
+    final extractedPayloadCpioDir = Directory(
+      p.join(_tmp, 'extracted_payload_cpio'),
+    );
+    await Process.run(exe, [
+      'x',
+      payloadCpioFile,
+      '-o${extractedPayloadCpioDir.path}',
+      '-y',
+    ]);
     if (result.exitCode != 0) {
       throw StateError(
-          'Failed to extract Payload cpio: ${result.stderr}\n${result.stdout}');
+        'Failed to extract Payload cpio: ${result.stderr}\n${result.stdout}',
+      );
     }
 
     print('Copying fonts to ${fontsDirectory.path}...');
-    final fontFiles =
-        Directory(p.join(extractedPayloadCpioDir.path, 'Library', 'Fonts'));
+    final fontFiles = Directory(
+      p.join(extractedPayloadCpioDir.path, 'Library', 'Fonts'),
+    );
     await fontsDirectory.create(recursive: true);
     await for (final entity in fontFiles.list()) {
       if (entity is! File) continue;
@@ -182,8 +219,9 @@ extension _AppleFontsDownloader on AppleFonts {
     final arch = Arch.current;
     if (Platform.isWindows) {
       throw UnsupportedError(
-          'Please install 7-Zip from https://www.7-zip.org/.\n'
-          'If it\'s already installed, consider adding it to your PATH.');
+        'Please install 7-Zip from https://www.7-zip.org/.\n'
+        'If it\'s already installed, consider adding it to your PATH.',
+      );
     } else if (Platform.isMacOS) {
       return 'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-mac.tar.xz';
     } else {

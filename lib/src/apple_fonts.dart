@@ -9,11 +9,12 @@ import 'package:path/path.dart' as p;
 ///
 /// Run `dart run golden_screenshot:download_apple_fonts` to download them.
 abstract class AppleFonts {
-  static final fontsDirectory =
-      Directory(p.join(_pubCache, 'golden_screenshot', 'SF-Pro'))
-        ..createSync(recursive: true);
+  static final fontsDirectory = Directory(
+    p.join(_pubCache, 'golden_screenshot', 'SF-Pro'),
+  )..createSync(recursive: true);
 
-  static final _pubCache = Platform.environment['PUB_CACHE'] ??
+  static final _pubCache =
+      Platform.environment['PUB_CACHE'] ??
       (Platform.isWindows
           ? p.join(Platform.environment['LOCALAPPDATA']!, 'Pub', 'Cache')
           : p.join(Platform.environment['HOME']!, '.pub-cache'));
@@ -26,14 +27,16 @@ abstract class AppleFonts {
   static final available = (() {
     final available = allOtfFiles.isNotEmpty;
     if (!available) {
-      print('Apple fonts are missing: '
-          'run `dart run golden_screenshot:download_apple_fonts`.');
+      print(
+        'Apple fonts are missing: '
+        'run `dart run golden_screenshot:download_apple_fonts`.',
+      );
     }
     return available;
   })();
 
   static Stream<({String family, List<Uint8List> fonts})>
-      getFontFamilies() async* {
+  getFontFamilies() async* {
     if (!available) return;
 
     final sfProDisplayFonts = await Future.wait(

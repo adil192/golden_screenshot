@@ -43,13 +43,19 @@ class ScreenshotDevice {
 
   /// Returns a `matchesGoldenFile` matcher for the relevant golden file.
   AsyncMatcher matchesGoldenFile(String goldenFileName, {String? langCode}) {
-    final screenshotsFolder = ScreenshotDevice.screenshotsFolder
-        .replaceFirst('\$langCode', langCode ?? 'en-US');
+    final screenshotsFolder = ScreenshotDevice.screenshotsFolder.replaceFirst(
+      '\$langCode',
+      langCode ?? 'en-US',
+    );
 
-    assert(screenshotsFolder.endsWith('/'),
-        'screenshotsFolder must end with a slash: $screenshotsFolder');
-    assert(goldenSubFolder.endsWith('/'),
-        'goldenSubFolder must end with a slash: $goldenSubFolder');
+    assert(
+      screenshotsFolder.endsWith('/'),
+      'screenshotsFolder must end with a slash: $screenshotsFolder',
+    );
+    assert(
+      goldenSubFolder.endsWith('/'),
+      'goldenSubFolder must end with a slash: $goldenSubFolder',
+    );
 
     final goldenFile = '$screenshotsFolder$goldenSubFolder$goldenFileName.png';
     return flutter_test.matchesGoldenFile(goldenFile);

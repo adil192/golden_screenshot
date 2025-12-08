@@ -9,7 +9,9 @@ void main() {
     expect(GoldenScreenshotDevices.olderIphone, GoldenScreenshotDevices.iphone);
     expect(GoldenScreenshotDevices.newerIpad, GoldenScreenshotDevices.ipad);
     expect(GoldenScreenshotDevices.olderIpad, GoldenScreenshotDevices.ipad);
-    expect(ScreenshotDevices.values,
-        GoldenScreenshotDevices.values.map((e) => e.device).toList());
+    expect(
+      ScreenshotDevices.values,
+      GoldenScreenshotDevices.values.map((e) => e.device).toList(),
+    );
   });
 }

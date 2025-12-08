@@ -51,10 +51,10 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     required this.titleBar,
     required this.device,
     required this.child,
-  })  : title = null,
-        isClosable = null,
-        isMaximizable = null,
-        isMinimizable = null;
+  }) : title = null,
+       isClosable = null,
+       isMaximizable = null,
+       isMinimizable = null;
 
   final PreferredSizeWidget? titleBar;
   final Widget? title;
@@ -80,7 +80,8 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     final onlyClosable = yaruPlatform == YaruWindowControlPlatform.yaru;
 
     return Scaffold(
-      appBar: titleBar ??
+      appBar:
+          titleBar ??
           YaruWindowTitleBar(
             title: title,
             isActive: true,

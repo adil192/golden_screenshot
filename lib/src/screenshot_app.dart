@@ -99,19 +99,20 @@ class ScreenshotApp extends MaterialApp {
     bool? isMaximizable,
     bool? isMinimizable,
   }) : super(
-          builder: (context, child) {
-            return ScreenshotConditionalTitlebar(
-              title: Text(title),
-              device: device,
-              isClosable: isClosable,
-              isMaximizable: isMaximizable,
-              isMinimizable: isMinimizable,
-              child: builder?.call(context, child) ??
-                  child ??
-                  const SizedBox.expand(),
-            );
-          },
-        );
+         builder: (context, child) {
+           return ScreenshotConditionalTitlebar(
+             title: Text(title),
+             device: device,
+             isClosable: isClosable,
+             isMaximizable: isMaximizable,
+             isMinimizable: isMinimizable,
+             child:
+                 builder?.call(context, child) ??
+                 child ??
+                 const SizedBox.expand(),
+           );
+         },
+       );
 
   /// The device whose resolution and pixel ratio will be simulated,
   /// and whose frame will be drawn around the [home] widget.
@@ -162,14 +163,17 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
         title: widget.title,
         onGenerateTitle: widget.onGenerateTitle,
         color: widget.color,
-        theme: widget.theme?.copyWith(platform: widget.device.platform) ??
+        theme:
+            widget.theme?.copyWith(platform: widget.device.platform) ??
             // Fallback so the platform is always set.
             ThemeData(platform: widget.device.platform),
         darkTheme: widget.darkTheme?.copyWith(platform: widget.device.platform),
-        highContrastTheme: widget.highContrastTheme
-            ?.copyWith(platform: widget.device.platform),
-        highContrastDarkTheme: widget.highContrastDarkTheme
-            ?.copyWith(platform: widget.device.platform),
+        highContrastTheme: widget.highContrastTheme?.copyWith(
+          platform: widget.device.platform,
+        ),
+        highContrastDarkTheme: widget.highContrastDarkTheme?.copyWith(
+          platform: widget.device.platform,
+        ),
         themeMode: widget.themeMode,
         themeAnimationDuration: widget.themeAnimationDuration,
         themeAnimationCurve: widget.themeAnimationCurve,
@@ -193,7 +197,8 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
           return widget.device.frameBuilder(
             device: widget.device,
             frameColors: widget.frameColors,
-            child: widget.builder?.call(context, child) ??
+            child:
+                widget.builder?.call(context, child) ??
                 child ??
                 const SizedBox.expand(),
           );
