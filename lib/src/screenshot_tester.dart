@@ -64,12 +64,6 @@ extension ScreenshotTester on WidgetTester {
   /// ```dart
   ///  imagesToInclude: [AssetImage('assets/logo.png')],
   /// ```
-  ///
-  /// #### [widgetType]: [ScreenshotApp]
-  ///
-  /// Flutter's [precacheImage] method requires a [BuildContext].
-  /// For this, we get the context from a widget of this type.
-  /// Specify a different type if you aren't using [ScreenshotApp].
   Future<void> loadAssets({
     Iterable<String>? alsoLoadTheseFonts,
     Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
@@ -78,7 +72,8 @@ extension ScreenshotTester on WidgetTester {
     bool searchWidgetTreeForImages = true,
     bool skipOffstageImages = true,
     List<ImageProvider>? imagesToInclude,
-    Type widgetType = ScreenshotApp,
+    @Deprecated('No longer needed, context is found automatically')
+    Type? widgetType,
   }) => runAsync(
     () => Future.wait([
       _findAndLoadFonts(
@@ -91,7 +86,6 @@ extension ScreenshotTester on WidgetTester {
         searchWidgetTree: searchWidgetTreeForImages,
         skipOffstage: skipOffstageImages,
         imagesToInclude: imagesToInclude,
-        widgetType: widgetType,
       ),
     ]),
   );
@@ -103,8 +97,9 @@ extension ScreenshotTester on WidgetTester {
   Future<void> _findAndLoadImages({
     bool searchWidgetTree = true,
     bool skipOffstage = true,
-    Type widgetType = ScreenshotApp,
     List<ImageProvider>? imagesToInclude,
+    @Deprecated('No longer needed, context is found automatically')
+    Type? widgetType,
   }) {
     if (kIsWeb) {
       // This times out with `flutter test --platform chrome`
@@ -122,7 +117,7 @@ extension ScreenshotTester on WidgetTester {
       return Future.value();
     }
 
-    final context = element(find.byType(widgetType));
+    final context = binding.rootElement!;
     return Future.wait(
       imageProviders.map((image) => precacheImage(image, context)),
     );
@@ -244,7 +239,8 @@ extension ScreenshotTester on WidgetTester {
   )
   Future<void> precacheImages(
     List<ImageProvider> images, {
-    Type widgetType = ScreenshotApp,
+    @Deprecated('No longer needed, context is found automatically')
+    Type? widgetType,
   }) => runAsync(
     () => _findAndLoadImages(
       searchWidgetTree: false,
@@ -259,7 +255,8 @@ extension ScreenshotTester on WidgetTester {
   )
   Future<void> precacheImagesInWidgetTree({
     bool skipOffstage = true,
-    Type widgetType = ScreenshotApp,
+    @Deprecated('No longer needed, context is found automatically')
+    Type? widgetType,
   }) => runAsync(
     () =>
         _findAndLoadImages(skipOffstage: skipOffstage, widgetType: widgetType),
@@ -269,19 +266,21 @@ extension ScreenshotTester on WidgetTester {
     'Use `loadAssets()` instead, '
     'which loads all needed images and fonts in one call.',
   )
-  Future<void> precacheTopbarImages({Type widgetType = ScreenshotApp}) =>
-      runAsync(
-        () => _findAndLoadImages(
-          searchWidgetTree: false,
-          widgetType: widgetType,
-          imagesToInclude: const [
-            ScreenshotFrame.androidPhoneTopBarImage,
-            ScreenshotFrame.androidTabletTopBarImage,
-            ScreenshotFrame.iphoneTopBarImage,
-            ScreenshotFrame.ipadTopBarImage,
-          ],
-        ),
-      );
+  Future<void> precacheTopbarImages({
+    @Deprecated('No longer needed, context is found automatically')
+    Type? widgetType,
+  }) => runAsync(
+    () => _findAndLoadImages(
+      searchWidgetTree: false,
+      widgetType: widgetType,
+      imagesToInclude: const [
+        ScreenshotFrame.androidPhoneTopBarImage,
+        ScreenshotFrame.androidTabletTopBarImage,
+        ScreenshotFrame.iphoneTopBarImage,
+        ScreenshotFrame.ipadTopBarImage,
+      ],
+    ),
+  );
 
   @Deprecated(
     'Use `loadAssets()` instead, '
