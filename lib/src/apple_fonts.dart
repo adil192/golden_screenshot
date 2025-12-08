@@ -35,22 +35,25 @@ abstract class AppleFonts {
     return available;
   })();
 
+  static final _sfProDisplayFontsFuture = Future.wait(
+    allOtfFiles
+        .where((file) => p.basename(file.path).startsWith('SF-Pro-Display'))
+        .map((file) => file.readAsBytes())
+        .toList(),
+  );
+  static final _sfProTextFontsFuture = Future.wait(
+    allOtfFiles
+        .where((file) => p.basename(file.path).startsWith('SF-Pro-Text'))
+        .map((file) => file.readAsBytes())
+        .toList(),
+  );
+
   static Stream<({String family, List<Uint8List> fonts})>
   getFontFamilies() async* {
     if (!available) return;
 
-    final sfProDisplayFonts = await Future.wait(
-      allOtfFiles
-          .where((file) => p.basename(file.path).startsWith('SF-Pro-Display'))
-          .map((file) => file.readAsBytes())
-          .toList(),
-    );
-    final sfProTextFonts = await Future.wait(
-      allOtfFiles
-          .where((file) => p.basename(file.path).startsWith('SF-Pro-Text'))
-          .map((file) => file.readAsBytes())
-          .toList(),
-    );
+    final sfProDisplayFonts = await _sfProDisplayFontsFuture;
+    final sfProTextFonts = await _sfProTextFontsFuture;
 
     yield (family: 'CupertinoSystemDisplay', fonts: sfProDisplayFonts);
     yield (family: 'CupertinoSystemText', fonts: sfProTextFonts);

@@ -85,7 +85,7 @@ Future<void> loadAppFonts({
       continue;
     }
     if (_appleFontFamilies.contains(family) && AppleFonts.available) {
-      // Apple fonts are available, no need to override them with Inter
+      // Apple fonts are available, no need to mock them with Inter
       continue;
     }
     fontLoadingFutures.add(_loadInter(family));
@@ -94,18 +94,23 @@ Future<void> loadAppFonts({
   await Future.wait(fontLoadingFutures);
 }
 
+Map<String, Future<ByteData>> _assetBytesFuturesCache = {};
 Future<void> _loadFontAsset(String family, JsonMap fontObject) {
   final fontLoader = FontLoader(family);
   for (final JsonMap fontDef in fontObject['fonts'] as List) {
     final assetPath = fontDef['asset'] as String;
-    final assetBytesFuture = rootBundle.load(assetPath);
-    fontLoader.addFont(assetBytesFuture);
+    fontLoader.addFont(
+      _assetBytesFuturesCache.putIfAbsent(
+        assetPath,
+        () => rootBundle.load(assetPath),
+      ),
+    );
   }
   return fontLoader.load();
 }
 
-/// Different to [_loadFontAsset] because we don't want to read the asset
-/// into memory multiple times. [InterFonts.assetFutures] is only created once.
+/// Inter will not appear in FontManifest.json since it's just a set of assets,
+/// so we have to load the assets explicitly in [InterFonts].
 Future<void> _loadInter(String family) async {
   final fontLoader = FontLoader(family);
   for (final assetBytesFuture in InterFonts.assetFutures) {
