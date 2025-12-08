@@ -36,14 +36,14 @@ extension ScreenshotTester on WidgetTester {
   /// If you use fonts that are not directly referenced in the widget tree,
   /// such as in a CustomPainter, provide them here to ensure they're loaded.
   ///
-  /// #### [fontsToReplaceWithRoboto]: [kFontsToReplaceWithRoboto]
+  /// #### [fontsToMock]: [kFontsToMock]
   ///
   /// If your app's text theme uses a font which isn't bundled with your app,
   /// it'll fall back to `Ahem`
   /// (regardless of any [TextStyle.fontFamilyFallback]s).
   /// In that case, you need to provide the list of such fonts like this:
   /// ```dart
-  ///   fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto],
+  ///   fontsToMock: ['Comic Sans', ...kFontsToMock],
   /// ```
   ///
   /// #### [searchWidgetTreeForImages]: `true`
@@ -67,8 +67,8 @@ extension ScreenshotTester on WidgetTester {
   /// ```
   Future<void> loadAssets({
     Iterable<String>? alsoLoadTheseFonts,
-    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
-    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> fontsToMock = kFontsToMock,
+    @Deprecated('This was renamed to fontsToMock')
     Iterable<String> overriddenFonts = const [],
     bool searchWidgetTreeForImages = true,
     bool skipOffstageImages = true,
@@ -79,7 +79,7 @@ extension ScreenshotTester on WidgetTester {
     () => Future.wait([
       _findAndLoadFonts(
         alsoLoadTheseFonts: alsoLoadTheseFonts,
-        fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+        fontsToMock: kFontsToMock,
         // ignore: deprecated_member_use_from_same_package
         overriddenFonts: overriddenFonts,
       ),
@@ -129,8 +129,8 @@ extension ScreenshotTester on WidgetTester {
   /// See [loadAssets] for the parameters.
   Future<void> _findAndLoadFonts({
     Iterable<String>? alsoLoadTheseFonts,
-    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
-    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> fontsToMock = kFontsToMock,
+    @Deprecated('This was renamed to fontsToMock')
     Iterable<String> overriddenFonts = const [],
   }) {
     if (kIsWeb) {
@@ -165,7 +165,7 @@ extension ScreenshotTester on WidgetTester {
 
     return loadAppFonts(
       onlyLoadTheseFonts: onlyLoadTheseFonts,
-      fontsToReplaceWithRoboto: fontsToReplaceWithRoboto,
+      fontsToMock: fontsToMock,
       // ignore: deprecated_member_use_from_same_package
       overriddenFonts: overriddenFonts,
     );
@@ -283,12 +283,12 @@ extension ScreenshotTester on WidgetTester {
     'which loads all needed images and fonts in one call.',
   )
   Future<void> loadFonts({
-    Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
-    @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+    Iterable<String> fontsToMock = kFontsToMock,
+    @Deprecated('This was renamed to fontsToMock')
     Iterable<String> overriddenFonts = const [],
   }) => runAsync(
     () => loadAppFonts(
-      fontsToReplaceWithRoboto: kFontsToReplaceWithRoboto,
+      fontsToMock: kFontsToMock,
       overriddenFonts: overriddenFonts,
     ),
   );

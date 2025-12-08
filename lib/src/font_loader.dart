@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/src/apple_fonts.dart';
-import 'package:golden_screenshot/src/roboto_fonts.dart';
+import 'package:golden_screenshot/src/inter_fonts.dart';
 
 typedef JsonMap = Map<String, dynamic>;
 
@@ -21,29 +21,29 @@ typedef JsonMap = Map<String, dynamic>;
 /// Note: If your app specifies a custom font (e.g. Comic Sans)
 /// with font fallbacks, but does not include said custom font,
 /// the font fallbacks will not be applied. Ahem will be used instead.
-/// In this case, please provide the [fontsToReplaceWithRoboto] parameter
-/// with the fonts that should be forced to use Roboto instead of Ahem, e.g.:
+/// In this case, please provide the [fontsToMock] parameter
+/// with the fonts that should be forced to use Inter instead of Ahem, e.g.:
 ///
 /// ```dart
-/// await loadAppFonts(fontsToReplaceWithRoboto: ['Comic Sans', ...kFontsToReplaceWithRoboto]);
+/// await loadAppFonts(fontsToMock: ['Comic Sans', ...kFontsToMock]);
 /// ```
 Future<void> loadAppFonts({
   /// If provided, only these fonts will be loaded.
   ///
-  /// This takes precedence over [fontsToReplaceWithRoboto].
+  /// This takes precedence over [fontsToMock].
   Set<String>? onlyLoadTheseFonts,
 
-  /// Fonts we don't actually have, so we load Roboto in their place.
+  /// Fonts we don't actually have, so we load Inter in their place.
   ///
-  /// If a font is in both [fontsToReplaceWithRoboto] and [onlyLoadTheseFonts],
+  /// If a font is in both [fontsToMock] and [onlyLoadTheseFonts],
   /// [onlyLoadTheseFonts] takes precedence and the font will not be loaded.
   ///
-  /// If Apple fonts are in [fontsToReplaceWithRoboto] but they're actually
-  /// available, the real fonts will be used instead of Roboto.
-  Iterable<String> fontsToReplaceWithRoboto = kFontsToReplaceWithRoboto,
+  /// If Apple fonts are in [fontsToMock] but they're actually
+  /// available, the real fonts will be used instead of Inter.
+  Iterable<String> fontsToMock = kFontsToMock,
 
-  /// This was renamed to [fontsToReplaceWithRoboto] for clarity.
-  @Deprecated('This was renamed to fontsToReplaceWithRoboto')
+  /// This was renamed to [fontsToMock] for clarity.
+  @Deprecated('This was renamed to fontsToMock')
   Iterable<String> overriddenFonts = const [],
 }) async {
   if (kIsWeb) {
@@ -66,7 +66,6 @@ Future<void> loadAppFonts({
     if (onlyLoadTheseFonts != null && !onlyLoadTheseFonts.contains(family)) {
       continue;
     }
-    if (family == RobotoFonts.familyWithPackage) continue;
     fontLoadingFutures.add(_loadFontAsset(family, fontObject));
   }
   final wantsAppleFonts =
@@ -80,17 +79,16 @@ Future<void> loadAppFonts({
     }
   }
 
-  // Now override [fontsToReplaceWithRoboto]
-  for (final family
-      in fontsToReplaceWithRoboto.toSet()..addAll(overriddenFonts)) {
+  // Now override [fontsToMock]
+  for (final family in fontsToMock.toSet()..addAll(overriddenFonts)) {
     if (onlyLoadTheseFonts != null && !onlyLoadTheseFonts.contains(family)) {
       continue;
     }
     if (_appleFontFamilies.contains(family) && AppleFonts.available) {
-      // Apple fonts are available, no need to override them with Roboto
+      // Apple fonts are available, no need to override them with Inter
       continue;
     }
-    fontLoadingFutures.add(_loadRoboto(family));
+    fontLoadingFutures.add(_loadInter(family));
   }
 
   await Future.wait(fontLoadingFutures);
@@ -107,12 +105,10 @@ Future<void> _loadFontAsset(String family, JsonMap fontObject) {
 }
 
 /// Different to [_loadFontAsset] because we don't want to read the asset
-/// into memory multiple times. [RobotoFonts.assetFutures] is only created once.
-Future<void> _loadRoboto([
-  String family = RobotoFonts.familyWithPackage,
-]) async {
+/// into memory multiple times. [InterFonts.assetFutures] is only created once.
+Future<void> _loadInter(String family) async {
   final fontLoader = FontLoader(family);
-  for (final assetBytesFuture in RobotoFonts.assetFutures) {
+  for (final assetBytesFuture in InterFonts.assetFutures) {
     fontLoader.addFont(assetBytesFuture);
   }
   return fontLoader.load();
@@ -127,10 +123,10 @@ Future<void> _loadFontFiles(String family, List<Uint8List> files) {
   return fontLoader.load();
 }
 
-/// The fonts overridden by Roboto in [loadAppFonts].
+/// The fonts overridden by Inter in [loadAppFonts].
 ///
 /// This list represents the default fonts used by Flutter on various platforms.
-const kFontsToReplaceWithRoboto = {
+const kFontsToMock = {
   // Android
   'Inter',
   'Roboto',
@@ -162,5 +158,8 @@ const _appleFontFamilies = {
   '.SF UI Text',
 };
 
-@Deprecated('Use kFontsToReplaceWithRoboto instead')
-const kOverriddenFonts = kFontsToReplaceWithRoboto;
+@Deprecated('Use kFontsToMock instead')
+const kFontsToReplaceWithRoboto = kFontsToMock;
+
+@Deprecated('Use kFontsToMock instead')
+const kOverriddenFonts = kFontsToMock;

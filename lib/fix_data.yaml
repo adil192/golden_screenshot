@@ -124,6 +124,7 @@ transforms:
     changes:
       - kind: rename
         newName: kFontsToReplaceWithRoboto
+
   - title: Remove widgetType parameter from tester.loadAssets
     date: 2025-12-08
     element:
@@ -137,3 +138,43 @@ transforms:
     changes:
       - kind: removeParameter
         name: widgetType
+
+  - title: Rename fontsToReplaceWithRoboto to fontsToMock in tester.loadAssets
+    date: 2025-12-08
+    element:
+      uris:
+        - 'src/screenshot_tester.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/screenshot_tester.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      method: loadAssets
+      inExtension: ScreenshotTester
+    changes:
+      - kind: renameParameter
+        oldName: fontsToReplaceWithRoboto
+        newName: fontsToMock
+  - title: Rename fontsToReplaceWithRoboto to fontsToMock in loadAppFonts
+    date: 2025-12-08
+    element:
+      uris:
+        - 'src/font_loader.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/font_loader.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      function: loadAppFonts
+    changes:
+      - kind: renameParameter
+        oldName: fontsToReplaceWithRoboto
+        newName: fontsToMock
+  - title: Rename kFontsToReplaceWithRoboto to kFontsToMock
+    date: 2025-12-08
+    element:
+      uris:
+        - 'src/font_loader.dart'
+        - 'golden_screenshot.dart'
+        - 'package:golden_screenshot/src/font_loader.dart'
+        - 'package:golden_screenshot/golden_screenshot.dart'
+      variable: kFontsToReplaceWithRoboto
+    changes:
+      - kind: rename
+        newName: kFontsToMock

@@ -92,7 +92,7 @@ You can also use this package for regular golden tests, not just for app store s
 ## Other notes
 
 - Always use `find.byType(MaterialApp)` not `find.byType(MyWidget)` for your golden comparison, so that the device frame is included in the golden image. You don't need to worry about this when using `tester.expectScreenshot`.
-- `tester.loadAssets()` will replace any missing fonts with Roboto. If you wish to avoid this, ensure all font files you need are bundled with your app.
+- `tester.loadAssets()` will replace any missing fonts with Inter. If you wish to avoid this, ensure all font files you need are bundled with your app.
 - If your golden images don't need to be high-resolution, you can swap `GoldenScreenshotDevices` with `GoldenSmallDevices` which have smaller resolutions to speed up tests.
 
 ## Customization
