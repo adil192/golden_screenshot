@@ -1,3 +1,7 @@
+## 9.1.1
+
+- Improved performance if `tester.loadAssets()` is called multiple times by caching loaded font assets.
+
 ## 9.1.0
 
 - Replaced Roboto with the more modern Inter as the default fallback font.
