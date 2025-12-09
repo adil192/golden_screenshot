@@ -1,3 +1,7 @@
+## 9.1.2
+
+- Fixed an issue where `SelectableText` and `EditableText` widgets would not be found when looking for fonts in the widget tree.
+
 ## 9.1.1
 
 - Improved performance if `tester.loadAssets()` is called multiple times by caching loaded font assets.
