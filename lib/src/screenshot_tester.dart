@@ -149,6 +149,14 @@ extension ScreenshotTester on WidgetTester {
       final textStyleFont = paragraph.text.style?.fontFamily;
       if (textStyleFont != null) onlyLoadTheseFonts.add(textStyleFont);
     }
+    for (final widget in widgetList<EditableText>(
+      find.bySubtype<EditableText>(),
+    )) {
+      final textStyleFont = widget.style.fontFamily;
+      if (textStyleFont != null) onlyLoadTheseFonts.add(textStyleFont);
+      final strutStyleFont = widget.strutStyle.fontFamily;
+      if (strutStyleFont != null) onlyLoadTheseFonts.add(strutStyleFont);
+    }
     for (final widget in widgetList<DefaultTextStyle>(
       find.bySubtype<DefaultTextStyle>(),
     )) {
