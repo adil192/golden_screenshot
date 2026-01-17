@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_screenshot/src/device_box.dart';
 
 /// A [MaterialApp] that produces golden images
 /// with [device]'s resolution, pixel ratio, and frame.
@@ -144,11 +145,12 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
 
   @override
   Widget build(BuildContext context) {
-    return _ResizedBox(
-      resolution: widget.device.resolution,
-      pixelRatio: widget.device.pixelRatio,
-      disableAnimations:
-          widget.themeAnimationStyle == AnimationStyle.noAnimation,
+    return DeviceBox.fromDevice(
+      device: widget.device,
+      mediaQueryData: MediaQueryData(
+        disableAnimations:
+            widget.themeAnimationStyle == AnimationStyle.noAnimation,
+      ),
       child: MaterialApp(
         navigatorKey: widget.navigatorKey,
         scaffoldMessengerKey: widget.scaffoldMessengerKey,
@@ -204,46 +206,6 @@ class _ScreenshotAppState extends State<ScreenshotApp> {
           );
         },
         home: widget.home,
-      ),
-    );
-  }
-}
-
-class _ResizedBox extends StatelessWidget {
-  const _ResizedBox({
-    required this.resolution,
-    required this.pixelRatio,
-    this.disableAnimations = true,
-    required this.child,
-  });
-
-  final Size resolution;
-  final double pixelRatio;
-  final bool disableAnimations;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return FittedBox(
-      child: RepaintBoundary(
-        child: SizedBox(
-          width: resolution.width,
-          height: resolution.height,
-          child: FittedBox(
-            child: SizedBox(
-              width: resolution.width / pixelRatio,
-              height: resolution.height / pixelRatio,
-              child: MediaQuery(
-                data: MediaQueryData(
-                  size: resolution / pixelRatio,
-                  devicePixelRatio: pixelRatio,
-                  disableAnimations: disableAnimations,
-                ),
-                child: child,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
