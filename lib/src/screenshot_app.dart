@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
-import 'package:golden_screenshot/src/device_box.dart';
 
 /// A [MaterialApp] that produces golden images
 /// with [device]'s resolution, pixel ratio, and frame.

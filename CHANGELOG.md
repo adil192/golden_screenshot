@@ -1,3 +1,9 @@
+## 10.0.0
+
+- The Inter font has been replaced by InterNotoSansHybrid for much wider language support. You can see more details here: [#10](https://github.com/adil192/golden_screenshot/pull/10).
+  - I'm bumping the package version to 10.0.0 since this may result in some slight font spacing changes.
+- If you need to use `MaterialApp`/`CupertinoApp` and not `ScreenshotApp`, you can wrap it with `DeviceBox` which handles the resizing and media query stuff.
+
 ## 9.1.2
 
 - Fixed an issue where `SelectableText` and `EditableText` widgets would not be found when looking for fonts in the widget tree.
