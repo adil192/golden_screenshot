@@ -22,15 +22,26 @@ void _testFontWeights(GoldenScreenshotDevices goldenDevice) {
         home: Scaffold(
           appBar: AppBar(title: const Text('Font Weight Test')),
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (final fontWeight in FontWeight.values)
-                  Text(
-                    'Font Weight $fontWeight',
-                    style: TextStyle(fontSize: 24, fontWeight: fontWeight),
-                  ),
-              ],
+            child: FittedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final fontWeight in FontWeight.values) ...[
+                    Text(
+                      'Font Weight $fontWeight',
+                      style: TextStyle(fontSize: 24, fontWeight: fontWeight),
+                    ),
+                    Text(
+                      'Italic Weight $fontWeight',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: fontWeight,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ),
