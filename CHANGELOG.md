@@ -1,3 +1,7 @@
+## 10.0.1
+
+- Bumped yaru to 10.0.0.
+
 ## 10.0.0
 
 - The Inter font has been replaced by InterNotoSansHybrid for much wider language support. You can see more details here: [#10](https://github.com/adil192/golden_screenshot/pull/10).
