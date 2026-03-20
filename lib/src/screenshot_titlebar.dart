@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
-import 'package:yaru/yaru.dart';
 
 /// A widget that shows a titlebar if [device] requires it.
 ///
-/// For Linux and Windows devices, it shows a titlebar from the Yaru package.
+/// For Linux, it shows a titlebar resembling GNOME's Adwaita decorations.
 /// For other platforms, it simply returns [child] without modification.
 ///
 /// It is recommended to use this widget inside the [builder] of [ScreenshotApp]
@@ -41,9 +40,6 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     required this.title,
     required this.device,
     required this.child,
-    this.isClosable,
-    this.isMaximizable,
-    this.isMinimizable,
   }) : titleBar = null;
 
   const ScreenshotConditionalTitlebar.manual({
@@ -51,44 +47,42 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
     required this.titleBar,
     required this.device,
     required this.child,
-  }) : title = null,
-       isClosable = null,
-       isMaximizable = null,
-       isMinimizable = null;
+  }) : title = null;
 
   final PreferredSizeWidget? titleBar;
   final Widget? title;
   final ScreenshotDevice device;
   final Widget child;
-  final bool? isClosable;
-  final bool? isMaximizable;
-  final bool? isMinimizable;
 
   @override
   Widget build(BuildContext context) {
-    final yaruPlatform = switch (device.platform) {
-      TargetPlatform.linux => YaruWindowControlPlatform.yaru,
-      TargetPlatform.windows => YaruWindowControlPlatform.windows,
-      _ => null,
-    };
-    if (yaruPlatform == null) {
-      return child;
-    }
+    if (device.platform != TargetPlatform.linux) return child;
 
-    /// On Linux, only show the close button by default, not maximize/minimize.
-    /// https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines#default-settings
-    final onlyClosable = yaruPlatform == YaruWindowControlPlatform.yaru;
-
+    final colorScheme = ColorScheme.of(context);
     return Scaffold(
       appBar:
           titleBar ??
-          YaruWindowTitleBar(
-            title: title,
-            isActive: true,
-            isClosable: isClosable ?? true,
-            isMaximizable: isMaximizable ?? !onlyClosable,
-            isMinimizable: isMinimizable ?? !onlyClosable,
-            platform: yaruPlatform,
+          AppBar(
+            toolbarHeight: 46,
+            backgroundColor: colorScheme.surface,
+            scrolledUnderElevation: 0,
+            leadingWidth: 46,
+            leading: SizedBox.square(dimension: 46),
+            title: DefaultTextStyle.merge(
+              style: TextStyle(
+                fontFamily: 'Adwaita Sans',
+                fontSize: 14,
+                color: colorScheme.onSurface,
+              ),
+              textAlign: TextAlign.center,
+              child: Center(child: title),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.all((46 - 24) / 2),
+                child: Image(image: ScreenshotFrame.flathubCloseButtonImage),
+              ),
+            ],
           ),
       body: child,
     );

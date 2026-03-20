@@ -256,6 +256,11 @@ class ScreenshotFrame extends StatelessWidget {
     package: 'golden_screenshot',
   );
 
+  static const flathubCloseButtonImage = AssetImage(
+    'assets/topbars/flathub_close_button.png',
+    package: 'golden_screenshot',
+  );
+
   @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
   static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
 }
@@ -270,25 +275,34 @@ class _FlathubScreenshotFrame extends ScreenshotFrame {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(12);
-    final colorScheme = ColorScheme.of(context);
+    final borderRadius = BorderRadius.vertical(
+      top: Radius.circular(15),
+      bottom: Radius.circular(12),
+    );
     return Padding(
       padding: const EdgeInsets.all(flathubMargin),
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: borderRadius,
           boxShadow: [
+            // Values from https://gitlab.gnome.org/GNOME/libadwaita/-/blob/main/src/stylesheet/widgets/_window.scss
             BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.3),
-              offset: const Offset(0, 3),
-              blurRadius: 12,
-              spreadRadius: -1,
+              offset: Offset.zero,
+              blurRadius: 14,
+              spreadRadius: 5,
+              color: Colors.black.withValues(alpha: 0.15),
             ),
             BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.2),
-              offset: const Offset(0, 0),
-              blurRadius: 1,
-              spreadRadius: 0,
+              offset: Offset.zero,
+              blurRadius: 5,
+              spreadRadius: 2,
+              color: Colors.black.withValues(alpha: 0.1),
+            ),
+            BoxShadow(
+              offset: Offset.zero,
+              blurRadius: 0,
+              spreadRadius: 1,
+              color: Colors.black.withValues(alpha: 0.05),
             ),
           ],
         ),

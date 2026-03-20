@@ -95,17 +95,11 @@ class ScreenshotApp extends MaterialApp {
     super.restorationScopeId,
     super.scrollBehavior,
     super.themeAnimationStyle = AnimationStyle.noAnimation,
-    bool? isClosable,
-    bool? isMaximizable,
-    bool? isMinimizable,
   }) : super(
          builder: (context, child) {
            return ScreenshotConditionalTitlebar(
              title: Text(title),
              device: device,
-             isClosable: isClosable,
-             isMaximizable: isMaximizable,
-             isMinimizable: isMinimizable,
              child:
                  builder?.call(context, child) ??
                  child ??
