@@ -68,11 +68,12 @@ class ScreenshotConditionalTitlebar extends StatelessWidget {
             scrolledUnderElevation: 0,
             leadingWidth: 46,
             leading: SizedBox.square(dimension: 46),
-            title: DefaultTextStyle.merge(
+            title: DefaultTextStyle(
               style: TextStyle(
                 fontFamily: 'Adwaita Sans',
                 fontSize: 14,
                 color: colorScheme.onSurface,
+                height: 1.2,
               ),
               textAlign: TextAlign.center,
               child: Center(child: title),
