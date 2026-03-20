@@ -1,3 +1,7 @@
+## 11.0.1
+
+- Fixed the titlebar's font being invalid if you use a theme from the Yaru package.
+
 ## 11.0.0
 
 - Tweak: Flathub screenshots now better match stock Adwaita, with tweaks to the border radii, window shadows, and titlebar.
