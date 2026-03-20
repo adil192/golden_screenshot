@@ -256,6 +256,11 @@ class ScreenshotFrame extends StatelessWidget {
     package: 'golden_screenshot',
   );
 
+  static const flathubCloseButtonImage = AssetImage(
+    'assets/topbars/flathub_close_button.png',
+    package: 'golden_screenshot',
+  );
+
   @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
   static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
 }
@@ -271,7 +276,7 @@ class _FlathubScreenshotFrame extends ScreenshotFrame {
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.vertical(
-      top: Radius.circular(16),
+      top: Radius.circular(15),
       bottom: Radius.circular(12),
     );
     return Padding(
