@@ -1,3 +1,9 @@
+## 11.0.0
+
+- Tweak: Flathub screenshots now better match stock Adwaita, with tweaks to the border radii, window shadows, and titlebar.
+- Tweak: `ScreenshotConditionalTitlebar` now only applies to Linux (Flathub) devices and no longer applies to Windows devices.
+- Chore: Removed the dependency on the Yaru package.
+
 ## 10.0.1
 
 - Bumped yaru to 10.0.0.
