@@ -1,3 +1,8 @@
+## 12.0.0
+
+- Migrated to `material_ui` as the decoupled Material library from Flutter 3.47.0.
+- Bumped the minimum Flutter version to 3.47.0.
+
 ## 11.0.1
 
 - Fixed the titlebar's font being invalid if you use a theme from the Yaru package.
