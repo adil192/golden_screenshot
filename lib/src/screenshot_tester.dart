@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
-@internal
 const kAllowedDiffPercent = 0.1;
 
 /// An extension on [WidgetTester] that provides some
