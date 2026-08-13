@@ -17,7 +17,6 @@ import 'package:golden_screenshot/src/fuzzy_compare.dart';
 /// See also:
 /// - [FuzzyComparator.allowedDiffPercent], for which this is the default.
 /// - [fuzzyCompare] for the RMSE implementation.
-@internal
 const kAllowedDiffPercent = 0.01;
 
 /// An extension on [WidgetTester] that provides some
