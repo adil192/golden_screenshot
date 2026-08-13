@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:golden_screenshot/src/screenshot_device.dart';
 
 /// A builder that can add a top and bottom bar to its [child].

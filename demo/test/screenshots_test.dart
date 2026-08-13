@@ -4,7 +4,7 @@
 /// or `flutter test` to compare the screenshots to the golden files.
 library;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 import 'package:golden_screenshot_demo/main.dart';
