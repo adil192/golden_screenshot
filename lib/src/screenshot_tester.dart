@@ -8,7 +8,7 @@ import 'package:golden_screenshot/golden_screenshot.dart';
 ///
 /// The RMSE could be:
 /// - 0.0 if every pixel is exactly the same.
-/// - 1.0 if every pixel is 100% different (i.e. black to white).
+/// - 1.0 if every pixel is 100% different (e.g. rgba(0,0,0,0.0) to rgba(255,255,255,1.0)).
 /// - 0.01 for a small text change.
 ///
 /// This is the default value for [FuzzyComparator.allowedDiffPercent].

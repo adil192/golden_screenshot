@@ -24,7 +24,7 @@ class FuzzyComparator extends LocalFileComparator {
   ///
   /// The RMSE could be:
   /// - 0.0 if every pixel is exactly the same.
-  /// - 1.0 if every pixel is 100% different (i.e. black to white).
+  /// - 1.0 if every pixel is 100% different (e.g. rgba(0,0,0,0.0) to rgba(255,255,255,1.0)).
   /// - 0.01 for a small text change.
   ///
   /// See [kAllowedDiffPercent] for the default.
