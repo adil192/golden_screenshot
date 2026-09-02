@@ -19,7 +19,7 @@ class FuzzyComparator extends LocalFileComparator {
        );
 
   /// How much the golden image can differ from the test image.
-  /// E.g. 0.1 means 0.1% difference is allowed.
+  /// E.g. 0.01 means 1% difference is allowed.
   final double allowedDiffPercent;
 
   // Based on https://stackoverflow.com/a/78510535/

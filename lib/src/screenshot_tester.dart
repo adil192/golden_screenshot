@@ -4,7 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 
-const kAllowedDiffPercent = 0.1;
+/// The default value for [FuzzyComparator.allowedDiffPercent].
+const kAllowedDiffPercent = 0.01;
 
 /// An extension on [WidgetTester] that provides some
 /// convenience methods for screenshot tests
