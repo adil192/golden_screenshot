@@ -47,7 +47,7 @@ We can replace `expectLater` with `tester.expectScreenshot` to automatically det
 Additionally, we use `testGoldens` instead of `testWidgets` which gives us two benefits:
 - It enables shadows inside golden tests. By default, Flutter renders them as solid black borders to
 [avoid flakiness](https://api.flutter.dev/flutter/rendering/debugDisableShadows.html), but we handle this by using a fuzzy comparator.
-- It enables a fuzzy comparator. Flutter's default behavior is to expect pixel-perfect matches in golden tests, but for our purposes, we can allow a small (0.1% configurable) mismatch without issue.
+- It enables a fuzzy comparator. Flutter's default behavior is to expect pixel-perfect matches in golden tests, but for our purposes, we can allow a small 1% (configurable) mismatch without issue.
 
 Here is how our code looks before and after using these convenience methods:
 
