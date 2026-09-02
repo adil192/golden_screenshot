@@ -63,12 +63,12 @@ Future<ComparisonResult> fuzzyCompare(
       final testPixel = testImageRgba.getUint32(byteOffset);
       final masterPixel = masterImageRgba.getUint32(byteOffset);
 
-      final squaredError = [
+      final squaredError = _max4(
         _square(_readRed(testPixel) / 255 - _readRed(masterPixel) / 255),
         _square(_readGreen(testPixel) / 255 - _readGreen(masterPixel) / 255),
         _square(_readBlue(testPixel) / 255 - _readBlue(masterPixel) / 255),
         _square(_readAlpha(testPixel) / 255 - _readAlpha(masterPixel) / 255),
-      ].reduce(max);
+      );
       totalSquaredError += squaredError;
     }
   }
@@ -129,3 +129,7 @@ Future<Image> _decodeImage(Uint8List bytes) async {
 }
 
 double _square(double x) => x * x;
+
+double _max4(double x, double y, double z, double w) {
+  return max(x, max(y, max(z, w)));
+}
