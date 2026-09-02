@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_screenshot/src/fuzzy_compare.dart';
 
 /// A golden file comparator that differs from the default one by allowing
 /// a small amount of difference between the golden and the test image.
@@ -18,24 +20,28 @@ class FuzzyComparator extends LocalFileComparator {
          ),
        );
 
-  /// How much the golden image can differ from the test image.
-  /// E.g. 0.01 means 1% difference is allowed.
+  /// How much the golden image and test image can differ (root mean square error).
+  ///
+  /// The RMSE could be:
+  /// - 0.0 if every pixel is exactly the same.
+  /// - 1.0 if every pixel is 100% different (i.e. black to white).
+  /// - 0.01 for a small text change.
+  ///
+  /// See [kAllowedDiffPercent] for the default.
   final double allowedDiffPercent;
 
   // Based on https://stackoverflow.com/a/78510535/
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
-    final result = await GoldenFileComparator.compareLists(
+    final result = await fuzzyCompare(
       imageBytes,
-      await getGoldenBytes(golden),
+      await getGoldenBytes(golden) as Uint8List,
+      allowedDiffPercent,
     );
 
     try {
-      final passed = result.passed || result.diffPercent <= allowedDiffPercent;
-      if (passed) return true;
-
-      final error = await generateFailureOutput(result, golden, basedir);
-      throw FlutterError(error);
+      if (result.passed) return true;
+      throw FlutterError(await generateFailureOutput(result, golden, basedir));
     } finally {
       result.dispose();
     }

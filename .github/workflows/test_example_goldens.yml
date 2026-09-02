@@ -42,14 +42,18 @@ jobs:
         working-directory: demo
         run: dart run golden_screenshot:download_apple_fonts
 
-      - name: Run tests
+      - name: Run tests (main)
+        run: flutter test --coverage --coverage-path=coverage/main.lcov.info
+
+      - name: Run tests (demo)
         working-directory: demo
-        run: flutter test --coverage --coverage-path=../coverage/lcov.info --coverage-package=golden_screenshot
+        run: flutter test --coverage --coverage-path=../coverage/demo.lcov.info --coverage-package=golden_screenshot
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
       
       - name: Test fixes
         working-directory: test_fixes
