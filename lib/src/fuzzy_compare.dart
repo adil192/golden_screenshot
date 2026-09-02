@@ -63,16 +63,17 @@ Future<ComparisonResult> fuzzyCompare(
       final testPixel = testImageRgba.getUint32(byteOffset);
       final masterPixel = masterImageRgba.getUint32(byteOffset);
 
-      final squaredError =
-          _square(_readRed(testPixel) / 255 - _readRed(masterPixel) / 255) +
-          _square(_readGreen(testPixel) / 255 - _readGreen(masterPixel) / 255) +
-          _square(_readBlue(testPixel) / 255 - _readBlue(masterPixel) / 255) +
-          _square(_readAlpha(testPixel) / 255 - _readAlpha(masterPixel) / 255);
+      final squaredError = [
+        _square(_readRed(testPixel) / 255 - _readRed(masterPixel) / 255),
+        _square(_readGreen(testPixel) / 255 - _readGreen(masterPixel) / 255),
+        _square(_readBlue(testPixel) / 255 - _readBlue(masterPixel) / 255),
+        _square(_readAlpha(testPixel) / 255 - _readAlpha(masterPixel) / 255),
+      ].reduce(max);
       totalSquaredError += squaredError;
     }
   }
 
-  final diffPercent = sqrt(totalSquaredError / (totalPixels * 4));
+  final diffPercent = sqrt(totalSquaredError / totalPixels);
   if (diffPercent > allowedDiffPercent) {
     return ComparisonResult(
       passed: false,

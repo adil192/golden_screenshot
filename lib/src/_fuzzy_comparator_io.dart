@@ -14,20 +14,24 @@ class FuzzyComparator extends LocalFileComparator {
          'previousComparator must be a LocalFileComparator on non-web, got $previousComparator',
        ),
        super(
-         // The actual file doesn't matter, just the directory.
-         Uri.parse(
-           '${(previousComparator as LocalFileComparator).basedir.path}/some_test.dart',
+         // The actual file doesn't matter, just the basedir.
+         (previousComparator as LocalFileComparator).basedir.resolve(
+           'some_test.dart',
          ),
        );
 
-  /// How much the golden image and test image can differ (root mean square error).
+  /// How much the golden image and test image can differ (root mean square error)
+  /// without failing the test.
   ///
   /// The RMSE could be:
   /// - 0.0 if every pixel is exactly the same.
-  /// - 1.0 if every pixel is 100% different (e.g. rgba(0,0,0,0.0) to rgba(255,255,255,1.0)).
+  /// - 1.0 if every pixel is 100% different in at least one rgba channel
+  ///   (e.g. black vs white / transparent vs opaque / pure red vs pure blue).
   /// - 0.01 for a small text change.
   ///
-  /// See [kAllowedDiffPercent] for the default.
+  /// See also:
+  /// - [kAllowedDiffPercent] for the default value.
+  /// - [fuzzyCompare] for the RMSE implementation.
   final double allowedDiffPercent;
 
   // Based on https://stackoverflow.com/a/78510535/
