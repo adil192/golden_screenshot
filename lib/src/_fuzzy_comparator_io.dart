@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_screenshot/src/fuzzy_compare.dart';
 
 /// A golden file comparator that differs from the default one by allowing
 /// a small amount of difference between the golden and the test image.
@@ -12,30 +14,38 @@ class FuzzyComparator extends LocalFileComparator {
          'previousComparator must be a LocalFileComparator on non-web, got $previousComparator',
        ),
        super(
-         // The actual file doesn't matter, just the directory.
-         Uri.parse(
-           '${(previousComparator as LocalFileComparator).basedir.path}/some_test.dart',
+         // The actual file doesn't matter, just the basedir.
+         (previousComparator as LocalFileComparator).basedir.resolve(
+           'some_test.dart',
          ),
        );
 
-  /// How much the golden image can differ from the test image.
-  /// E.g. 0.01 means 1% difference is allowed.
+  /// How much the golden image and test image can differ (root mean square error)
+  /// without failing the test.
+  ///
+  /// The RMSE could be:
+  /// - 0.0 if every pixel is exactly the same.
+  /// - 1.0 if every pixel is 100% different in at least one rgba channel
+  ///   (e.g. black vs white / transparent vs opaque / pure red vs pure blue).
+  /// - 0.01 for a small text change.
+  ///
+  /// See also:
+  /// - [kAllowedDiffPercent] for the default value.
+  /// - [fuzzyCompare] for the RMSE implementation.
   final double allowedDiffPercent;
 
   // Based on https://stackoverflow.com/a/78510535/
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
-    final result = await GoldenFileComparator.compareLists(
+    final result = await fuzzyCompare(
       imageBytes,
-      await getGoldenBytes(golden),
+      await getGoldenBytes(golden) as Uint8List,
+      allowedDiffPercent,
     );
 
     try {
-      final passed = result.passed || result.diffPercent <= allowedDiffPercent;
-      if (passed) return true;
-
-      final error = await generateFailureOutput(result, golden, basedir);
-      throw FlutterError(error);
+      if (result.passed) return true;
+      throw FlutterError(await generateFailureOutput(result, golden, basedir));
     } finally {
       result.dispose();
     }
