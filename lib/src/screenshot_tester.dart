@@ -3,8 +3,20 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
+import 'package:golden_screenshot/src/fuzzy_compare.dart';
 
-/// The default value for [FuzzyComparator.allowedDiffPercent].
+/// How much the golden image and test image can differ (root mean square error)
+/// without failing the test.
+///
+/// The RMSE could be:
+/// - 0.0 if every pixel is exactly the same.
+/// - 1.0 if every pixel is 100% different in at least one rgba channel
+///   (e.g. black vs white / transparent vs opaque / pure red vs pure blue).
+/// - 0.01 for a small text change.
+///
+/// See also:
+/// - [FuzzyComparator.allowedDiffPercent], for which this is the default.
+/// - [fuzzyCompare] for the RMSE implementation.
 const kAllowedDiffPercent = 0.01;
 
 /// An extension on [WidgetTester] that provides some
