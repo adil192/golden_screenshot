@@ -1,3 +1,7 @@
+## 12.0.1
+
+- Reduced the default `allowedDiffPercent` from 10% to 1% (fixes [#11](https://github.com/adil192/golden_screenshot/issues/11))
+
 ## 12.0.0
 
 - Migrated to `material_ui` as the decoupled Material library from Flutter 3.47.0.
