@@ -73,10 +73,10 @@ Uint8List _pixels(List<int> rgbas) {
   final image = img.Image(width: rgbas.length ~/ 4, height: 1);
   for (final pixel in image) {
     pixel
-      ..r = rgbas[pixel.x]
-      ..g = rgbas[pixel.x + 1]
-      ..b = rgbas[pixel.x + 2]
-      ..a = rgbas[pixel.x + 3];
+      ..r = rgbas[pixel.x * 4]
+      ..g = rgbas[pixel.x * 4 + 1]
+      ..b = rgbas[pixel.x * 4 + 2]
+      ..a = rgbas[pixel.x * 4 + 3];
   }
   return img.encodePng(image, level: 0);
 }
