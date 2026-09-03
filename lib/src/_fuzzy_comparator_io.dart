@@ -80,7 +80,11 @@ class FuzzyComparator extends LocalFileComparator {
       goldenBytes,
       allowedDiffPercent,
     );
-    return !result.passed;
+    try {
+      return !result.passed;
+    } finally {
+      result.dispose();
+    }
   }
 
   /// Copied from [LocalFileComparator._getGoldenFile].
