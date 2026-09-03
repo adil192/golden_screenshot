@@ -68,6 +68,11 @@ testGoldens('My screenshot test', (tester) async {
 });
 ```
 
+Unlike normal Flutter tests,
+running `flutter test --update-goldens` will only update goldens that exceed the 1% (configurable) allowedDiffPercent.
+This is to reduce noise from minute differences when developing your project.
+If needed, you can forcibly update all goldens by adding `--dart-define GOLDEN_SCREENSHOT_ALWAYS_UPDATE_GOLDENS=true` to the command.
+
 ## Usage with regular golden tests
 
 You can also use this package for regular golden tests, not just for app store screenshots. Just make a few adjustments to your existing golden tests:
