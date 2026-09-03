@@ -1,3 +1,55 @@
+## 12.1.0
+
+- Better golden image comparison algorithm:
+
+  Flutter previously counted the number of pixels that changed,
+  even if they only changed a little bit.
+  
+  We now take the root mean square error of each pixel,
+  so small per-pixel rendering differences count less than larger changes.
+
+  If you provide your own `allowedDiffPercent`,
+  you can probably reduce it now due to the new and more accurate metric.
+
+- Reduced noise when updating goldens:
+
+  Running `flutter test --update-goldens` will only update goldens that exceed the `allowedDiffPercent` (default 1%).
+
+  This means you have to commit new goldens less often, and improves portability across different development platforms.
+
+## 12.0.1
+
+- Reduced the default `allowedDiffPercent` from 10% to 1% (fixes [#11](https://github.com/adil192/golden_screenshot/issues/11))
+
+## 12.0.0
+
+- Migrated to `material_ui` as the decoupled Material library from Flutter 3.47.0.
+- Bumped the minimum Flutter version to 3.47.0.
+
+## 11.1.0
+
+Backports from 12.1.0 for those who can't move to `material_ui` yet:
+
+- Bumped the minimum Flutter version to 3.47.0.
+- Reduced the default `allowedDiffPercent` from 10% to 1% (fixes [#11](https://github.com/adil192/golden_screenshot/issues/11))
+
+- Better golden image comparison algorithm:
+
+  Flutter previously counted the number of pixels that changed,
+  even if they only changed a little bit.
+  
+  We now take the root mean square error of each pixel,
+  so small per-pixel rendering differences count less than larger changes.
+
+  If you provide your own `allowedDiffPercent`,
+  you can probably reduce it now due to the new and more accurate metric.
+
+- Reduced noise when updating goldens:
+
+  Running `flutter test --update-goldens` will only update goldens that exceed the `allowedDiffPercent` (default 1%).
+
+  This means you have to commit new goldens less often, and improves portability across different development platforms.
+
 ## 11.0.1
 
 - Fixed the titlebar's font being invalid if you use a theme from the Yaru package.
