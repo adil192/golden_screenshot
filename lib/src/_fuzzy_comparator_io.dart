@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 import 'package:golden_screenshot/src/fuzzy_compare.dart';
+import 'package:path/path.dart' as path;
+
+const alwaysUpdateGoldens = bool.fromEnvironment(
+  'GOLDEN_SCREENSHOT_ALWAYS_UPDATE_GOLDENS',
+);
 
 /// A golden file comparator that differs from the default one by allowing
 /// a small amount of difference between the golden and the test image.
@@ -34,7 +41,6 @@ class FuzzyComparator extends LocalFileComparator {
   /// - [fuzzyCompare] for the RMSE implementation.
   final double allowedDiffPercent;
 
-  // Based on https://stackoverflow.com/a/78510535/
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
     final result = await fuzzyCompare(
@@ -50,4 +56,34 @@ class FuzzyComparator extends LocalFileComparator {
       result.dispose();
     }
   }
+
+  @override
+  Future<void> update(Uri golden, Uint8List imageBytes) async {
+    final goldenFile = _getGoldenFile(golden);
+
+    if (!await _shouldUpdateGolden(goldenFile, imageBytes)) return;
+
+    await goldenFile.parent.create(recursive: true);
+    await goldenFile.writeAsBytes(imageBytes, flush: true);
+  }
+
+  Future<bool> _shouldUpdateGolden(
+    File goldenFile,
+    Uint8List imageBytes,
+  ) async {
+    if (alwaysUpdateGoldens) return true;
+    if (!goldenFile.existsSync()) return true;
+
+    final goldenBytes = await goldenFile.readAsBytes();
+    final result = await fuzzyCompare(
+      imageBytes,
+      goldenBytes,
+      allowedDiffPercent,
+    );
+    return !result.passed;
+  }
+
+  /// Copied from [LocalFileComparator._getGoldenFile].
+  File _getGoldenFile(Uri golden) =>
+      File(path.join(path.fromUri(basedir), path.fromUri(golden.path)));
 }
