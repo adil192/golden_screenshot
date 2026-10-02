@@ -5,7 +5,11 @@ import 'dart:io';
 import 'package:golden_screenshot/src/apple_fonts.dart';
 import 'package:path/path.dart' as p;
 
-Future<void> main() async {
+// ignore: non_constant_identifier_names
+var VERBOSE = false;
+
+Future<void> main(List<String> args) async {
+  VERBOSE = args.contains('--verbose') || args.contains('-v');
   await _AppleFontsDownloader.downloadFonts();
 }
 
@@ -81,7 +85,7 @@ extension _AppleFontsDownloader on AppleFonts {
 
     // Extract the archive and find the 7zr binary.
     final extractedDir = Directory(p.join(_tmp, 'extracted7z'))..createSync();
-    final tarResult = await Process.run('tar', [
+    final tarResult = Process.runSync('tar', [
       '-xf',
       downloadedFile.path,
       '-C',
@@ -110,7 +114,7 @@ extension _AppleFontsDownloader on AppleFonts {
     print('Extracting (1/4) .pkg out of .dmg using $exe...');
     final extractedDmgDir = Directory(p.join(_tmp, 'extracted_dmg'));
     await extractedDmgDir.create(recursive: true);
-    var result = await Process.run(exe, [
+    var result = Process.runSync(exe, [
       'x',
       _tmpDmgFile.path,
       '-o${extractedDmgDir.path}',
@@ -121,43 +125,42 @@ extension _AppleFontsDownloader on AppleFonts {
         'Failed to extract .dmg: ${result.stderr}\n${result.stdout}',
       );
     }
+    await showVerbose(_tmp);
+    var payloadCpioFile = p.join(extractedDmgDir.path, 'Payload~');
 
-    print('Extracting (2/4) Payload out of .pkg using $exe...');
-    final pkgFile = p.join(
-      extractedDmgDir.path,
-      'SFProFonts',
-      'SF Pro Fonts.pkg',
-    );
     final extractedPkgDir = Directory(p.join(_tmp, 'extracted_pkg'));
-    await extractedPkgDir.create(recursive: true);
-    result = await Process.run(exe, [
-      'x',
-      pkgFile,
-      '-o${extractedPkgDir.path}',
-      '-y',
-    ]);
-    if (result.exitCode != 0) {
-      throw StateError(
-        'Failed to extract .pkg: ${result.stderr}\n${result.stdout}',
-      );
+    if (!File(payloadCpioFile).existsSync()) {
+      print('Extracting (2/4) Payload out of .pkg using $exe...');
+      final pkgFile = p.join(extractedDmgDir.path, 'SFProFonts.pkg');
+      await extractedPkgDir.create(recursive: true);
+      result = Process.runSync(exe, [
+        'x',
+        pkgFile,
+        '-o${extractedPkgDir.path}',
+        '-y',
+      ]);
+      if (result.exitCode != 0) {
+        throw StateError(
+          'Failed to extract .pkg: ${result.stderr}\n${result.stdout}',
+        );
+      }
+      await showVerbose(_tmp);
+      payloadCpioFile = p.join(extractedPkgDir.path, 'Payload~');
+    } else {
+      print('Extracting (3/4) Payload out of pkg not needed, already cpio.');
     }
 
-    // Sometimes the above gives us `Payload~` (cpio) directly, sometimes it's
-    // `Payload` (gzip) which contains `Payload~` (cpio).
-    var payloadCpioFile = p.join(extractedPkgDir.path, 'Payload~');
     if (!File(payloadCpioFile).existsSync()) {
       print('Extracting (3/4) Payload~ out of Payload using $exe...');
-      final payloadFile = p.join(
+      final payloadGzFile = p.join(
         extractedPkgDir.path,
-        'SFProFonts.pkg',
+        'SFProFontsPackage.pkg',
         'Payload',
       );
-      final extractedPayloadDir = Directory(p.join(_tmp, 'extracted_payload'));
-      await extractedPayloadDir.create(recursive: true);
-      result = await Process.run(exe, [
+      result = Process.runSync(exe, [
         'x',
-        payloadFile,
-        '-o${extractedPayloadDir.path}',
+        payloadGzFile,
+        '-o${extractedPkgDir.path}',
         '-y',
       ]);
       if (result.exitCode != 0) {
@@ -165,7 +168,7 @@ extension _AppleFontsDownloader on AppleFonts {
           'Failed to extract Payload: ${result.stderr}\n${result.stdout}',
         );
       }
-      payloadCpioFile = p.join(extractedPayloadDir.path, 'Payload~');
+      await showVerbose(_tmp);
     } else {
       print(
         'Extracting (3/4) Payload~ out of Payload not needed, already cpio.',
@@ -176,7 +179,8 @@ extension _AppleFontsDownloader on AppleFonts {
     final extractedPayloadCpioDir = Directory(
       p.join(_tmp, 'extracted_payload_cpio'),
     );
-    await Process.run(exe, [
+    await extractedPayloadCpioDir.create(recursive: true);
+    result = Process.runSync(exe, [
       'x',
       payloadCpioFile,
       '-o${extractedPayloadCpioDir.path}',
@@ -187,6 +191,7 @@ extension _AppleFontsDownloader on AppleFonts {
         'Failed to extract Payload cpio: ${result.stderr}\n${result.stdout}',
       );
     }
+    await showVerbose(_tmp);
 
     print('Copying fonts to ${fontsDirectory.path}...');
     final fontFiles = Directory(
@@ -196,9 +201,12 @@ extension _AppleFontsDownloader on AppleFonts {
     await for (final entity in fontFiles.list()) {
       if (entity is! File) continue;
       final fileName = p.basename(entity.path);
+      // Avoid variable fonts due to poor Flutter support
+      if (fileName.endsWith('.ttf')) continue;
       final destinationFile = File(p.join(fontsDirectory.path, fileName));
       await entity.copy(destinationFile.path);
     }
+    await showVerbose(_tmp);
   }
 
   static Future<void> _download(Uri uri, File destination) async {
@@ -226,10 +234,8 @@ extension _AppleFontsDownloader on AppleFonts {
       return 'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-mac.tar.xz';
     } else {
       return switch (arch) {
-        Arch.x64 =>
-          'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-x64.tar.xz',
-        Arch.arm64 =>
-          'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-arm64.tar.xz',
+        Arch.x64 => 'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-x64.tar.xz',
+        Arch.arm64 => 'https://github.com/ip7z/7zip/releases/download/25.01/7z2501-linux-arm64.tar.xz',
       };
     }
   }
@@ -259,4 +265,25 @@ enum Arch {
     print('Could not detect platform architecture, defaulting to x64.');
     return 'x64';
   }();
+}
+
+final hasTree = () {
+  try {
+    final result = Process.runSync('tree', []);
+    return result.exitCode == 0;
+  } on ProcessException {
+    return false;
+  }
+}();
+Future<void> showVerbose(String dir) async {
+  if (!VERBOSE) return;
+  if (hasTree) {
+    final process = Process.runSync('tree', [dir]);
+    print(process.stdout);
+  } else {
+    print('Directory contents of $dir:');
+    await for (final entity in Directory(dir).list(recursive: true)) {
+      print(entity.path);
+    }
+  }
 }
