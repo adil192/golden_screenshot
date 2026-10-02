@@ -52,23 +52,25 @@ extension _AppleFontsDownloader on AppleFonts {
   static Future<void> _findOrDownload7z() async {
     if (_sevenZipBinary != null) return;
 
-    // See if 7z is already installed.
-    for (final cmd in [
-      '7zzs',
-      '7zz',
-      '7z',
-      if (Platform.isWindows) 'C:\\Program Files\\7-Zip\\7z.exe',
-      if (Platform.isWindows) 'C:\\Program Files (x86)\\7-Zip\\7z.exe',
-    ]) {
-      try {
-        final result = Process.runSync(cmd, []);
-        if (result.exitCode != 0) continue;
-      } on ProcessException {
-        continue;
+    // Find 7z in PATH (but don't use macOS's outdated 7z).
+    if (!Platform.isMacOS) {
+      for (final cmd in [
+        '7zzs',
+        '7zz',
+        '7z',
+        if (Platform.isWindows) 'C:\\Program Files\\7-Zip\\7z.exe',
+        if (Platform.isWindows) 'C:\\Program Files (x86)\\7-Zip\\7z.exe',
+      ]) {
+        try {
+          final result = Process.runSync(cmd, []);
+          if (result.exitCode != 0) continue;
+        } on ProcessException {
+          continue;
+        }
+        print('Using $cmd from PATH.');
+        _sevenZipBinary = cmd;
+        return;
       }
-      print('Using $cmd from PATH.');
-      _sevenZipBinary = cmd;
-      return;
     }
 
     // Download 7zr binary.
