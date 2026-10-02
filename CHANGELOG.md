@@ -1,3 +1,7 @@
+## 12.1.1
+
+- Fixed `dart run golden_screenshot:download_apple_fonts` not working after Apple changed the archive format.
+
 ## 12.1.0
 
 - Better golden image comparison algorithm:
@@ -25,6 +29,12 @@
 
 - Migrated to `material_ui` as the decoupled Material library from Flutter 3.47.0.
 - Bumped the minimum Flutter version to 3.47.0.
+
+## 11.1.1
+
+Backports from 12.1.1 for those who can't move to `material_ui` yet:
+
+- Fixed `dart run golden_screenshot:download_apple_fonts` not working after Apple changed the archive format.
 
 ## 11.1.0
 
