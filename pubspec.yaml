@@ -28,6 +28,8 @@ screenshots:
     path: demo/metadata/en-US/images/iphoneScreenshots/2_chat_jane.png
   - description: A generated screenshot for an Android phone
     path: demo/metadata/en-US/images/phoneScreenshots/2_chat_jane.png
+  - description: A generated screenshot for an iPhone Duo
+    path: demo/metadata/en-US/images/iphoneDuoScreenshots/2_chat_jane.png
   - description: A generated screenshot for an iPad
     path: demo/metadata/en-US/images/ipadScreenshots/2_chat_jane.png
   - description: A generated screenshot for an Android tablet
