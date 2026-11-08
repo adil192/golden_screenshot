@@ -1,3 +1,8 @@
+## 12.2.0
+
+- Added the iPhone Duo to comply with upcoming App Store requirements.
+- Updated the iPhone and iPad top bars to iOS 27.
+
 ## 12.1.1
 
 - Fixed `dart run golden_screenshot:download_apple_fonts` not working after Apple changed the archive format.
@@ -29,6 +34,13 @@
 
 - Migrated to `material_ui` as the decoupled Material library from Flutter 3.47.0.
 - Bumped the minimum Flutter version to 3.47.0.
+
+## 11.2.0
+
+Backports from 12.2.0 for those who can't move to `material_ui` yet:
+
+- Added the iPhone Duo to comply with upcoming App Store requirements.
+- Updated the iPhone and iPad top bars to iOS 27.
 
 ## 11.1.1
 
