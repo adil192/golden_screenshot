@@ -2,8 +2,6 @@
 /// nothing too fancy here.
 library;
 
-import 'dart:math';
-
 import 'package:material_ui/material_ui.dart';
 
 class DemoHomePage extends StatelessWidget {
@@ -63,10 +61,10 @@ class _RecentChatsList extends StatelessWidget {
     return ListView(
       children: [
         _ChatListTile(
-          'Jane',
-          'This is message number 30.',
-          unread: selectedUserName != 'Jane',
-          selected: selectedUserName == 'Jane',
+          'Macbeth',
+          _macbethChat.last.split('\n\n').last,
+          unread: selectedUserName != 'Macbeth',
+          selected: selectedUserName == 'Macbeth',
         ),
         _ChatListTile('John', 'Let\'s catch up on Monday.'),
         _ChatListTile('Bob', 'Did you see the game last night?', unread: true),
@@ -99,7 +97,6 @@ class _OpenChat extends StatelessWidget {
       );
     }
 
-    final random = Random(31415);
     return ColoredBox(
       color: ColorScheme.of(context).surfaceContainer,
       child: Column(
@@ -111,7 +108,7 @@ class _OpenChat extends StatelessWidget {
               child: ListView(
                 reverse: true,
                 padding: const EdgeInsets.all(16),
-                children: _getMessages(context, random).reversed.toList(),
+                children: _getMessages(context).reversed.toList(),
               ),
             ),
           ),
@@ -153,35 +150,38 @@ class _OpenChat extends StatelessWidget {
     );
   }
 
-  List<Widget> _getMessages(BuildContext context, Random random) {
+  List<Widget> _getMessages(BuildContext context) {
     final messages = <Widget>[];
-    for (var i = 0; i < 30; ++i) {
-      final sentByMe = random.nextBool();
-      messages.add(
-        Align(
-          alignment: sentByMe
-              ? AlignmentDirectional.centerEnd
-              : AlignmentDirectional.centerStart,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            decoration: BoxDecoration(
-              color: sentByMe
-                  ? ColorScheme.of(context).primaryContainer
-                  : ColorScheme.of(context).surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              'This is message number ${i + 1}.',
-              style: TextStyle(
+    for (var i = 0; i < _macbethChat.length; ++i) {
+      final sentByMe = i.isEven;
+      final lines = _macbethChat[i].split('\n\n');
+      for (final line in lines) {
+        messages.add(
+          Align(
+            alignment: sentByMe
+                ? AlignmentDirectional.centerEnd
+                : AlignmentDirectional.centerStart,
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              decoration: BoxDecoration(
                 color: sentByMe
-                    ? ColorScheme.of(context).onPrimaryContainer
-                    : ColorScheme.of(context).onSurfaceVariant,
+                    ? ColorScheme.of(context).primaryContainer
+                    : ColorScheme.of(context).surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                line,
+                style: TextStyle(
+                  color: sentByMe
+                      ? ColorScheme.of(context).onPrimaryContainer
+                      : ColorScheme.of(context).onSurfaceVariant,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
     return messages;
   }
@@ -240,7 +240,11 @@ class _ChatListTile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(child: Text(userName[0])),
       title: Text(userName, style: TextStyle(fontWeight: fontWeight)),
-      subtitle: Text(lastMessage, style: TextStyle(fontWeight: fontWeight)),
+      subtitle: Text(
+        lastMessage,
+        style: TextStyle(fontWeight: fontWeight),
+        maxLines: 2,
+      ),
       onTap: () {
         Navigator.pushNamed(context, '/chat/${userName.toLowerCase()}');
       },
@@ -251,3 +255,50 @@ class _ChatListTile extends StatelessWidget {
 }
 
 final _borderColor = Colors.grey.shade300;
+
+const _macbethChat = [
+  '''That which hath made them drunk hath made me bold; what hath quench'd them hath given me fire
+
+Hark! Peace!
+
+It was the owl that shriek'd, the fatal bellman, which gives the stern'st good-night. He is about it
+
+The doors are open; and the surfeited grooms do mock their charge with snores: I have drugg'd their possets
+
+That death and nature do contend about them, whether they live or die''',
+  "Who's there? what, ho!",
+  '''Alack, I am afraid they have awaked
+
+And 'tis not done. The attempt and not the deed confounds us
+
+Hark! I laid their daggers ready; He could not miss 'em
+
+Had he not resembled my father as he slept, I had done't''',
+  '[Enter Macbeth]',
+  'My husband!',
+  'I have done the deed. Didst thou not hear a noise?',
+  '''I heard the owl scream and the crickets cry.
+
+Did not you speak?''',
+  'When?',
+  'Now',
+  'As I descended?',
+  'Ay',
+  '''Hark!
+
+Who lies i' the second chamber?''',
+  'Donalbain',
+  'This is a sorry sight',
+  '''A foolish thought
+
+to say a sorry sight''',
+  '''There's one did laugh in's sleep, and one cried 'Murder!' that they did wake each other
+
+I stood and heard them: But they did say their prayers, and address'd them again to sleep''',
+  'There are two lodged together',
+  '''One cried 'God bless us!' and 'Amen' the other
+
+As they had seen me with these hangman's hands
+
+Listening their fear, I could not say 'Amen,' when they did say 'God bless us!' ''',
+];

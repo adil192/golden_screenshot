@@ -15,13 +15,26 @@ void main() {
 
     _screenshot('1_home', home: DemoHomePage());
 
-    _screenshot('2_chat_jane', home: DemoChatPage(userName: 'Jane'));
+    _screenshot(
+      '2_chat_macbeth',
+      home: DemoChatPage(userName: 'Macbeth'),
+      beforeScreenshot: (tester) async {
+        await tester.enterText(
+          find.byType(TextField),
+          'Consider it not so deeply.',
+        );
+        await tester.pump();
+      },
+    );
 
     _screenshot(
       '3_dialog',
-      home: DemoChatPage(userName: 'Jane'),
+      home: DemoChatPage(userName: 'Macbeth'),
       beforeScreenshot: (tester) async {
-        await tester.enterText(find.byType(TextField), 'Hello Jane!');
+        await tester.enterText(
+          find.byType(TextField),
+          'Consider it not so deeply.',
+        );
         await tester.pump();
         await tester.longPress(find.byIcon(Icons.send));
         await tester.pump();

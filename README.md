@@ -4,7 +4,7 @@ Easily generate screenshots
 <span aria-hidden="true">like this</span>
 for all app stores:
 
-<p align="middle" aria-hidden="true"><img width="76%" align="middle" src="https://raw.githubusercontent.com/adil192/golden_screenshot/main/demo/metadata/en-US/images/flathubScreenshots/2_chat_jane.png"><img width="23%" align="middle" src="https://raw.githubusercontent.com/adil192/golden_screenshot/main/demo/metadata/en-US/images/phoneScreenshots/2_chat_jane.png"></p>
+<p align="middle" aria-hidden="true"><img width="76%" align="middle" src="https://raw.githubusercontent.com/adil192/golden_screenshot/main/demo/metadata/en-US/images/flathubScreenshots/2_chat_macbeth.png"><img width="23%" align="middle" src="https://raw.githubusercontent.com/adil192/golden_screenshot/main/demo/metadata/en-US/images/phoneScreenshots/2_chat_macbeth.png"></p>
 
 [![pub.dev](https://img.shields.io/pub/v/golden_screenshot)](https://pub.dev/packages/golden_screenshot)
 [![codecov](https://codecov.io/github/adil192/golden_screenshot/graph/badge.svg?token=TIBGLCUE11)](https://codecov.io/github/adil192/golden_screenshot)
