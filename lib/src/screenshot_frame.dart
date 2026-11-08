@@ -4,12 +4,11 @@ import 'package:golden_screenshot/src/screenshot_device.dart';
 /// A builder that can add a top and bottom bar to its [child].
 ///
 /// It should also set [MediaQueryData.padding] so that [SafeArea]s work.
-typedef ScreenshotFrameBuilder =
-    Widget Function({
-      required ScreenshotDevice device,
-      required ScreenshotFrameColors? frameColors,
-      required Widget child,
-    });
+typedef ScreenshotFrameBuilder = Widget Function({
+  required ScreenshotDevice device,
+  required ScreenshotFrameColors? frameColors,
+  required Widget child,
+});
 
 /// The margin around the window for the Flathub frame.
 /// This is intended to match the Gnome screenshot tool's style.
@@ -123,7 +122,7 @@ class ScreenshotFrame extends StatelessWidget {
     child: child,
   );
 
-  /// Creates a frame with an iPhone 6.5" top bar and a bottom bar.
+  /// Creates a frame with an iPhone 16 Pro Max top bar and a bottom bar.
   const ScreenshotFrame.iphone({
     super.key,
     required this.device,
@@ -131,6 +130,18 @@ class ScreenshotFrame extends StatelessWidget {
     required this.child,
   }) : topBar = const FrameTopBar(height: 186 / 3, image: iphoneTopBarImage),
        bottomBar = const FrameBottomBar(height: 102 / 3, handleSize: Size.zero);
+
+  factory ScreenshotFrame.iphoneDuo({
+    Key? key,
+    required ScreenshotDevice device,
+    ScreenshotFrameColors? frameColors,
+    required Widget child,
+  }) => _IphoneDuoScreenshotFrame(
+    key: key,
+    device: device,
+    frameColors: frameColors,
+    child: child,
+  );
 
   /// Creates a frame with an iPad 13" top bar and a bottom bar.
   const ScreenshotFrame.ipad({
@@ -250,6 +261,12 @@ class ScreenshotFrame extends StatelessWidget {
     package: 'golden_screenshot',
   );
 
+  /// An image of the side bar of the iPhone Duo.
+  static const iphoneDuoSideBarImage = AssetImage(
+    'assets/topbars/iphone_duo_sidebar.png',
+    package: 'golden_screenshot',
+  );
+
   /// An image of the top bar of an iPad.
   static const ipadTopBarImage = AssetImage(
     'assets/topbars/ipad_topbar.png',
@@ -263,6 +280,55 @@ class ScreenshotFrame extends StatelessWidget {
 
   @Deprecated('This has been renamed to `androidPhoneTopBarImage`')
   static AssetImage get androidTopBarImage => androidPhoneTopBarImage;
+}
+
+class _IphoneDuoScreenshotFrame extends ScreenshotFrame {
+  const _IphoneDuoScreenshotFrame({
+    super.key,
+    required super.device,
+    super.frameColors,
+    required super.child,
+  }) : super(
+         topBar: null,
+         bottomBar: const FrameBottomBar(
+           height: 103 / 3,
+           handleSize: Size.zero,
+         ),
+       );
+
+  @override
+  Widget build(BuildContext context) {
+    const sidebarWidth = 253 / 3;
+    const sidebarImage = ScreenshotFrame.iphoneDuoSideBarImage;
+
+    final mediaQuery = MediaQuery.of(context);
+    final viewPadding = EdgeInsets.only(
+      right: sidebarWidth,
+      bottom: bottomBar!.height,
+    );
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(padding: viewPadding, viewPadding: viewPadding),
+      child: Stack(
+        children: [
+          child,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            right: 0,
+            width: sidebarWidth,
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                _getIconColor(context, _getStatusBarIconBrightness(context)),
+                BlendMode.srcIn,
+              ),
+              child: Image(image: sidebarImage),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _FlathubScreenshotFrame extends ScreenshotFrame {

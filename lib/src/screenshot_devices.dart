@@ -56,7 +56,8 @@ enum GoldenScreenshotDevices {
   ),
 
   /// iPhone 16 Pro Max,
-  /// labelled on App Store Connect as iPhone 6.9" Display.
+  /// labelled on App Store Connect as the
+  /// "iPhone with Dynamic Island (large display)".
   iphone(
     ScreenshotDevice(
       platform: TargetPlatform.iOS,
@@ -64,6 +65,18 @@ enum GoldenScreenshotDevices {
       pixelRatio: 3,
       goldenSubFolder: 'iphoneScreenshots/',
       frameBuilder: ScreenshotFrame.iphone,
+    ),
+  ),
+
+  /// iPhone Duo (the folding phone),
+  /// specifically its outer (folded) screen.
+  iphoneDuo(
+    ScreenshotDevice(
+      platform: TargetPlatform.iOS,
+      resolution: Size(1398, 2034),
+      pixelRatio: 3,
+      goldenSubFolder: 'iphoneDuoScreenshots/',
+      frameBuilder: ScreenshotFrame.iphoneDuo,
     ),
   ),
 
@@ -157,7 +170,8 @@ enum GoldenSmallDevices {
   ),
 
   /// iPhone 16 Pro Max,
-  /// labelled on App Store Connect as iPhone 6.9" Display.
+  /// labelled on App Store Connect as the
+  /// "iPhone with Dynamic Island (large display)".
   iphone(
     ScreenshotDevice(
       platform: TargetPlatform.iOS,
@@ -165,6 +179,18 @@ enum GoldenSmallDevices {
       pixelRatio: 3 * sf,
       goldenSubFolder: 'iphoneScreenshots/',
       frameBuilder: ScreenshotFrame.iphone,
+    ),
+  ),
+
+  /// iPhone Duo (the folding phone),
+  /// specifically its outer (folded) screen.
+  iphoneDuo(
+    ScreenshotDevice(
+      platform: TargetPlatform.iOS,
+      resolution: Size(1398 * sf, 2034 * sf),
+      pixelRatio: 3 * sf,
+      goldenSubFolder: 'iphoneDuoScreenshots/',
+      frameBuilder: ScreenshotFrame.iphoneDuo,
     ),
   ),
 

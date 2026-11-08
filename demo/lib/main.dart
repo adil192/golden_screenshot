@@ -105,10 +105,14 @@ class _OpenChat extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: ListView(
-              reverse: true,
-              padding: const EdgeInsets.all(16),
-              children: _getMessages(context, random).reversed.toList(),
+            child: SafeArea(
+              top: false,
+              bottom: false,
+              child: ListView(
+                reverse: true,
+                padding: const EdgeInsets.all(16),
+                children: _getMessages(context, random).reversed.toList(),
+              ),
             ),
           ),
           SafeArea(
